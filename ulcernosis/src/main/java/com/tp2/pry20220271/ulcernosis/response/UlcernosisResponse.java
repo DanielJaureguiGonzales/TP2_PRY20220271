@@ -14,7 +14,7 @@ public class UlcernosisResponse<T> implements Serializable {
     private String message;
     private T data;
 
-    // CREAMOS LOS CUERPOS DE RESPUESTA TIPO JSON, DEPENDIENDO AL TIPO DE RESPUESTA YA SEA UN "GET, DELETE" O "POST, PUT"
+
     public UlcernosisResponse(String status, String code, String message) {
         this.status = status;
         this.code = code;

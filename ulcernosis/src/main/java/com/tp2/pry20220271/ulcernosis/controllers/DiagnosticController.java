@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/ulcernosis")
 public class DiagnosticController {
 
-    @Autowired
+    /*@Autowired
     private DiagnosticService diagnosticService;
 
     @ResponseStatus(HttpStatus.OK)
@@ -34,6 +34,6 @@ public class DiagnosticController {
     DiagnosticResource createMedic(@Valid SaveDiagnosisResource saveDiagnosisResource, @RequestParam("file") MultipartFile file) throws UlcernosisException, IOException {
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.CREATED),"CREATED",medicService.saveMedic(saveMedic));
         return diagnosticService.saveDiagnosis(saveDiagnosisResource, file);
-    }
+    }*/
 
 }

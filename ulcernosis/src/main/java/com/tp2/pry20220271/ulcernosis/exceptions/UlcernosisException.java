@@ -3,7 +3,7 @@ package com.tp2.pry20220271.ulcernosis.exceptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UlcernosisException extends Exception{
+public class UlcernosisException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
