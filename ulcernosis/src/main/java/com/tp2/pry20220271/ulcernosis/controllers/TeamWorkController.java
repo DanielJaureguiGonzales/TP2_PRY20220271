@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/ulcernosis")
 public class TeamWorkController {
 
-    @Autowired
+    /*@Autowired
     private TeamWorkService teamWorkService;
 
 
@@ -67,5 +67,5 @@ public class TeamWorkController {
         return teamWorkService.deleteTeamWorkByNurseId(nurseId);
     }
 
-
+*/
 }

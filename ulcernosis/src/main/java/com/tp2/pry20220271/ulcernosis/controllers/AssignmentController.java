@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/ulcernosis")
 public class AssignmentController {
 
-    @Autowired
+   /* @Autowired
     private AssignmentService assignmentService;
 
     @ResponseStatus(HttpStatus.OK)
@@ -59,7 +59,7 @@ public class AssignmentController {
         //return new UlcernosisResponse<>("Success", String.valueOf(HttpStatus.OK),"OK", assignmentService.deleteAssigment(assignmentId));
         return assignmentService.deleteAssigment(assignmentId);
     }
-
+*/
 
 
 }

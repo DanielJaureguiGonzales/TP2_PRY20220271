@@ -30,7 +30,7 @@ public class PatientController {
     @Autowired
     private PatientService patientService;
 
-    @ResponseStatus(HttpStatus.OK)
+   /* @ResponseStatus(HttpStatus.OK)
     @GetMapping("/patients/get_by_medic/{medicId}")
     List<PatientResource> getAllPatientsByMedicId(@PathVariable("medicId") Long medicId) throws UlcernosisException {
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"OK",patientService.findAllPatientsByMedicId(medicId));
@@ -87,6 +87,6 @@ public class PatientController {
         //return new UlcernosisResponse<>("Success", String.valueOf(HttpStatus.OK),"OK", patientService.deletePatient(patientId));
         return patientService.deletePatient(patientId);
     }
-
+*/
 
 }

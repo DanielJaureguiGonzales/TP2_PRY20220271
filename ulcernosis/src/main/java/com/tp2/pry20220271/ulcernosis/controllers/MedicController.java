@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +23,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ulcernosis")
+@RequestMapping("/medic-controller")
 public class MedicController {
 
     @Autowired
@@ -36,7 +37,7 @@ public class MedicController {
         return medicService.findAll();
     }
 
-    @ResponseStatus(HttpStatus.OK)
+   /* @ResponseStatus(HttpStatus.OK)
     @GetMapping("/medics/{medicId}")
     MedicResource getMedicById(@PathVariable("medicId") Long medicId) throws UlcernosisException{
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"OK",medicService.findMedicById(medicId));
@@ -48,10 +49,10 @@ public class MedicController {
     ResponseEntity<?> getMedicPhoto(@PathVariable("medicId") Long medicId) throws UlcernosisException, IOException {
         Resource profile_photo = medicService.findMedicPhoto(medicId);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(profile_photo);
-    }
+    }*/
 
 
-    @ResponseStatus(HttpStatus.OK)
+   /* @ResponseStatus(HttpStatus.OK)
     @PutMapping("/medics/{medicId}/profile-photo")
     ResponseEntity<?> putMedicPhoto(@PathVariable("medicId") Long medicId, @RequestParam("file") MultipartFile file) throws UlcernosisException, IOException {
         Resource profile_photo = medicService.updateMedicPhoto(medicId, file);
@@ -78,6 +79,6 @@ public class MedicController {
         //return new UlcernosisResponse<>("Success", String.valueOf(HttpStatus.OK),"OK", medicService.deleteMedic(medicId));
         return medicService.deleteMedic(medicId);
     }
-
+*/
 
 }
