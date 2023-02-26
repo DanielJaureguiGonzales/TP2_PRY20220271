@@ -32,7 +32,7 @@ public class MedicController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/medics")
-    @PreAuthorize("hasRole(Rol.NURSE)")
+    @PreAuthorize("hasRole('ROLE_MEDIC')")
     List<MedicResource> getAllMedics() throws UlcernosisException{
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"OK",medicService.findAll());
         return medicService.findAll();

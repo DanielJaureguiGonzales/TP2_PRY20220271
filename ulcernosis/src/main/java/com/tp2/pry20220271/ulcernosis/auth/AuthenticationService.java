@@ -40,7 +40,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     @Transactional
-    public AuthenticationResponse register(RegisterRequest request) throws ErrorExcepcion {
+    public AuthenticationResponse register(RegisterRequest request) throws UlcernosisException {
 
         var user = User.builder()
                 .fullName(request.getFullName())
@@ -56,9 +56,9 @@ public class AuthenticationService {
         try {
             repository.save(user);
         } catch (Exception e) {
-            throw new ErrorExcepcion(Error.INTERNAL_SERVER_ERROR);
+            throw new InternalServerException("UCN-500","NO SE PUDO CREAR AL USUARIO");
         }
-        if (request.getRol() == Rol.MEDIC) {
+        if (request.getRol() == Rol.ROLE_MEDIC) {
             var medic = Medic.builder()
                     .fullName(request.getFullName())
                     .email(request.getEmail())
@@ -73,10 +73,10 @@ public class AuthenticationService {
             try {
                 medicRepository.save(medic);
             } catch (Exception e) {
-                throw new ErrorExcepcion(Error.INTERNAL_SERVER_ERROR);
+                throw new InternalServerException("UCN-500","NO SE PUDO CREAR AL MEDICO");
             }
 
-        } else if (request.getRol() == Rol.NURSE) {
+        } else if (request.getRol() == Rol.ROLE_NURSE) {
             var nurse = Nurse.builder()
                     .fullName(request.getFullName())
                     .email(request.getEmail())
@@ -91,7 +91,7 @@ public class AuthenticationService {
             try {
                 nurseRepository.save(nurse);
             } catch (Exception e) {
-                throw new ErrorExcepcion(Error.INTERNAL_SERVER_ERROR);
+                throw new InternalServerException("UCN-500","NO SE PUDO CREAR AL ENFERMERO");
             }
 
         }

@@ -1,7 +1,9 @@
 package com.tp2.pry20220271.ulcernosis.config;
 
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -30,7 +32,11 @@ public class SecurityConfiguration {
                         .anyRequest()
                         .authenticated()
                         );
-
+        http.exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
+            response.setContentType("application/json");
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write(new JSONObject().put("message", "No autorizado").toString());
+        });
         http
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

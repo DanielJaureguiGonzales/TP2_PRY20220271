@@ -1,5 +1,5 @@
 package com.tp2.pry20220271.ulcernosis.models.enums;
 
 public enum Rol {
-    MEDIC,NURSE
+    ROLE_MEDIC,ROLE_NURSE
 }
