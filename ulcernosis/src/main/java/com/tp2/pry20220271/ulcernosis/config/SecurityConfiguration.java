@@ -24,12 +24,14 @@ public class SecurityConfiguration {
         http
                 .csrf()
                 .disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**","/ulcernosis/medic-controller/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/auth/**")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated()
+                        );
+
+        http
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
