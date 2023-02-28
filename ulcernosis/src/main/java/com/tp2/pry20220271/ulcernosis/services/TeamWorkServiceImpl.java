@@ -38,58 +38,48 @@ public class TeamWorkServiceImpl implements TeamWorkService {
     private NurseRepository nurseRepository;
 
     @Override
-    public List<TeamWorkResource> findAllTeamWork() throws UlcernosisException {
+    public List<TeamWorkResource> findAllTeamWork(){
         List<TeamWork> teamWorks = teamWorkRepository.findAll();
         return teamWorks.stream().map(teamWork -> mapper.map(teamWork,TeamWorkResource.class)).collect(Collectors.toList());
 
     }
 
     @Override
-    public List<TeamWorkResource> getTeamWorkByMedicId(Long medicId) throws UlcernosisException {
+    public List<TeamWorkResource> getTeamWorkByMedicId(Long medicId){
         List<TeamWork> teamWorks = teamWorkRepository.findAllByMedicId(medicId);
         return teamWorks.stream().map(teamWork-> mapper.map(teamWork,TeamWorkResource.class)).collect(Collectors.toList());
     }
 
     @Override
-    public List<TeamWorkResource> getTeamWorkByNurseId(Long nurseId) throws UlcernosisException {
+    public List<TeamWorkResource> getTeamWorkByNurseId(Long nurseId){
         List<TeamWork> teamWorks = teamWorkRepository.findAllByNurseId(nurseId);
         return teamWorks.stream().map(teamWork-> mapper.map(teamWork,TeamWorkResource.class)).collect(Collectors.toList());
     }
 
     @Override
-    public TeamWorkResource createTeamWork(SaveTeamWorkResource teamWork) throws UlcernosisException {
-        Medic medic = medicRepository.findById(teamWork.getMedicId()).orElseThrow(()->new NotFoundException("UCN-404","MEDIC_NOT_FOUND"));
-        Nurse nurse = nurseRepository.findById(teamWork.getNurseId()).orElseThrow(()->new NotFoundException("UCN-404","NURSE_NOT_FOUND"));
+    public TeamWorkResource createTeamWork(SaveTeamWorkResource teamWork){
+        Medic medic = medicRepository.findById(teamWork.getMedicId()).orElseThrow(()->new NotFoundException("Medic","id",teamWork.getMedicId()));
+        Nurse nurse = nurseRepository.findById(teamWork.getNurseId()).orElseThrow(()->new NotFoundException("Nurse","id",teamWork.getNurseId()));
         TeamWork teamWork1 = new TeamWork();
         teamWork1.setMedic(medic);
         teamWork1.setNurse(nurse);
-        Long id;
-        try {
-            id=teamWorkRepository.save(teamWork1).getId();
-        }catch (Exception e){
-            throw new InternalServerException("UCN-500",e.getMessage());
-        }
 
-        return mapper.map(getTeamWorkByID(id), TeamWorkResource.class);
+        return mapper.map(teamWorkRepository.save(teamWork1), TeamWorkResource.class);
 
 
     }
 
     @Override
     @Transactional
-    public String deleteTeamWorkByNurseId(Long nurseId) throws UlcernosisException {
-        Nurse nurse = nurseRepository.findById(nurseId).orElseThrow(()->new NotFoundException("UCN-404","NURSE_NOT_FOUND"));
-        try {
-            teamWorkRepository.deleteTeamWorkByNurseId(nurse.getId());
-        }catch (Exception e){
-            throw new InternalServerException("UCN-500",e.getMessage());
-        }
+    public String deleteTeamWorkByNurseId(Long nurseId){
+        Nurse nurse = nurseRepository.findById(nurseId).orElseThrow(()->new NotFoundException("Nurse","id",nurseId));
+        teamWorkRepository.deleteTeamWorkByNurseId(nurse.getId());
         return "Se ha eliminado con éxito";
     }
 
-    public TeamWork getTeamWorkByID(Long id) throws UlcernosisException {
+    public TeamWork getTeamWorkByID(Long id){
         return teamWorkRepository.findById(id).orElseThrow(()->
-                new NotFoundException("UCN-404","TEAM_WORK_NOT_FOUND")
+                new NotFoundException("TeamWork","id",id)
         );
     }
 }

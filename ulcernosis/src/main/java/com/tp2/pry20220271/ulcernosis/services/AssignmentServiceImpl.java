@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Service
 public class AssignmentServiceImpl implements AssignmentService {
 
-    private static final ModelMapper modelMapper = new ModelMapper();
+  /*  private static final ModelMapper modelMapper = new ModelMapper();
 
     private static final Logger log = LoggerFactory.getLogger(AssignmentServiceImpl.class);
 
@@ -90,6 +90,6 @@ public class AssignmentServiceImpl implements AssignmentService {
         return assignmentRepository.findById(id).orElseThrow(()->
                 new NotFoundException("UCN-404","TEAM_WORK_NOT_FOUND")
         );
-    }
+    }*/
 
 }

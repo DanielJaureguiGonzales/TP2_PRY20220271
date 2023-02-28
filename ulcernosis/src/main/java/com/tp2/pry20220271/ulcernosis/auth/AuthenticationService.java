@@ -1,10 +1,8 @@
 package com.tp2.pry20220271.ulcernosis.auth;
 
 import com.tp2.pry20220271.ulcernosis.config.JwtService;
+import com.tp2.pry20220271.ulcernosis.exceptions.*;
 import com.tp2.pry20220271.ulcernosis.exceptions.Error;
-import com.tp2.pry20220271.ulcernosis.exceptions.ErrorExcepcion;
-import com.tp2.pry20220271.ulcernosis.exceptions.InternalServerException;
-import com.tp2.pry20220271.ulcernosis.exceptions.UlcernosisException;
 import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
 import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
 import com.tp2.pry20220271.ulcernosis.models.entities.User;
@@ -12,87 +10,90 @@ import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
 import com.tp2.pry20220271.ulcernosis.models.repositories.MedicRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.NurseRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.UserRepository;
+import com.tp2.pry20220271.ulcernosis.models.services.MedicService;
+import com.tp2.pry20220271.ulcernosis.models.services.NurseService;
 import com.tp2.pry20220271.ulcernosis.resources.etc.AuthenticationRequest;
 import com.tp2.pry20220271.ulcernosis.resources.etc.AuthenticationResponse;
 import com.tp2.pry20220271.ulcernosis.resources.etc.RegisterRequest;
+import com.tp2.pry20220271.ulcernosis.resources.request.SaveMedicResource;
+import com.tp2.pry20220271.ulcernosis.resources.request.SaveNurseResource;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
 
+    private static final ModelMapper modelMapper = new ModelMapper();
+
     private final UserRepository repository;
     @Autowired
-    private MedicRepository medicRepository;
+    private MedicService medicService;
 
     private final PasswordEncoder passwordEncoder;
 
     private final JwtService jwtService;
     @Autowired
-    private NurseRepository nurseRepository;
+    private NurseService nurseService;
 
     private final AuthenticationManager authenticationManager;
 
     @Transactional
-    public AuthenticationResponse register(RegisterRequest request) throws UlcernosisException {
+    public AuthenticationResponse register(RegisterRequest request) {
+
+        Optional<User> userEmailExists = repository.findByEmail(request.getEmail());
+        /*Optional<Medic> medicByCmpExists = medicService.findMedicByCMP(request.getCmp());
+        Optional<Nurse> nurseByCepExists = nurseService.findNurseByCEP(request.getCep());*/
+
+        if (userEmailExists.isPresent()) {
+            throw new EmailExistsException("El email ya está asociado con otra cuenta");
+        }
+
+
 
         var user = User.builder()
                 .fullName(request.getFullName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .dni(request.getDni())
-                .age(request.getAge())
+                .age(Integer.valueOf(request.getAge()))
                 .address(request.getAddress())
                 .role(request.getRol())
                 .civilStatus(request.getCivilStatus())
                 .avatar(new byte[]{})
                 .build();
-        try {
-            repository.save(user);
-        } catch (Exception e) {
-            throw new InternalServerException("UCN-500","NO SE PUDO CREAR AL USUARIO");
-        }
+
+
+
         if (request.getRol() == Rol.ROLE_MEDIC) {
-            var medic = Medic.builder()
-                    .fullName(request.getFullName())
-                    .email(request.getEmail())
-                    .password(passwordEncoder.encode(request.getPassword()))
-                    .dni(request.getDni())
-                    .age(request.getAge())
-                    .address(request.getAddress())
-                    .avatar(new byte[]{})
-                    .cmp(request.getCmp())
-                    .civilStatus(request.getCivilStatus())
-                    .build();
-            try {
-                medicRepository.save(medic);
-            } catch (Exception e) {
-                throw new InternalServerException("UCN-500","NO SE PUDO CREAR AL MEDICO");
+            Medic medic = medicService.findMedicByCMP(request.getCmp());
+
+            if (!(Objects.isNull(medic))){
+                throw new CmpExistsException("El cmp ya está asociado a otro médico");
             }
 
+           repository.save(user);
+           medicService.saveMedic(modelMapper.map(request, SaveMedicResource.class));
+
+
         } else if (request.getRol() == Rol.ROLE_NURSE) {
-            var nurse = Nurse.builder()
-                    .fullName(request.getFullName())
-                    .email(request.getEmail())
-                    .password(passwordEncoder.encode(request.getPassword()))
-                    .dni(request.getDni())
-                    .age(request.getAge())
-                    .address(request.getAddress())
-                    .avatar(new byte[]{})
-                    .cep(request.getCep())
-                    .civilStatus(request.getCivilStatus())
-                    .build();
-            try {
-                nurseRepository.save(nurse);
-            } catch (Exception e) {
-                throw new InternalServerException("UCN-500","NO SE PUDO CREAR AL ENFERMERO");
+            Nurse nurse = nurseService.findNurseByCEP(request.getCep());
+
+            if (!(Objects.isNull(nurse))){
+                throw new CepExistsException("El cep ya está asociado a otro médico");
             }
+
+            repository.save(user);
+            nurseService.saveNurse(modelMapper.map(request, SaveNurseResource.class));
 
         }
         var jwtToken = jwtService.generateToken(user);

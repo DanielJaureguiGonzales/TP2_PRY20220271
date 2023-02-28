@@ -21,10 +21,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/ulcernosis")
+@RequestMapping("/team-work-controller")
 public class TeamWorkController {
 
-    /*@Autowired
+    @Autowired
     private TeamWorkService teamWorkService;
 
 
@@ -67,5 +67,4 @@ public class TeamWorkController {
         return teamWorkService.deleteTeamWorkByNurseId(nurseId);
     }
 
-*/
 }

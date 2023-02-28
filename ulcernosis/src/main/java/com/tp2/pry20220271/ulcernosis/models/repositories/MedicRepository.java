@@ -12,4 +12,6 @@ public interface MedicRepository extends JpaRepository<Medic,Long> {
 
     Optional<Medic> findMedicByFullName(String fullName);
 
+    Optional<Medic> findMedicByCmp(String cmp);
+
 }

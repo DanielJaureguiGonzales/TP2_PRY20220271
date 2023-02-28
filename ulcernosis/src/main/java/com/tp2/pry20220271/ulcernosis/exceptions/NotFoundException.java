@@ -3,18 +3,19 @@ package com.tp2.pry20220271.ulcernosis.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.util.Arrays;
-import java.util.List;
+
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class NotFoundException extends UlcernosisException{
+public class NotFoundException extends RuntimeException{
 
+    private final String resourceName;
+    private final String fieldName;
+    private final Object fieldValue;
 
-    public NotFoundException(String code, String message) {
-        super(code, HttpStatus.NOT_FOUND.value(), message);
-    }
-
-    public NotFoundException(String code, String message, ErrorResource data) {
-        super(code, HttpStatus.NOT_FOUND.value(), message, Arrays.asList(data));
+    public NotFoundException(String resourceName, String fieldName, Object fieldValue) {
+        super(String.format("%s not found with %s : '%s'", resourceName, fieldName, fieldValue));
+        this.resourceName = resourceName;
+        this.fieldName = fieldName;
+        this.fieldValue = fieldValue;
     }
 }

@@ -12,12 +12,12 @@ import java.util.List;
 public interface TeamWorkService {
 
 
-    List<TeamWorkResource> findAllTeamWork() throws UlcernosisException;
+    List<TeamWorkResource> findAllTeamWork();
 
-    List<TeamWorkResource> getTeamWorkByMedicId(Long medicId) throws UlcernosisException;
-    List<TeamWorkResource> getTeamWorkByNurseId(Long nurseId) throws UlcernosisException;
+    List<TeamWorkResource> getTeamWorkByMedicId(Long medicId);
+    List<TeamWorkResource> getTeamWorkByNurseId(Long nurseId);
 
 
-    TeamWorkResource createTeamWork(SaveTeamWorkResource teamWork) throws UlcernosisException;
-    String deleteTeamWorkByNurseId(Long nurseId) throws UlcernosisException;
+    TeamWorkResource createTeamWork(SaveTeamWorkResource teamWork);
+    String deleteTeamWorkByNurseId(Long nurseId);
 }
