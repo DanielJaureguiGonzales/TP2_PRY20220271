@@ -1,14 +1,14 @@
 package com.tp2.pry20220271.ulcernosis.services;
 
-import com.tp2.pry20220271.ulcernosis.exceptions.InternalServerException;
-import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
-import com.tp2.pry20220271.ulcernosis.exceptions.UlcernosisException;
+import com.tp2.pry20220271.ulcernosis.exceptions.*;
 import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
 import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
 import com.tp2.pry20220271.ulcernosis.models.entities.TeamWork;
+import com.tp2.pry20220271.ulcernosis.models.entities.User;
 import com.tp2.pry20220271.ulcernosis.models.repositories.MedicRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.NurseRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.TeamWorkRepository;
+import com.tp2.pry20220271.ulcernosis.models.repositories.UserRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.NurseService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveNurseResource;
 
@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,8 +39,17 @@ public class NurseServiceImpl implements NurseService {
     @Autowired
     private MedicRepository medicRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserRepository userRepository;
+
     @Autowired
     private TeamWorkRepository teamWorkRepository;
+
+    public NurseServiceImpl(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public List<NurseResource> findAll() throws UlcernosisException {
@@ -48,8 +58,8 @@ public class NurseServiceImpl implements NurseService {
     }
 
     @Override
-    public List<NurseResource> findAllByMedicId(Long medicalId) throws UlcernosisException {
-        Medic medic = medicRepository.findById(medicalId).orElseThrow(()-> new NotFoundException("UCN-404","MEDIC_NOT_FOUND"));
+    public List<NurseResource> findAllByMedicId(Long medicalId)  {
+        Medic medic = medicRepository.findById(medicalId).orElseThrow(()-> new NotFoundException("Medic","id",medicalId.toString()));
         List<TeamWork> teamWorks = teamWorkRepository.findAllByMedicId(medicalId);
         List<Nurse> nurseList = nurseRepository.findAllByTeamWorkIn(teamWorks);
         return nurseList.stream().map(nurse -> mapper.map(nurse,NurseResource.class)).collect(Collectors.toList());
@@ -62,48 +72,49 @@ public class NurseServiceImpl implements NurseService {
     }
 
     @Override
-    public Resource findNursePhoto(Long id) throws UlcernosisException {
-        Nurse nurse = nurseRepository.findById(id).orElseThrow(()-> new NotFoundException("UCN-404","USER_NOT_FOUND"));
+    public Nurse findNurseByCEP(String cep) {
+        Nurse foundNurse = nurseRepository.findNurseByCep(cep).orElse(null);
+        return foundNurse;
+    }
+
+    @Override
+    public Resource findNursePhoto(Long id)  {
+        Nurse nurse = nurseRepository.findById(id).orElseThrow(()-> new NotFoundException("Nurse","id",id.toString()));
         Resource avatar = new ByteArrayResource(nurse.getAvatar());
         return avatar;
     }
 
     @Override
-    public Resource putNursePhoto(Long id, MultipartFile file) throws UlcernosisException {
-        Nurse nurse = nurseRepository.findById(id).orElseThrow(()-> new NotFoundException("UCN-404","USER_NOT_FOUND"));
-        try {
-            nurse.setAvatar(file.getBytes());
-            nurseRepository.save(nurse);
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            throw new InternalServerException("UCN-500","INTERNAL_SERVER_ERROR");
-        }
+    public Resource putNursePhoto(Long id, MultipartFile file) throws IOException {
+        Nurse nurse = nurseRepository.findById(id).orElseThrow(()-> new NotFoundException("Nurse","id",id.toString()));
+        User user = userRepository.findByEmail(nurse.getEmail()).orElseThrow(()-> new NotFoundException("User","email",nurse.getEmail()));
+
+        nurse.setAvatar(file.getBytes());
+        user.setAvatar(file.getBytes());
+        nurseRepository.save(nurse);
+        userRepository.save(user);
+
         Resource avatar = new ByteArrayResource(nurse.getAvatar());
         return avatar;
 
     }
 
     @Override
-    public NurseResource saveNurse(SaveNurseResource saveNurseResource) throws UlcernosisException, IOException {
+    public NurseResource saveNurse(SaveNurseResource saveNurseResource)  {
+
+
         Nurse newNurse = mapper.map(saveNurseResource,Nurse.class);
-        newNurse.setDni(String.format("%08d",Integer.valueOf(saveNurseResource.getDni())));
+        newNurse.setDni(saveNurseResource.getDni());
         newNurse.setAvatar(new byte[]{});
+        newNurse.setPassword(passwordEncoder.encode(saveNurseResource.getPassword()));
 
-        Long id;
-        try {
-            id=nurseRepository.save(newNurse).getId();
-        }catch (Exception e){
-            log.error(e.getMessage());
-            throw new InternalServerException("UCN-500","INTERNAL_SERVER_ERROR");
-        }
-        NurseResource nurseResource = mapper.map(getNurseByID(id), NurseResource.class);
-
-        return nurseResource;
+        return mapper.map(nurseRepository.save(newNurse), NurseResource.class);
     }
 
-    @Override
-    public NurseResource updateNurse(Long id, SaveNurseResource saveNurseResource) throws UlcernosisException, IOException {
+   @Override
+    public NurseResource updateNurse(Long id, SaveNurseResource saveNurseResource) {
         Nurse updateNurse = getNurseByID(id);
+        User updateUser = userRepository.findByEmail(updateNurse.getEmail()).orElseThrow(()-> new NotFoundException("User","email",updateNurse.getEmail()));
         updateNurse.setDni(saveNurseResource.getDni());
         updateNurse.setAge(saveNurseResource.getAge());
         updateNurse.setEmail(saveNurseResource.getEmail());
@@ -111,33 +122,34 @@ public class NurseServiceImpl implements NurseService {
         updateNurse.setFullName(saveNurseResource.getFullName());
         updateNurse.setCep(saveNurseResource.getCep());
         updateNurse.setAddress(saveNurseResource.getAddress());
+        updateNurse.setPassword(saveNurseResource.getPassword());
 
-        Long idUpdatedNurse;
-        try {
-            idUpdatedNurse = nurseRepository.save(updateNurse).getId();
-        }catch (Exception e) {
-            throw new InternalServerException("UCN-500","INTERNAL_SERVER_ERROR");
-        }
+       updateUser.setEmail(saveNurseResource.getEmail());
+       updateUser.setFullName(saveNurseResource.getFullName());
+       updateUser.setCivilStatus(saveNurseResource.getCivilStatus());
+       updateUser.setAddress(saveNurseResource.getAddress());
+       updateUser.setDni(saveNurseResource.getDni());
+       updateUser.setAge(Integer.valueOf(saveNurseResource.getAge()));
+       updateUser.setAvatar(updateNurse.getAvatar());
+       updateUser.setPassword(passwordEncoder.encode(saveNurseResource.getPassword()));
+       userRepository.save(updateUser);
 
-        NurseResource nurseResource = mapper.map(getNurseByID(idUpdatedNurse), NurseResource.class);
-        return nurseResource;
+        return mapper.map(nurseRepository.save(updateNurse), NurseResource.class);
     }
 
     @Override
-    public String deleteNurse(Long id) throws UlcernosisException {
+    public String deleteNurse(Long id) {
         Nurse deleteNurse = getNurseByID(id);
+        User user = userRepository.findByEmail(deleteNurse.getEmail()).orElseThrow(()-> new NotFoundException("User","email",deleteNurse.getEmail()));
+        userRepository.delete(user);
+        nurseRepository.delete(deleteNurse);
 
-        try{
-            nurseRepository.delete(deleteNurse);
-        }catch (Exception e){
-            throw new InternalServerException("UCN-500","INTERNAL_SERVER_ERROR");
-        }
         return "Se eliminó al enfermero exitosamente";
     }
 
-    public Nurse getNurseByID(Long id) throws UlcernosisException {
+    public Nurse getNurseByID(Long id)  {
         return nurseRepository.findById(id).orElseThrow(()->
-                new NotFoundException("UCN-404","USER_NOT_FOUND")
+                new NotFoundException("Nurse","Id", id)
         );
     }
 }

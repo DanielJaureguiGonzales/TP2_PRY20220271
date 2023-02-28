@@ -46,7 +46,7 @@ public class DiagnosticServiceImpl implements DiagnosticService {
         this.restTemplate = restTemplate;
     }
 
-    @Override
+  /*  @Override
     public List<DiagnosticResource> findAllByPatientId(Long patientId) throws UlcernosisException {
         List<Diagnostic> diagnosticList = diagnosisRepository.findAllByPatientId(patientId);
         return diagnosticList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosticResource.class)).collect(Collectors.toList());
@@ -139,5 +139,5 @@ public class DiagnosticServiceImpl implements DiagnosticService {
         HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
         DiagResource response = restTemplate.postForObject("http://127.0.0.1:5000/predict",request,DiagResource.class);
         return response;
-    }
+    }*/
 }

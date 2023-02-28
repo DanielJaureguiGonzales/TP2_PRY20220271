@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ulcernosis/nurse-controller")
+@RequestMapping("/nurse-controller")
 public class NurseController {
 
     @Autowired
@@ -32,12 +32,11 @@ public class NurseController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/nurses")
-    @PreAuthorize("hasRole('NURSES')")
     List<NurseResource> getAllNurses() throws UlcernosisException {
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"OK",nurseService.findAll());
         return nurseService.findAll();
     }
-/*
+
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/nurses/medic/{medicId}")
     List<NurseResource> getAllNursesByMedicId(@PathVariable("medicId") Long medicId) throws UlcernosisException {
@@ -62,30 +61,31 @@ public class NurseController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/nurses/{nurseId}/profile-photo")
-    ResponseEntity<?> putPatientPhoto(@PathVariable("nurseId") Long nurseId, @RequestParam("file") MultipartFile file) throws UlcernosisException{
+    ResponseEntity<?> putNursePhoto(@PathVariable("nurseId") Long nurseId, @RequestParam("file") MultipartFile file) throws  IOException {
         Resource profile_photo = nurseService.putNursePhoto(nurseId, file);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(profile_photo);
     }
 
+    /*
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/nurses/create-nurse")
     NurseResource createNurse(@Valid SaveNurseResource saveNurse) throws UlcernosisException, IOException {
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.CREATED),"CREATED",nurseService.saveNurse(saveNurse));
         return nurseService.saveNurse(saveNurse);
     }
-
+*/
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/nurses/{nurseId}/update-nurse")
-    NurseResource updateNurse(@Valid SaveNurseResource updateNurse, @PathVariable("nurseId") Long nurseId) throws UlcernosisException, IOException{
+    NurseResource updateNurse(@Valid SaveNurseResource updateNurse, @PathVariable("nurseId") Long nurseId) {
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"UPDATED",nurseService.updateNurse(nurseId,updateNurse));
         return nurseService.updateNurse(nurseId,updateNurse);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/nurses/{nurseId}/delete-nurse")
-    String deleteNurse(@PathVariable("nurseId") Long nurseId) throws UlcernosisException{
+    String deleteNurse(@PathVariable("nurseId") Long nurseId){
         //return new UlcernosisResponse<>("Success", String.valueOf(HttpStatus.OK),"OK", nurseService.deleteNurse(nurseId));
         return nurseService.deleteNurse(nurseId);
-    }*/
+    }
 
 }

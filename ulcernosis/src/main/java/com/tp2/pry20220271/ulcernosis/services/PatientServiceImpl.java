@@ -47,7 +47,7 @@ public class PatientServiceImpl implements PatientService {
     @Autowired
     private AssignmentRepository assignmentRepository;
 
-    @Override
+    /*@Override
     public List<PatientResource> findAllPatientsByMedicId(Long medicId) throws UlcernosisException {
         final Medic searchMedic = medicRepository.findById(medicId).orElseThrow(()-> new NotFoundException("UCN_404","NOT_FOUND_EXCEPTION"));
         List<Patient> patients_founds = patientRepository.findAllByMedicId(searchMedic.getId());
@@ -161,5 +161,5 @@ public class PatientServiceImpl implements PatientService {
         return patientRepository.findById(id).orElseThrow(()->
                 new NotFoundException("UCN-404","USER_NOT_FOUND")
         );
-    }
+    }*/
 }

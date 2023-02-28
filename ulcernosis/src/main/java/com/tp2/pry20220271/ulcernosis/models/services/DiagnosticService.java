@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface DiagnosticService {
 
-    List<DiagnosticResource> findAllByPatientId(Long patientId) throws UlcernosisException;
+  /*  List<DiagnosticResource> findAllByPatientId(Long patientId) throws UlcernosisException;
 
     List<DiagnosticResource> findAllByCreatorType(String creatorType) throws UlcernosisException;
 
@@ -25,5 +25,5 @@ public interface DiagnosticService {
 
     DiagnosticResource saveDiagnosis(SaveDiagnosisResource saveDiagnosisResource, MultipartFile file) throws UlcernosisException,IOException;
 
-    String deleteDiagnosisById(Long diagnosticId) throws UlcernosisException;
+    String deleteDiagnosisById(Long diagnosticId) throws UlcernosisException;*/
 }

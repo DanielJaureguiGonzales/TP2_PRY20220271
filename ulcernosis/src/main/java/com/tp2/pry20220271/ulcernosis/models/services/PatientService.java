@@ -14,7 +14,7 @@ import java.util.List;
 public interface PatientService {
 
     //List<PatientResource> findAllPatientsByCreatorId(Long creatorId) throws UlcernosisException;
-    List<PatientResource> findAllPatientsByMedicId(Long medicId) throws UlcernosisException;
+    /*List<PatientResource> findAllPatientsByMedicId(Long medicId) throws UlcernosisException;
 
     List<PatientResource> findAllByNurseId(Long nurseId) throws UlcernosisException;
     PatientResource findPatientById(Long id) throws UlcernosisException;
@@ -23,5 +23,5 @@ public interface PatientService {
     PatientResource createPatient(SavePatientResource savePatientResource) throws UlcernosisException, IOException;
 
     PatientResource updatePatient(SavePatientResource savePatientResource, Long patientId) throws UlcernosisException, IOException;
-    String deletePatient(Long patientId) throws UlcernosisException;
+    String deletePatient(Long patientId) throws UlcernosisException;*/
 }
