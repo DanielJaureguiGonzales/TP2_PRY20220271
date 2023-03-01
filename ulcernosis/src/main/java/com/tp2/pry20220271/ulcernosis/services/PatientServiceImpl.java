@@ -47,16 +47,16 @@ public class PatientServiceImpl implements PatientService {
     @Autowired
     private AssignmentRepository assignmentRepository;
 
-    /*@Override
-    public List<PatientResource> findAllPatientsByMedicId(Long medicId) throws UlcernosisException {
-        final Medic searchMedic = medicRepository.findById(medicId).orElseThrow(()-> new NotFoundException("UCN_404","NOT_FOUND_EXCEPTION"));
+    @Override
+    public List<PatientResource> findAllPatientsByMedicId(Long medicId){
+        final Medic searchMedic = medicRepository.findById(medicId).orElseThrow(()-> new NotFoundException("Medic","Id",medicId));
         List<Patient> patients_founds = patientRepository.findAllByMedicId(searchMedic.getId());
         return patients_founds.stream().map(patient_found-> mapper.map(patient_found,PatientResource.class)).collect(Collectors.toList());
     }
 
     @Override
-    public List<PatientResource> findAllByNurseId(Long nurseId) throws UlcernosisException {
-        Nurse nurse = nurseRepository.findById(nurseId).orElseThrow(()-> new NotFoundException("UCN-404","NURSE_NOT_FOUND"));
+    public List<PatientResource> findAllByNurseId(Long nurseId){
+        Nurse nurse = nurseRepository.findById(nurseId).orElseThrow(()-> new NotFoundException("Nurse","Id",nurseId));
         List<Assignment> assignments = assignmentRepository.findAllByNurseId(nurse.getId());
         List<Patient> patients = patientRepository.findAllByAssignmentsIn(assignments);
         return patients.stream().map(patient -> mapper.map(patient,PatientResource.class)).collect(Collectors.toList());
@@ -64,38 +64,31 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public PatientResource findPatientById(Long id) throws UlcernosisException {
+    public PatientResource findPatientById(Long id) {
         return mapper.map(getPatientByID(id), PatientResource.class);
     }
 
     @Override
-    public Resource findPatientPhoto(Long id) throws UlcernosisException {
-        Patient patient = patientRepository.findById(id).orElseThrow(()-> new NotFoundException("UCN-404","USER_NOT_FOUND"));
+    public Resource findPatientPhoto(Long id) {
+        Patient patient = getPatientByID(id);
         Resource avatar = new ByteArrayResource(patient.getAvatar());
         return avatar;
     }
 
     @Override
-    public Resource putPatientPhoto(Long id, MultipartFile file) throws UlcernosisException, IOException{
-        Patient patient = patientRepository.findById(id).orElseThrow(()-> new NotFoundException("UCN-404","USER_NOT_FOUND"));
-
-        try {
-            patient.setAvatar(file.getBytes());
-            patientRepository.save(patient);
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            throw new InternalServerException("UCN-500","INTERNAL_SERVER_ERROR");
-        }
+    public Resource putPatientPhoto(Long id, MultipartFile file) throws IOException {
+        Patient patient = getPatientByID(id);
+        patient.setAvatar(file.getBytes());
+        patientRepository.save(patient);
 
         Resource avatar = new ByteArrayResource(patient.getAvatar());
         return avatar;
     }
 
     @Override
-    public PatientResource createPatient(SavePatientResource savePatientResource) throws UlcernosisException, IOException {
+    public PatientResource createPatient(SavePatientResource savePatientResource) {
         final Medic assignMedic = medicRepository.findById(savePatientResource.getMedicId()).orElseThrow(()->
-            new NotFoundException("UCN-404","MEDIC_NOT_FOUND")
+            new NotFoundException("Medic","Id",savePatientResource.getMedicId())
         );
 
         Patient newPatient = new Patient();
@@ -107,23 +100,14 @@ public class PatientServiceImpl implements PatientService {
         newPatient.setAvatar(new byte[]{});
         newPatient.setCivilStatus(savePatientResource.getCivilStatus());
         newPatient.setMedic(assignMedic);
-        Long id;
-        try {
-            id = patientRepository.save(newPatient).getId();
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new InternalServerException("UCN-500","INTERNAL_SERVER_ERROR");
-        }
-        PatientResource patientResource = mapper.map(newPatient,PatientResource.class);
-
-        log.info(String.valueOf(patientResource.getMedicId()));
-        return  patientResource;
+        Patient savePatient = patientRepository.save(newPatient);
+        return mapper.map(savePatient,PatientResource.class);
     }
 
     @Override
-    public PatientResource updatePatient(SavePatientResource savePatientResource, Long patientId) throws UlcernosisException, IOException {
+    public PatientResource updatePatient(SavePatientResource savePatientResource, Long patientId){
         final Medic assignMedic = medicRepository.findById(savePatientResource.getMedicId()).orElseThrow(()->
-                new NotFoundException("UCN-404","MEDIC_NOT_FOUND")
+                new NotFoundException("Medic","Id",savePatientResource.getMedicId())
         );
 
         Patient updatePatient = getPatientByID(patientId);
@@ -134,32 +118,21 @@ public class PatientServiceImpl implements PatientService {
         updatePatient.setDni(savePatientResource.getDni());
         updatePatient.setCivilStatus(savePatientResource.getCivilStatus());
 
-        Long id;
-        try {
-            id = patientRepository.save(updatePatient).getId();
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new InternalServerException("UCN-500","INTERNAL_SERVER_ERROR");
-        }
-        PatientResource patientResource = mapper.map(updatePatient,PatientResource.class);
 
-        return  patientResource;
+        return  mapper.map(patientRepository.save(updatePatient),PatientResource.class);
     }
 
     @Override
-    public String deletePatient(Long patientId) throws UlcernosisException {
+    public String deletePatient(Long patientId){
         Patient patient = getPatientByID(patientId);
-        try {
-            patientRepository.delete(patient);
-        } catch (Exception e){
-            throw new InternalServerException("UCN-500","INTERNAL_SERVER_ERROR");
-        }
+        patientRepository.delete(patient);
+
         return "Se eliminó al paciente exitosamente";
     }
 
-    public Patient getPatientByID(Long id) throws UlcernosisException {
+    public Patient getPatientByID(Long id){
         return patientRepository.findById(id).orElseThrow(()->
-                new NotFoundException("UCN-404","USER_NOT_FOUND")
+                new NotFoundException("Patient","Id",id)
         );
-    }*/
+    }
 }

@@ -10,20 +10,20 @@ import java.util.List;
 
 public interface DiagnosticService {
 
-  /*  List<DiagnosticResource> findAllByPatientId(Long patientId) throws UlcernosisException;
+    List<DiagnosticResource> findAllByPatientId(Long patientId);
 
-    List<DiagnosticResource> findAllByCreatorType(String creatorType) throws UlcernosisException;
+    List<DiagnosticResource> findAllByCreatorType(String creatorType);
 
-    List<DiagnosticResource> findAllByStage1() throws UlcernosisException;
+    List<DiagnosticResource> findAllByStage1();
 
 
-    List<DiagnosticResource> findAllByStage2() throws UlcernosisException;
+    List<DiagnosticResource> findAllByStage2();
 
-    List<DiagnosticResource> findAllByStage3() throws UlcernosisException;
+    List<DiagnosticResource> findAllByStage3();
 
-    List<DiagnosticResource> findAllByStage4() throws UlcernosisException;
+    List<DiagnosticResource> findAllByStage4();
 
     DiagnosticResource saveDiagnosis(SaveDiagnosisResource saveDiagnosisResource, MultipartFile file) throws UlcernosisException,IOException;
 
-    String deleteDiagnosisById(Long diagnosticId) throws UlcernosisException;*/
+    String deleteDiagnosisById(Long diagnosticId) throws UlcernosisException;
 }

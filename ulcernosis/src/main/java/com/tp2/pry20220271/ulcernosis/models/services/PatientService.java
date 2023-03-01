@@ -14,14 +14,14 @@ import java.util.List;
 public interface PatientService {
 
     //List<PatientResource> findAllPatientsByCreatorId(Long creatorId) throws UlcernosisException;
-    /*List<PatientResource> findAllPatientsByMedicId(Long medicId) throws UlcernosisException;
+    List<PatientResource> findAllPatientsByMedicId(Long medicId);
 
-    List<PatientResource> findAllByNurseId(Long nurseId) throws UlcernosisException;
-    PatientResource findPatientById(Long id) throws UlcernosisException;
-    Resource findPatientPhoto(Long id) throws UlcernosisException;
-    Resource putPatientPhoto(Long id, MultipartFile file) throws UlcernosisException, IOException;
-    PatientResource createPatient(SavePatientResource savePatientResource) throws UlcernosisException, IOException;
+    List<PatientResource> findAllByNurseId(Long nurseId);
+    PatientResource findPatientById(Long id);
+    Resource findPatientPhoto(Long id);
+    Resource putPatientPhoto(Long id, MultipartFile file) throws IOException;
+    PatientResource createPatient(SavePatientResource savePatientResource);
 
-    PatientResource updatePatient(SavePatientResource savePatientResource, Long patientId) throws UlcernosisException, IOException;
-    String deletePatient(Long patientId) throws UlcernosisException;*/
+    PatientResource updatePatient(SavePatientResource savePatientResource, Long patientId);
+    String deletePatient(Long patientId);
 }

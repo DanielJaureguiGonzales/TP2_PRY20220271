@@ -16,22 +16,22 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ulcernosis")
+@RequestMapping("/diagnosis")
 public class DiagnosticController {
 
-    /*@Autowired
+   /* @Autowired
     private DiagnosticService diagnosticService;
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/diagnosis/patient/{patientId}")
-    List<DiagnosticResource> getAllDiagnosticsByPatientId(@PathVariable("patientId") Long patientId) throws UlcernosisException {
+    @GetMapping("/get-by-patient/{patientId}")
+    List<DiagnosticResource> getAllDiagnosticsByPatientId(@PathVariable("patientId") Long patientId){
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"OK",medicService.findAll());
         return diagnosticService.findAllByPatientId(patientId);
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/diagnosis/create-patient")
-    DiagnosticResource createMedic(@Valid SaveDiagnosisResource saveDiagnosisResource, @RequestParam("file") MultipartFile file) throws UlcernosisException, IOException {
+    @PostMapping("/create-patient")
+    DiagnosticResource createMedic(@Valid SaveDiagnosisResource saveDiagnosisResource, @RequestParam("file") MultipartFile file){
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.CREATED),"CREATED",medicService.saveMedic(saveMedic));
         return diagnosticService.saveDiagnosis(saveDiagnosisResource, file);
     }*/

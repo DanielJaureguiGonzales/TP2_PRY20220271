@@ -12,14 +12,14 @@ import java.util.Optional;
 
 public interface AssignmentService {
 
-   /* List<AssignmentResource> findAllAssignments() throws UlcernosisException;
+    List<AssignmentResource> findAllAssignments();
 
-    List<AssignmentResource> getAssignmentByPatientId(Long patientId) throws UlcernosisException;
-    List<AssignmentResource> getAssignmentByNurseId(Long nurseId) throws UlcernosisException;
+    List<AssignmentResource> getAssignmentByPatientId(Long patientId);
+    List<AssignmentResource> getAssignmentByNurseId(Long nurseId);
 
 
-    AssignmentResource createAssignment(SaveAssignmentResource assignment) throws UlcernosisException;
+    AssignmentResource createAssignment(SaveAssignmentResource assignment);
 
-    String deleteAssigment(Long id) throws UlcernosisException;*/
+    String deleteAssigment(Long id);
     //String deleteAssignmentByNurseId(Long nurseId) throws UlcernosisException;
 }

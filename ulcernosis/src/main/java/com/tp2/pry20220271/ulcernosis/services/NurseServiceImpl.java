@@ -122,15 +122,14 @@ public class NurseServiceImpl implements NurseService {
         updateNurse.setFullName(saveNurseResource.getFullName());
         updateNurse.setCep(saveNurseResource.getCep());
         updateNurse.setAddress(saveNurseResource.getAddress());
-        updateNurse.setPassword(saveNurseResource.getPassword());
+        updateNurse.setPassword(passwordEncoder.encode(saveNurseResource.getPassword()));
 
        updateUser.setEmail(saveNurseResource.getEmail());
        updateUser.setFullName(saveNurseResource.getFullName());
        updateUser.setCivilStatus(saveNurseResource.getCivilStatus());
        updateUser.setAddress(saveNurseResource.getAddress());
        updateUser.setDni(saveNurseResource.getDni());
-       updateUser.setAge(Integer.valueOf(saveNurseResource.getAge()));
-       updateUser.setAvatar(updateNurse.getAvatar());
+       updateUser.setAge(saveNurseResource.getAge());
        updateUser.setPassword(passwordEncoder.encode(saveNurseResource.getPassword()));
        userRepository.save(updateUser);
 

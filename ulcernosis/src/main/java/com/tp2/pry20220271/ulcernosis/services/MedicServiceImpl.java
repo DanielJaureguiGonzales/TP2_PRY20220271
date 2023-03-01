@@ -89,8 +89,6 @@ public class MedicServiceImpl implements MedicService {
     @Override
     public MedicResource saveMedic(SaveMedicResource saveMedicResource) {
 
-
-
         Medic newMedic = mapper.map(saveMedicResource,Medic.class);
 
         newMedic.setAvatar(new byte[]{});
@@ -114,6 +112,7 @@ public class MedicServiceImpl implements MedicService {
         updateMedic.setCmp(saveMedicResource.getCmp());
         updateMedic.setCivilStatus(saveMedicResource.getCivilStatus());
         updateMedic.setAddress(saveMedicResource.getAddress());
+        updateMedic.setPassword(passwordEncoder.encode(saveMedicResource.getPassword()));
 
         updateUser.setEmail(saveMedicResource.getEmail());
         updateUser.setFullName(saveMedicResource.getFullName());
@@ -121,7 +120,6 @@ public class MedicServiceImpl implements MedicService {
         updateUser.setAddress(saveMedicResource.getAddress());
         updateUser.setDni(saveMedicResource.getDni());
         updateUser.setAge(Integer.valueOf(saveMedicResource.getAge()));
-        updateUser.setAvatar(updateMedic.getAvatar());
         updateUser.setPassword(passwordEncoder.encode(saveMedicResource.getPassword()));
         userRepository.save(updateUser);
 

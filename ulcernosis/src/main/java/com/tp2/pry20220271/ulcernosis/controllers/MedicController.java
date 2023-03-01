@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/medic-controller")
+@RequestMapping("/medics")
 public class MedicController {
 
     @Autowired
@@ -31,7 +31,7 @@ public class MedicController {
 
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/medics")
+    @GetMapping
     @PreAuthorize("hasRole('ROLE_MEDIC')")
     List<MedicResource> getAllMedics() throws UlcernosisException{
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"OK",medicService.findAll());
@@ -39,14 +39,14 @@ public class MedicController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/medics/{medicId}")
+    @GetMapping("/{medicId}")
     MedicResource getMedicById(@PathVariable("medicId") Long medicId) throws UlcernosisException{
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"OK",medicService.findMedicById(medicId));
         return medicService.findMedicById(medicId);
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/medics/{medicId}/profile-photo")
+    @GetMapping("/{medicId}/profile-photo")
     ResponseEntity<?> getMedicPhoto(@PathVariable("medicId") Long medicId) throws UlcernosisException, IOException {
         Resource profile_photo = medicService.findMedicPhoto(medicId);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(profile_photo);
@@ -54,7 +54,7 @@ public class MedicController {
 
 
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping("/medics/{medicId}/profile-photo")
+    @PutMapping("/{medicId}/profile-photo")
     ResponseEntity<?> putMedicPhoto(@PathVariable("medicId") Long medicId, @RequestParam("file") MultipartFile file) throws IOException {
         Resource profile_photo = medicService.updateMedicPhoto(medicId, file);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(profile_photo);
@@ -69,7 +69,7 @@ public class MedicController {
     }*/
 
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping("/medics/{medicId}/update-medic")
+    @PutMapping("/{medicId}/update-medic")
     MedicResource updateMedic(@Valid @RequestBody SaveMedicResource updateMedic, @PathVariable("medicId") Long medicId){
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"UPDATED",medicService.updateMedic(medicId,updateMedic));
         return medicService.updateMedic(medicId,updateMedic);
@@ -77,7 +77,7 @@ public class MedicController {
 
 
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/medics/{medicId}/delete-medic")
+    @DeleteMapping("/{medicId}/delete-medic")
     @PreAuthorize("hasRole('ROLE_MEDIC')")
     String deleteMedic(@PathVariable("medicId") Long medicId) throws UlcernosisException{
         //return new UlcernosisResponse<>("Success", String.valueOf(HttpStatus.OK),"OK", medicService.deleteMedic(medicId));

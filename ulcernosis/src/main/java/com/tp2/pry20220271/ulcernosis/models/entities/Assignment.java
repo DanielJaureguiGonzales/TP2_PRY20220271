@@ -15,7 +15,7 @@ public class Assignment {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "medic_id",nullable = false)
+    @JoinColumn(name = "patient_id",nullable = false)
     private Patient patient;
 
 
