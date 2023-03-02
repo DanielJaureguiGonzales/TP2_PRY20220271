@@ -66,7 +66,7 @@ public class Patient {
 
     @OneToMany(mappedBy = "patient", fetch=FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonIgnoreProperties(value = {"patient"}, allowSetters = true)
-    private List<Diagnostic> diagnosis;
+    private List<Diagnosis> diagnosis;
 
     @OneToMany(mappedBy = "patient", fetch=FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonIgnoreProperties(value = {"patient"}, allowSetters = true)

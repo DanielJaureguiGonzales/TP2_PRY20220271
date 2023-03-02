@@ -1,13 +1,12 @@
 package com.tp2.pry20220271.ulcernosis.resources.response;
 
 
-import com.tp2.pry20220271.ulcernosis.models.entities.Patient;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class DiagnosticResource {
+public class DiagnosisResource {
 
     private Long id;
 
