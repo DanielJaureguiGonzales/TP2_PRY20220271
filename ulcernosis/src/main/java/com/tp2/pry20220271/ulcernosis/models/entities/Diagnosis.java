@@ -1,6 +1,7 @@
 package com.tp2.pry20220271.ulcernosis.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tp2.pry20220271.ulcernosis.models.enums.Type;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -44,7 +45,11 @@ public class Diagnosis {
     @NotNull(message = "Debe haber un paciente asignado para este diagnóstico")
     private Patient patient;
 
-    @Column(nullable = false)
+    @Column(nullable = false,name = "creator_id")
     private Long creatorId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "creator_type")
+    private Type creatorType;
 
 }

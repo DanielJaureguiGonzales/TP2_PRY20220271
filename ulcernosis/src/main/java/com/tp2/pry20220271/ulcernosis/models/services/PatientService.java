@@ -1,9 +1,6 @@
 package com.tp2.pry20220271.ulcernosis.models.services;
 
-import com.tp2.pry20220271.ulcernosis.exceptions.UlcernosisException;
-
 import com.tp2.pry20220271.ulcernosis.resources.request.SavePatientResource;
-import com.tp2.pry20220271.ulcernosis.resources.response.NurseResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.PatientResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;

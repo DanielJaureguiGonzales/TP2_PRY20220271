@@ -1,6 +1,7 @@
 package com.tp2.pry20220271.ulcernosis.resources.response;
 
 
+import com.tp2.pry20220271.ulcernosis.models.enums.Type;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,4 +26,5 @@ public class DiagnosisResource {
     private Long patientId;
 
     private Long creatorId;
+    private Type creatorType;
 }

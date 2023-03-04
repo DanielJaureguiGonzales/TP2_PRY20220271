@@ -2,8 +2,13 @@ package com.tp2.pry20220271.ulcernosis.services;
 
 import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
 import com.tp2.pry20220271.ulcernosis.models.entities.Diagnosis;
+import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
+import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
 import com.tp2.pry20220271.ulcernosis.models.entities.Patient;
+import com.tp2.pry20220271.ulcernosis.models.enums.Type;
 import com.tp2.pry20220271.ulcernosis.models.repositories.DiagnosisRepository;
+import com.tp2.pry20220271.ulcernosis.models.repositories.MedicRepository;
+import com.tp2.pry20220271.ulcernosis.models.repositories.NurseRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.PatientRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.DiagnosisService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveDiagnosisResource;
@@ -38,67 +43,102 @@ public class DiagnosisServiceImpl implements DiagnosisService {
 
     @Autowired
     private PatientRepository patientRepository;
+    @Autowired
+    private MedicRepository medicRepository;
+    @Autowired
+    private NurseRepository nurseRepository;
 
     public DiagnosisServiceImpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
+
     @Override
-    public List<DiagnosisResource> findAllByPatientId(Long patientId){
-        List<Diagnosis> diagnosticList = diagnosisRepository.findAllByPatientId(patientId);
+    public DiagnosisResource findById(Long diagnosticId) {
+        Diagnosis diagnosis = diagnosisRepository.findById(diagnosticId).orElseThrow(() -> new NotFoundException("Diagnosis", "id", diagnosticId));
+        return mapper.map(diagnosis, DiagnosisResource.class);
+    }
+
+    @Override
+    public List<DiagnosisResource> findAllByPatientName(String patientName) {
+        Patient patient = patientRepository.findByName(patientName).orElseThrow(() -> new NotFoundException("Patient", "name", patientName));
+        List<Diagnosis> diagnosticList = diagnosisRepository.findAllByPatientId(patient.getId());
         return diagnosticList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
     }
 
     @Override
-    public List<DiagnosisResource> findAllByCreatorType(String creatorType){
-        return null;
+    public List<DiagnosisResource> findAllByNurseFullname(String nurseName) {
+        Nurse nurse = nurseRepository.findNurseByFullName(nurseName).orElseThrow(() -> new NotFoundException("Nurse", "name", nurseName));
+        List<Diagnosis> diagnosticList = diagnosisRepository.findAllByCreatorIdAndCreatorType(nurse.getId(), Type.NURSE);
+        return diagnosticList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
     }
 
     @Override
-    public List<DiagnosisResource> findAllByStage1() {
-        return null;
+    public List<DiagnosisResource> findAllByMedicFullname(String medicName) {
+        Medic medic = medicRepository.findMedicByFullName(medicName).orElseThrow(() -> new NotFoundException("Medic", "name", medicName));
+        List<Diagnosis> diagnosticList = diagnosisRepository.findAllByCreatorIdAndCreatorType(medic.getId(), Type.MEDIC);
+        return diagnosticList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
     }
 
     @Override
-    public List<DiagnosisResource> findAllByStage2(){
-        return null;
+    public List<DiagnosisResource> findAllByStagePredicted(String stagePredicted) {
+        List<Diagnosis> diagnosticList = diagnosisRepository.findAllByStagePredicted(stagePredicted);
+        return diagnosticList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
+    }
+
+
+    /*@Override
+    public List<DiagnosisResource> findAllByCreatorIdAndCreatorTypeAndStagePredicted(Long creatorId, Type creatorType, String stagePredicted) {
+        List<Diagnosis> diagnosticList = diagnosisRepository.findAllByStagePredictedAndCreatorIdAndCreatorType(stagePredicted,creatorId, creatorType );
+        return diagnosticList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
     }
 
     @Override
-    public List<DiagnosisResource> findAllByStage3() {
-        return null;
-    }
+    public List<DiagnosisResource> findAllByCreatorIdAndCreatorType(Long creatorId, Type creatorType){
+        List<Diagnosis> diagnosticList = diagnosisRepository.findAllByCreatorIdAndCreatorType(creatorId, creatorType);
+        return diagnosticList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
+    }*/
 
-    @Override
-    public List<DiagnosisResource> findAllByStage4(){
-        return null;
-    }
 
     @Override
     public DiagnosisResource saveDiagnosis(SaveDiagnosisResource saveDiagnosisResource, MultipartFile file) throws IOException {
-
         Patient patient = patientRepository.findById(saveDiagnosisResource.getPatientId()).orElseThrow(() -> new NotFoundException("Patient", "id", saveDiagnosisResource.getPatientId()));
         DiagResource response =getDiagResourceCNN(file);
+        Diagnosis diagnosis = new Diagnosis();
+        if (saveDiagnosisResource.getCreatorType()== Type.MEDIC){
+            Medic medic = medicRepository.findById(saveDiagnosisResource.getCreatorId()).orElseThrow(() -> new NotFoundException("Medic", "id", saveDiagnosisResource.getCreatorId()));
+            diagnosis.setUlcerPhoto(file.getBytes());
+            diagnosis.setCreatorId(medic.getId());
+            diagnosis.setStage1(response.getStage_1());
+            diagnosis.setStage2(response.getStage_2());
+            diagnosis.setStage3(response.getStage_3());
+            diagnosis.setStage4(response.getStage_4());
+            diagnosis.setStagePredicted(response.getStage_predicted());
+            diagnosis.setPatient(patient);
+            diagnosis.setCreatorType(Type.MEDIC);
+        } else if (saveDiagnosisResource.getCreatorType()== Type.NURSE){
+            Nurse nurse = nurseRepository.findById(saveDiagnosisResource.getCreatorId()).orElseThrow(() -> new NotFoundException("Nurse", "id", saveDiagnosisResource.getCreatorId()));
+            diagnosis.setUlcerPhoto(file.getBytes());
+            diagnosis.setCreatorId(nurse.getId());
+            diagnosis.setStage1(response.getStage_1());
+            diagnosis.setStage2(response.getStage_2());
+            diagnosis.setStage3(response.getStage_3());
+            diagnosis.setStage4(response.getStage_4());
+            diagnosis.setStagePredicted(response.getStage_predicted());
+            diagnosis.setPatient(patient);
+            diagnosis.setCreatorType(Type.NURSE);
+        }
 
-        Diagnosis newDiagnosis = new Diagnosis();
+        return mapper.map(diagnosisRepository.save(diagnosis), DiagnosisResource.class);
 
-        newDiagnosis.setCreatorId(saveDiagnosisResource.getCreatorId());
-        newDiagnosis.setStage1(response.getStage_1());
-        newDiagnosis.setStage2(response.getStage_2());
-        newDiagnosis.setStage3(response.getStage_3());
-        newDiagnosis.setStage4(response.getStage_4());
-        newDiagnosis.setStagePredicted(response.getStage_predicted());
-        newDiagnosis.setPatient(patient);
-        newDiagnosis.setUlcerPhoto(file.getBytes());
-
-
-        return mapper.map(diagnosisRepository.save(newDiagnosis), DiagnosisResource.class);
     }
 
 
     @Override
     public String deleteDiagnosisById(Long diagnosticId) {
-        return null;
+        diagnosisRepository.findById(diagnosticId).orElseThrow(() -> new NotFoundException("Diagnosis", "id", diagnosticId));
+        diagnosisRepository.deleteById(diagnosticId);
+        return "El diagnóstico ha sido eliminado";
     }
 
     public Diagnosis getDiagnosisById(Long id) {
@@ -122,4 +162,6 @@ public class DiagnosisServiceImpl implements DiagnosisService {
         DiagResource response = restTemplate.postForObject("http://127.0.0.1:5000/predict",request,DiagResource.class);
         return response;
     }
+
+
 }

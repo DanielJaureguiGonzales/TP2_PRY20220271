@@ -1,6 +1,7 @@
 package com.tp2.pry20220271.ulcernosis.models.repositories;
 
 import com.tp2.pry20220271.ulcernosis.models.entities.Diagnosis;
+import com.tp2.pry20220271.ulcernosis.models.enums.Type;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -11,19 +12,10 @@ import java.util.List;
 public interface DiagnosisRepository extends JpaRepository<Diagnosis,Long> {
 
 
-    List<Diagnosis> findAllByCreatorId(String creatorId);
+    List<Diagnosis> findAllByCreatorIdAndCreatorType(Long creatorId, Type creatorType);
 
     List<Diagnosis> findAllByPatientId(Long patientId);
 
-    @Query("select d from diagnosis d where d.stagePredicted = '1'")
-    List<Diagnosis> findAllByStage1();
-
-    @Query("select d from diagnosis d where d.stagePredicted = '2'")
-    List<Diagnosis> findAllByStage2();
-
-    @Query("select d from diagnosis d where d.stagePredicted = '3'")
-    List<Diagnosis> findAllByStage3();
-
-    @Query("select d from diagnosis d where d.stagePredicted = '4'")
-    List<Diagnosis> findAllByStage4();
+    List<Diagnosis> findAllByStagePredicted(String stagePredicted);
+    /*List<Diagnosis> findAllByStagePredictedAndCreatorIdAndCreatorType(String stagePredicted,Long creatorId, Type creatorType);*/
 }

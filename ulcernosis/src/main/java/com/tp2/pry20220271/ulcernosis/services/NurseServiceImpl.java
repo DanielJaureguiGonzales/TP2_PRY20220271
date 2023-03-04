@@ -52,7 +52,7 @@ public class NurseServiceImpl implements NurseService {
     }
 
     @Override
-    public List<NurseResource> findAll() throws UlcernosisException {
+    public List<NurseResource> findAll() {
         List<Nurse> nurses = nurseRepository.findAll();
         return nurses.stream().map(m -> mapper.map(m,NurseResource.class)).collect(Collectors.toList());
     }
@@ -67,7 +67,7 @@ public class NurseServiceImpl implements NurseService {
 
 
     @Override
-    public NurseResource findNurseById(Long id) throws UlcernosisException {
+    public NurseResource findNurseById(Long id){
         return mapper.map(getNurseByID(id), NurseResource.class);
     }
 

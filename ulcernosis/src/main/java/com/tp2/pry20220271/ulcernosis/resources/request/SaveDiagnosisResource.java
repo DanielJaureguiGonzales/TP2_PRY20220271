@@ -1,11 +1,9 @@
 package com.tp2.pry20220271.ulcernosis.resources.request;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tp2.pry20220271.ulcernosis.models.entities.Patient;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import com.tp2.pry20220271.ulcernosis.models.enums.Type;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,5 +18,8 @@ public class SaveDiagnosisResource {
     private Long patientId;
 
     private Long creatorId;
+
+    @Enumerated(EnumType.STRING)
+    private Type creatorType;
 
 }
