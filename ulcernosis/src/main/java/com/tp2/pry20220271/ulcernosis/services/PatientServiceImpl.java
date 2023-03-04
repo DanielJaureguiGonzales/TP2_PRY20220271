@@ -1,8 +1,6 @@
 package com.tp2.pry20220271.ulcernosis.services;
 
-import com.tp2.pry20220271.ulcernosis.exceptions.InternalServerException;
 import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
-import com.tp2.pry20220271.ulcernosis.exceptions.UlcernosisException;
 import com.tp2.pry20220271.ulcernosis.models.entities.Assignment;
 import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
 import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
@@ -21,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

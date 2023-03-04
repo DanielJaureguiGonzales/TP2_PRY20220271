@@ -1,6 +1,5 @@
 package com.tp2.pry20220271.ulcernosis.controllers;
 
-import com.tp2.pry20220271.ulcernosis.exceptions.UlcernosisException;
 import com.tp2.pry20220271.ulcernosis.models.services.NurseService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveNurseResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.NurseResource;
@@ -25,28 +24,28 @@ public class NurseController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    List<NurseResource> getAllNurses() throws UlcernosisException {
+    List<NurseResource> getAllNurses() {
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"OK",nurseService.findAll());
         return nurseService.findAll();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/medic/{medicId}")
-    List<NurseResource> getAllNursesByMedicId(@PathVariable("medicId") Long medicId) throws UlcernosisException {
+    List<NurseResource> getAllNursesByMedicId(@PathVariable("medicId") Long medicId){
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"OK",nurseService.findAllByMedicId(medicId));
         return nurseService.findAllByMedicId(medicId);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{nurseId}")
-    NurseResource getNurseById(@PathVariable("nurseId") Long nurseId) throws UlcernosisException{
+    NurseResource getNurseById(@PathVariable("nurseId") Long nurseId){
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"OK",nurseService.findNurseById(nurseId));
         return nurseService.findNurseById(nurseId);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{nurseId}/profile-photo")
-    ResponseEntity<?> getNursePhoto(@PathVariable("nurseId") Long nurseId) throws UlcernosisException{
+    ResponseEntity<?> getNursePhoto(@PathVariable("nurseId") Long nurseId){
         Resource profile_photo = nurseService.findNursePhoto(nurseId);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(profile_photo);
     }

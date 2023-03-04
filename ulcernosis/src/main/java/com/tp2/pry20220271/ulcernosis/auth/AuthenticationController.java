@@ -1,7 +1,6 @@
 package com.tp2.pry20220271.ulcernosis.auth;
 
 
-import com.tp2.pry20220271.ulcernosis.exceptions.UlcernosisException;
 import com.tp2.pry20220271.ulcernosis.resources.etc.AuthenticationRequest;
 import com.tp2.pry20220271.ulcernosis.resources.etc.AuthenticationResponse;
 import com.tp2.pry20220271.ulcernosis.resources.etc.RegisterRequest;
@@ -17,7 +16,7 @@ public class AuthenticationController {
     private final AuthenticationService service;
 
     @PostMapping("/register")
-    public AuthenticationResponse register(@RequestBody @Valid RegisterRequest request) throws UlcernosisException {
+    public AuthenticationResponse register(@RequestBody @Valid RegisterRequest request){
         return service.register(request);
 
     }

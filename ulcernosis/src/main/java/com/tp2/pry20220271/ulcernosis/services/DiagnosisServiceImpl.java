@@ -61,7 +61,7 @@ public class DiagnosisServiceImpl implements DiagnosisService {
 
     @Override
     public List<DiagnosisResource> findAllByPatientName(String patientName) {
-        Patient patient = patientRepository.findByName(patientName).orElseThrow(() -> new NotFoundException("Patient", "name", patientName));
+        Patient patient = patientRepository.findByFullName(patientName).orElseThrow(() -> new NotFoundException("Patient", "name", patientName));
         List<Diagnosis> diagnosticList = diagnosisRepository.findAllByPatientId(patient.getId());
         return diagnosticList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
     }

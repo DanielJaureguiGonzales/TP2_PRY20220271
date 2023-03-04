@@ -2,13 +2,10 @@ package com.tp2.pry20220271.ulcernosis.auth;
 
 import com.tp2.pry20220271.ulcernosis.config.JwtService;
 import com.tp2.pry20220271.ulcernosis.exceptions.*;
-import com.tp2.pry20220271.ulcernosis.exceptions.Error;
 import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
 import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
 import com.tp2.pry20220271.ulcernosis.models.entities.User;
 import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
-import com.tp2.pry20220271.ulcernosis.models.repositories.MedicRepository;
-import com.tp2.pry20220271.ulcernosis.models.repositories.NurseRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.UserRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.MedicService;
 import com.tp2.pry20220271.ulcernosis.models.services.NurseService;

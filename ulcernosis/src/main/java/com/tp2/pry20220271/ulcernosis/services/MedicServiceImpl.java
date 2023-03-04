@@ -1,18 +1,14 @@
 package com.tp2.pry20220271.ulcernosis.services;
 
-import com.tp2.pry20220271.ulcernosis.exceptions.CmpExistsException;
-import com.tp2.pry20220271.ulcernosis.exceptions.InternalServerException;
 import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
-import com.tp2.pry20220271.ulcernosis.exceptions.UlcernosisException;
 import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
 import com.tp2.pry20220271.ulcernosis.models.entities.User;
 import com.tp2.pry20220271.ulcernosis.models.repositories.MedicRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.UserRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.MedicService;
-import com.tp2.pry20220271.ulcernosis.resources.response.MedicResource;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveMedicResource;
+import com.tp2.pry20220271.ulcernosis.resources.response.MedicResource;
 import org.modelmapper.ModelMapper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

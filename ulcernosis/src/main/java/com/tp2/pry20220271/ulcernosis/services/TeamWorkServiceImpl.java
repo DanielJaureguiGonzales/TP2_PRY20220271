@@ -1,8 +1,6 @@
 package com.tp2.pry20220271.ulcernosis.services;
 
-import com.tp2.pry20220271.ulcernosis.exceptions.InternalServerException;
 import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
-import com.tp2.pry20220271.ulcernosis.exceptions.UlcernosisException;
 import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
 import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
 import com.tp2.pry20220271.ulcernosis.models.entities.TeamWork;

@@ -1,6 +1,6 @@
 package com.tp2.pry20220271.ulcernosis.controllers;
 
-import com.tp2.pry20220271.ulcernosis.exceptions.UlcernosisException;
+
 import com.tp2.pry20220271.ulcernosis.models.services.MedicService;
 
 import com.tp2.pry20220271.ulcernosis.resources.response.MedicResource;
@@ -33,21 +33,21 @@ public class MedicController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     @PreAuthorize("hasRole('ROLE_MEDIC')")
-    List<MedicResource> getAllMedics() throws UlcernosisException{
+    List<MedicResource> getAllMedics() {
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"OK",medicService.findAll());
         return medicService.findAll();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{medicId}")
-    MedicResource getMedicById(@PathVariable("medicId") Long medicId) throws UlcernosisException{
+    MedicResource getMedicById(@PathVariable("medicId") Long medicId) {
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"OK",medicService.findMedicById(medicId));
         return medicService.findMedicById(medicId);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{medicId}/profile-photo")
-    ResponseEntity<?> getMedicPhoto(@PathVariable("medicId") Long medicId) throws UlcernosisException, IOException {
+    ResponseEntity<?> getMedicPhoto(@PathVariable("medicId") Long medicId) {
         Resource profile_photo = medicService.findMedicPhoto(medicId);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(profile_photo);
     }
@@ -79,7 +79,7 @@ public class MedicController {
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{medicId}/delete-medic")
     @PreAuthorize("hasRole('ROLE_MEDIC')")
-    String deleteMedic(@PathVariable("medicId") Long medicId) throws UlcernosisException{
+    String deleteMedic(@PathVariable("medicId") Long medicId){
         //return new UlcernosisResponse<>("Success", String.valueOf(HttpStatus.OK),"OK", medicService.deleteMedic(medicId));
         return medicService.deleteMedic(medicId);
     }
