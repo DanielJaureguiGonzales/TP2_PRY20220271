@@ -52,7 +52,7 @@ public class Medic {
     private String address;
 
     @NotEmpty(message = "El código del médico no debe estar vacío")
-    @Column(nullable = false, length = 5, unique = true)
+    @Column(nullable = false, unique = true)
     private String cmp;
 
     @NotEmpty(message = "El nombre completo no debe estar vacío")

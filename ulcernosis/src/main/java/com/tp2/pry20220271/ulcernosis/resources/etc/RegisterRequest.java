@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,7 +40,11 @@ public class RegisterRequest {
     @NotEmpty(message = "La dirección no puede ser vacia")
     private String address;
 
+
+    @Pattern(regexp = "^0\\d{5}$|^0$", message = "El código cmp debe comenzar con 0 y tener 6 dígitos, o que empieze con 0")
     private String cmp;
+
+    @Pattern(regexp = "\\d{6}", message = "El código cep debe tener 6 dígitos")
     private String cep;
 
     @Enumerated(EnumType.STRING)
