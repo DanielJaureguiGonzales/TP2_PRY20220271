@@ -38,7 +38,7 @@ public class Medic {
     private String dni;
 
     @NotEmpty(message = "El DNI no debe estar vacío")
-    @Column(unique = true, nullable = false, length = 8)
+    @Column(unique = true, nullable = false, length = 9)
     private String phone;
 
 

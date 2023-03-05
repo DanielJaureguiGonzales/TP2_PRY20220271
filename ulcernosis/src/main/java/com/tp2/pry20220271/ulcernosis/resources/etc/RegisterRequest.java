@@ -31,11 +31,11 @@ public class RegisterRequest {
     private String password;
 
     @NotEmpty(message = "El dni no puede ser vacia")
-    @Pattern(regexp = "^[0-9]*$",message = "El dni debe ser solo números")
+    @Pattern(regexp = "\\d{8}",message = "El dni debe tener 8 dígitos y debe ser solo números")
     private String dni;
 
     @NotEmpty(message = "El teléfono no puede ser vacia")
-    @Pattern(regexp = "^[0-9]*$",message = "El teléfono debe ser solo números")
+    @Pattern(regexp = "\\d{9}",message = "El teléfono debe tener 9 dígitos y debe ser solo números")
     private String phone;
 
     @NotEmpty(message = "La edad no puede ser vacia")
