@@ -109,6 +109,7 @@ public class MedicServiceImpl implements MedicService {
         updateMedic.setCivilStatus(saveMedicResource.getCivilStatus());
         updateMedic.setAddress(saveMedicResource.getAddress());
         updateMedic.setPassword(passwordEncoder.encode(saveMedicResource.getPassword()));
+        updateMedic.setPhone(saveMedicResource.getPhone());
 
         updateUser.setEmail(saveMedicResource.getEmail());
         updateUser.setFullName(saveMedicResource.getFullName());
@@ -117,6 +118,7 @@ public class MedicServiceImpl implements MedicService {
         updateUser.setDni(saveMedicResource.getDni());
         updateUser.setAge(Integer.valueOf(saveMedicResource.getAge()));
         updateUser.setPassword(passwordEncoder.encode(saveMedicResource.getPassword()));
+        updateUser.setPhone(saveMedicResource.getPhone());
         userRepository.save(updateUser);
 
        return  mapper.map(medicRepository.save(updateMedic), MedicResource.class);

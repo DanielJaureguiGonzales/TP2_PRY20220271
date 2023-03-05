@@ -22,7 +22,7 @@ public class SaveMedicResource {
 
 
     private String dni;
-
+    private String phone;
 
     private String age;
 

@@ -42,6 +42,10 @@ public class User implements UserDetails {
     @Column(unique = true, nullable = false, length = 8)
     private String dni;
 
+    @NotEmpty(message = "El DNI no debe estar vacío")
+    @Column(unique = true, nullable = false, length = 8)
+    private String phone;
+
     @NotEmpty(message = "El nombre completo no debe estar vacío")
     @Column(nullable = false)
     private String civilStatus;

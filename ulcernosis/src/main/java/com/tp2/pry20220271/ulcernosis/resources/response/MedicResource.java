@@ -15,6 +15,7 @@ public class MedicResource {
     private String fullName;
     private String email;
     private String dni;
+    private String phone;
     private Integer age;
     private String address;
     private String cmp;

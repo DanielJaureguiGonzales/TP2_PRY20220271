@@ -14,6 +14,8 @@ public class SaveNurseResource {
     private String password;
 
     private String dni;
+
+    private String phone;
     private Integer age;
 
     private String civilStatus;

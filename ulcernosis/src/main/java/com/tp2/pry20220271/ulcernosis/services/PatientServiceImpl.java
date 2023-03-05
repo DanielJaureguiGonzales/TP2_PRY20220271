@@ -97,6 +97,7 @@ public class PatientServiceImpl implements PatientService {
         newPatient.setAvatar(new byte[]{});
         newPatient.setCivilStatus(savePatientResource.getCivilStatus());
         newPatient.setMedic(assignMedic);
+        newPatient.setPhone(savePatientResource.getPhone());
         Patient savePatient = patientRepository.save(newPatient);
         return mapper.map(savePatient,PatientResource.class);
     }
@@ -114,7 +115,7 @@ public class PatientServiceImpl implements PatientService {
         updatePatient.setAddress(savePatientResource.getAddress());
         updatePatient.setDni(savePatientResource.getDni());
         updatePatient.setCivilStatus(savePatientResource.getCivilStatus());
-
+        updatePatient.setPhone(savePatientResource.getPhone());
 
         return  mapper.map(patientRepository.save(updatePatient),PatientResource.class);
     }

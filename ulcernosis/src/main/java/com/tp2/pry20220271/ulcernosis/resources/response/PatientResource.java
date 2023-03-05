@@ -18,6 +18,7 @@ public class PatientResource {
     private String email;
 
     private String dni;
+    private String phone;
 
     private Integer age;
 

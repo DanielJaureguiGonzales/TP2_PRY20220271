@@ -64,6 +64,7 @@ public class AuthenticationService {
                 .dni(request.getDni())
                 .age(Integer.valueOf(request.getAge()))
                 .address(request.getAddress())
+                .phone(request.getPhone())
                 .role(request.getRol())
                 .civilStatus(request.getCivilStatus())
                 .avatar(new byte[]{})
