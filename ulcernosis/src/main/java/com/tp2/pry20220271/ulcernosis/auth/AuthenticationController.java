@@ -3,6 +3,7 @@ package com.tp2.pry20220271.ulcernosis.auth;
 
 import com.tp2.pry20220271.ulcernosis.resources.etc.AuthenticationRequest;
 import com.tp2.pry20220271.ulcernosis.resources.etc.AuthenticationResponse;
+import com.tp2.pry20220271.ulcernosis.resources.etc.AuthenticationResponseId;
 import com.tp2.pry20220271.ulcernosis.resources.etc.RegisterRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public AuthenticationResponse register(@RequestBody AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(@RequestBody AuthenticationRequest request) {
         return service.authenticate(request);
 
     }
 
+    @PostMapping("/authenticateId")
+    public AuthenticationResponseId authenticateById(@RequestBody AuthenticationRequest authenticateRequest) {
+        return service.authenticateId(authenticateRequest);
+    }
 }

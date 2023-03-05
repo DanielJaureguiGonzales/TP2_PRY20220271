@@ -11,6 +11,7 @@ import com.tp2.pry20220271.ulcernosis.models.services.MedicService;
 import com.tp2.pry20220271.ulcernosis.models.services.NurseService;
 import com.tp2.pry20220271.ulcernosis.resources.etc.AuthenticationRequest;
 import com.tp2.pry20220271.ulcernosis.resources.etc.AuthenticationResponse;
+import com.tp2.pry20220271.ulcernosis.resources.etc.AuthenticationResponseId;
 import com.tp2.pry20220271.ulcernosis.resources.etc.RegisterRequest;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveMedicResource;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveNurseResource;
@@ -110,6 +111,18 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .build();
+    }
+
+    public AuthenticationResponseId authenticateId(AuthenticationRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+        );
+        var user = repository.findByEmail(request.getEmail())
+                .orElseThrow();
+        var jwtToken = jwtService.generateToken(user);
+        return AuthenticationResponseId.builder()
+                .id(user.getId())
                 .build();
     }
 }
