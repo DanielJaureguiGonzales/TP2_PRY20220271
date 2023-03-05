@@ -58,13 +58,18 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request) {
 
         Optional<User> userEmailExists = repository.findByEmail(request.getEmail());
+        Optional<User> userPhoneExists = repository.findByPhone(request.getPhone());
+        Optional<User> userDniExists = repository.findByDni(request.getDni());
         /*Optional<Medic> medicByCmpExists = medicService.findMedicByCMP(request.getCmp());
         Optional<Nurse> nurseByCepExists = nurseService.findNurseByCEP(request.getCep());*/
 
         if (userEmailExists.isPresent()) {
             throw new EmailExistsException("El email ya está asociado con otra cuenta");
+        } else if (userPhoneExists.isPresent()){
+            throw new PhoneExistsException("El teléfono ya está asociado con otra cuenta");
+        } else if (userDniExists.isPresent()) {
+            throw new DniExistsException("El dni ya está asociado con otra cuenta");
         }
-
 
 
         var user = User.builder()
@@ -97,7 +102,7 @@ public class AuthenticationService {
             Nurse nurse = nurseService.findNurseByCEP(request.getCep());
 
             if (!(Objects.isNull(nurse))){
-                throw new CepExistsException("El cep ya está asociado a otro médico");
+                throw new CepExistsException("El cep ya está asociado a otro enfermero");
             }
 
             repository.save(user);
