@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface MedicRepository extends JpaRepository<Medic,Long> {
 
     Optional<Medic> findMedicByFullName(String fullName);
+    Optional<Medic> findMedicByEmail(String email);
 
     Optional<Medic> findMedicByCmp(String cmp);
 

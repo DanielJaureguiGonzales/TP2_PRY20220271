@@ -6,6 +6,8 @@ import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
 import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
 import com.tp2.pry20220271.ulcernosis.models.entities.User;
 import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
+import com.tp2.pry20220271.ulcernosis.models.repositories.MedicRepository;
+import com.tp2.pry20220271.ulcernosis.models.repositories.NurseRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.UserRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.MedicService;
 import com.tp2.pry20220271.ulcernosis.models.services.NurseService;
@@ -36,6 +38,13 @@ public class AuthenticationService {
     private final UserRepository repository;
     @Autowired
     private MedicService medicService;
+
+    @Autowired
+    private MedicRepository medicRepository;
+
+    @Autowired
+    private NurseRepository nurseRepository;
+
 
     private final PasswordEncoder passwordEncoder;
 
@@ -106,8 +115,12 @@ public class AuthenticationService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
+
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
+
+
+
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
@@ -121,8 +134,15 @@ public class AuthenticationService {
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
+        Long id = null;
+        if (user.getRole() == Rol.ROLE_MEDIC){
+            id = medicRepository.findMedicByEmail(user.getEmail()).orElseThrow(()-> new NotFoundException("Medic","Email",user.getEmail())).getId();
+        } else if (user.getRole() == Rol.ROLE_NURSE ) {
+            id = nurseRepository.findNurseByEmail(user.getEmail()).orElseThrow(()-> new NotFoundException("Nurse","Email",user.getEmail())).getId();
+        }
         return AuthenticationResponseId.builder()
-                .id(user.getId())
+                .id(id)
+                .type(user.getRole())
                 .build();
     }
 }
