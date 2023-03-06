@@ -5,6 +5,7 @@ import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
 import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
 import com.tp2.pry20220271.ulcernosis.models.entities.TeamWork;
 import com.tp2.pry20220271.ulcernosis.models.entities.User;
+import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
 import com.tp2.pry20220271.ulcernosis.models.repositories.MedicRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.NurseRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.TeamWorkRepository;
@@ -12,6 +13,7 @@ import com.tp2.pry20220271.ulcernosis.models.repositories.UserRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.NurseService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveNurseResource;
 
+import com.tp2.pry20220271.ulcernosis.resources.response.MedicResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.NurseResource;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -68,7 +70,8 @@ public class NurseServiceImpl implements NurseService {
 
     @Override
     public NurseResource findNurseById(Long id){
-        return mapper.map(getNurseByID(id), NurseResource.class);
+        Nurse nurse = nurseRepository.findById(id).orElseThrow(()-> new NotFoundException("Nurse","id",id));
+        return mapper.map(nurse, NurseResource.class);
     }
 
     @Override
@@ -104,11 +107,14 @@ public class NurseServiceImpl implements NurseService {
 
 
         Nurse newNurse = mapper.map(saveNurseResource,Nurse.class);
+        newNurse.setRole(Rol.ROLE_NURSE);
         newNurse.setDni(saveNurseResource.getDni());
         newNurse.setAvatar(new byte[]{});
         newNurse.setPassword(passwordEncoder.encode(saveNurseResource.getPassword()));
 
-        return mapper.map(nurseRepository.save(newNurse), NurseResource.class);
+        NurseResource nurseResource = mapper.map(nurseRepository.save(newNurse), NurseResource.class);
+        nurseResource.setRole(Rol.ROLE_NURSE);
+        return nurseResource;
     }
 
    @Override
@@ -124,6 +130,7 @@ public class NurseServiceImpl implements NurseService {
         updateNurse.setAddress(saveNurseResource.getAddress());
         updateNurse.setPassword(passwordEncoder.encode(saveNurseResource.getPassword()));
         updateNurse.setPhone(saveNurseResource.getPhone());
+        updateNurse.setCivilStatus(saveNurseResource.getCivilStatus());
 
         updateUser.setEmail(saveNurseResource.getEmail());
         updateUser.setFullName(saveNurseResource.getFullName());

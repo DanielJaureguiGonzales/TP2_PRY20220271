@@ -1,5 +1,6 @@
 package com.tp2.pry20220271.ulcernosis.resources.response;
 
+import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class NurseResource {
     private Integer age;
     private String address;
     private String cep;
-
+    private String civilStatus;
+    private Rol role;
 
 }

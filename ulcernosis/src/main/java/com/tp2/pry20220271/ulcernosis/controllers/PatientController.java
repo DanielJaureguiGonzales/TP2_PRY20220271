@@ -61,7 +61,7 @@ public class PatientController {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/create-patient")
-    PatientResource createPatient(@Valid SavePatientResource savePatient){
+    PatientResource createPatient(@Valid @RequestBody SavePatientResource savePatient){
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.CREATED),"CREATED",patientService.createPatient(savePatient));
         return patientService.createPatient(savePatient);
     }

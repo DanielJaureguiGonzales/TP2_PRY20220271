@@ -80,14 +80,14 @@ public class AuthenticationService {
                 .age(Integer.valueOf(request.getAge()))
                 .address(request.getAddress())
                 .phone(request.getPhone())
-                .role(request.getRol())
+                .role(request.getRole())
                 .civilStatus(request.getCivilStatus())
                 .avatar(new byte[]{})
                 .build();
 
 
 
-        if (request.getRol() == Rol.ROLE_MEDIC) {
+        if (request.getRole() == Rol.ROLE_MEDIC) {
             Medic medic = medicService.findMedicByCMP(request.getCmp());
 
             if (!(Objects.isNull(medic))){
@@ -98,7 +98,7 @@ public class AuthenticationService {
            medicService.saveMedic(modelMapper.map(request, SaveMedicResource.class));
 
 
-        } else if (request.getRol() == Rol.ROLE_NURSE) {
+        } else if (request.getRole() == Rol.ROLE_NURSE) {
             Nurse nurse = nurseService.findNurseByCEP(request.getCep());
 
             if (!(Objects.isNull(nurse))){

@@ -3,6 +3,7 @@ package com.tp2.pry20220271.ulcernosis.services;
 import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
 import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
 import com.tp2.pry20220271.ulcernosis.models.entities.User;
+import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
 import com.tp2.pry20220271.ulcernosis.models.repositories.MedicRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.UserRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.MedicService;
@@ -52,7 +53,9 @@ public class MedicServiceImpl implements MedicService {
 
     @Override
     public MedicResource findMedicById(Long id) {
-       return mapper.map(getMedicByID(id), MedicResource.class);
+        Medic medic = medicRepository.findById(id).orElseThrow(()-> new NotFoundException("Medic","id",id));
+        return mapper.map(medic,MedicResource.class);
+
     }
 
     @Override
@@ -86,14 +89,14 @@ public class MedicServiceImpl implements MedicService {
     public MedicResource saveMedic(SaveMedicResource saveMedicResource) {
 
         Medic newMedic = mapper.map(saveMedicResource,Medic.class);
-
+        newMedic.setRole(Rol.ROLE_MEDIC);
         newMedic.setAvatar(new byte[]{});
         newMedic.setDni(saveMedicResource.getDni());
         newMedic.setPassword(passwordEncoder.encode(saveMedicResource.getPassword()));
 
-        Medic saveMedic=medicRepository.save(newMedic);
-
-        return mapper.map(saveMedic, MedicResource.class);
+        MedicResource medicResource = mapper.map(medicRepository.save(newMedic),MedicResource.class);
+        medicResource.setRole(Rol.ROLE_MEDIC);
+        return medicResource;
     }
 
     @Override
@@ -110,6 +113,7 @@ public class MedicServiceImpl implements MedicService {
         updateMedic.setAddress(saveMedicResource.getAddress());
         updateMedic.setPassword(passwordEncoder.encode(saveMedicResource.getPassword()));
         updateMedic.setPhone(saveMedicResource.getPhone());
+        updateMedic.setCivilStatus(saveMedicResource.getCivilStatus());
 
         updateUser.setEmail(saveMedicResource.getEmail());
         updateUser.setFullName(saveMedicResource.getFullName());

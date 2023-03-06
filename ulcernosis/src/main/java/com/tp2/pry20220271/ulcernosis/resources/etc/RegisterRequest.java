@@ -52,7 +52,7 @@ public class RegisterRequest {
     private String cep;
 
     @Enumerated(EnumType.STRING)
-    private Rol rol;
+    private Rol role;
 
     @NotEmpty(message = "El estado civil no puede ser vacio")
     private String civilStatus;

@@ -2,6 +2,7 @@ package com.tp2.pry20220271.ulcernosis.resources.request;
 
 
 
+import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 
@@ -31,6 +32,6 @@ public class SaveMedicResource {
 
     private String cmp;
 
-
     private String civilStatus;
+    private Rol rol;
 }
