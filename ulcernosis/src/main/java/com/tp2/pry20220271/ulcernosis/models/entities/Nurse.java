@@ -85,6 +85,10 @@ public class Nurse {
     @JsonIgnoreProperties(value = {"nurse"}, allowSetters = true)
     private List<Assignment> assignments;
 
+    @OneToMany(mappedBy = "nurse", fetch=FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonIgnoreProperties(value = {"nurse"}, allowSetters = true)
+    private List<Schedule> schedules;
+
     @PrePersist
     public void asignCreatedAt(){
         this.createdAt = new Date();

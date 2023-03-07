@@ -11,10 +11,7 @@ import com.tp2.pry20220271.ulcernosis.models.repositories.NurseRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.UserRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.MedicService;
 import com.tp2.pry20220271.ulcernosis.models.services.NurseService;
-import com.tp2.pry20220271.ulcernosis.resources.etc.AuthenticationRequest;
-import com.tp2.pry20220271.ulcernosis.resources.etc.AuthenticationResponse;
-import com.tp2.pry20220271.ulcernosis.resources.etc.AuthenticationResponseId;
-import com.tp2.pry20220271.ulcernosis.resources.etc.RegisterRequest;
+import com.tp2.pry20220271.ulcernosis.resources.etc.*;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveMedicResource;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveNurseResource;
 import jakarta.transaction.Transactional;
@@ -150,4 +147,17 @@ public class AuthenticationService {
                 .type(user.getRole())
                 .build();
     }
+    public AuthenticateResponseUserId authenticateUserId(AuthenticationRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+        );
+        var user = repository.findByEmail(request.getEmail())
+                .orElseThrow();
+        var jwtToken = jwtService.generateToken(user);
+        return AuthenticateResponseUserId.builder()
+                .id(user.getId())
+                .build();
+    }
+
+
 }

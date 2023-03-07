@@ -35,4 +35,7 @@ public class Schedule {
     @Column(name = "altitude", nullable = false)
     private String altitude;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "nurse_id",nullable = false)
+    private Nurse nurse;
 }

@@ -1,10 +1,7 @@
 package com.tp2.pry20220271.ulcernosis.auth;
 
 
-import com.tp2.pry20220271.ulcernosis.resources.etc.AuthenticationRequest;
-import com.tp2.pry20220271.ulcernosis.resources.etc.AuthenticationResponse;
-import com.tp2.pry20220271.ulcernosis.resources.etc.AuthenticationResponseId;
-import com.tp2.pry20220271.ulcernosis.resources.etc.RegisterRequest;
+import com.tp2.pry20220271.ulcernosis.resources.etc.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +25,16 @@ public class AuthenticationController {
 
     }
 
-    @PostMapping("/authenticateId")
-    public AuthenticationResponseId authenticateById(@RequestBody AuthenticationRequest authenticateRequest) {
+    // ESTE DEVUELVE EL ID DEL MÉDICO O ENFERMERO
+    @PostMapping("/get-type-id/authenticateId")
+    public AuthenticationResponseId authenticateTypeByTypeId(@RequestBody AuthenticationRequest authenticateRequest) {
         return service.authenticateId(authenticateRequest);
+    }
+
+
+    // ESTE DEVUELVE EL ID DEL USUARIO
+    @PostMapping("/get-user-id/authenticateId")
+    public AuthenticateResponseUserId authenticateByUserId(@RequestBody AuthenticationRequest authenticateRequest) {
+        return service.authenticateUserId(authenticateRequest);
     }
 }
