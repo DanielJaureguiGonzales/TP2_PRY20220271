@@ -5,19 +5,19 @@ import com.tp2.pry20220271.ulcernosis.models.services.TeamWorkService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveTeamWorkResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.TeamWorkResource;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/team-works")
 public class TeamWorkController {
 
-    @Autowired
-    private TeamWorkService teamWorkService;
 
+    private final TeamWorkService teamWorkService;
 
 
     @ResponseStatus(HttpStatus.OK)

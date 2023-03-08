@@ -14,8 +14,9 @@ import com.tp2.pry20220271.ulcernosis.models.services.DiagnosisService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveDiagnosisResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.DiagResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.DiagnosisResource;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
@@ -31,26 +32,26 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class DiagnosisServiceImpl implements DiagnosisService {
 
     private static final ModelMapper mapper = new ModelMapper();
 
-    @Autowired
+
     private final RestTemplate restTemplate;
 
-    @Autowired
-    private DiagnosisRepository diagnosisRepository;
 
-    @Autowired
-    private PatientRepository patientRepository;
-    @Autowired
-    private MedicRepository medicRepository;
-    @Autowired
-    private NurseRepository nurseRepository;
+    private final DiagnosisRepository diagnosisRepository;
 
-    public DiagnosisServiceImpl(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
+
+    private final PatientRepository patientRepository;
+
+    private final MedicRepository medicRepository;
+
+    private final NurseRepository nurseRepository;
+
+    @Value("${cnn.server.url}")
+    private String urlCNN;
 
 
     @Override
@@ -159,7 +160,7 @@ public class DiagnosisServiceImpl implements DiagnosisService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
-        DiagResource response = restTemplate.postForObject("http://127.0.0.1:5000/predict",request,DiagResource.class);
+        DiagResource response = restTemplate.postForObject(urlCNN,request,DiagResource.class);
         return response;
     }
 

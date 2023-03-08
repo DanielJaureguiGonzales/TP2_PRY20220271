@@ -33,21 +33,21 @@ public class AuthenticationService {
     private static final ModelMapper modelMapper = new ModelMapper();
 
     private final UserRepository repository;
-    @Autowired
-    private MedicService medicService;
 
-    @Autowired
-    private MedicRepository medicRepository;
+    private final MedicService medicService;
 
-    @Autowired
-    private NurseRepository nurseRepository;
+
+    private final MedicRepository medicRepository;
+
+
+    private final NurseRepository nurseRepository;
 
 
     private final PasswordEncoder passwordEncoder;
 
     private final JwtService jwtService;
-    @Autowired
-    private NurseService nurseService;
+
+    private final NurseService nurseService;
 
     private final AuthenticationManager authenticationManager;
 

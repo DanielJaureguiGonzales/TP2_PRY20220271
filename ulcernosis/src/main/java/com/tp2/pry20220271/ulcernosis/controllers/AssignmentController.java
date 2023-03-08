@@ -5,18 +5,21 @@ import com.tp2.pry20220271.ulcernosis.models.services.AssignmentService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveAssignmentResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.AssignmentResource;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/assignments")
 public class AssignmentController {
 
-    @Autowired
-    private AssignmentService assignmentService;
+
+    private final AssignmentService assignmentService;
+
+
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping

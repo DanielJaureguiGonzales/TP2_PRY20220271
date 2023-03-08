@@ -10,6 +10,7 @@ import com.tp2.pry20220271.ulcernosis.models.repositories.TeamWorkRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.TeamWorkService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveTeamWorkResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.TeamWorkResource;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,19 +22,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class TeamWorkServiceImpl implements TeamWorkService {
 
     private static final ModelMapper mapper = new ModelMapper();
     private static final Logger log = LoggerFactory.getLogger(TeamWorkServiceImpl.class);
 
-    @Autowired
-    private TeamWorkRepository teamWorkRepository;
 
-    @Autowired
-    private MedicRepository medicRepository;
+    private final TeamWorkRepository teamWorkRepository;
 
-    @Autowired
-    private NurseRepository nurseRepository;
+
+    private final MedicRepository medicRepository;
+
+
+    private final NurseRepository nurseRepository;
 
     @Override
     public List<TeamWorkResource> findAllTeamWork(){

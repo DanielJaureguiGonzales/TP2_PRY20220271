@@ -10,30 +10,29 @@ import com.tp2.pry20220271.ulcernosis.models.repositories.PatientRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.AssignmentService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveAssignmentResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.AssignmentResource;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class AssignmentServiceImpl implements AssignmentService {
 
     private static final ModelMapper modelMapper = new ModelMapper();
 
     private static final Logger log = LoggerFactory.getLogger(AssignmentServiceImpl.class);
 
-    @Autowired
-    private AssignmentRepository assignmentRepository;
+    private final AssignmentRepository assignmentRepository;
 
-    @Autowired
-    private NurseRepository nurseRepository;
+    private final NurseRepository nurseRepository;
 
-    @Autowired
-    private PatientRepository patientRepository;
+    private final PatientRepository patientRepository;
+
 
     @Override
     public List<AssignmentResource> findAllAssignments() {

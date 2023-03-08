@@ -5,20 +5,19 @@ import com.tp2.pry20220271.ulcernosis.models.entities.User;
 import com.tp2.pry20220271.ulcernosis.models.repositories.UserRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.UserService;
 import com.tp2.pry20220271.ulcernosis.resources.response.UserResource;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private static final ModelMapper modelMapper = new ModelMapper();
     private final UserRepository repository;
 
-    public UserServiceImpl(UserRepository repository) {
-        this.repository = repository;
-    }
 
 
     @Override

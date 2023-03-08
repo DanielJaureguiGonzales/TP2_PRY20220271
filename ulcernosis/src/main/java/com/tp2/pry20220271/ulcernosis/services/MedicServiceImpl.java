@@ -9,6 +9,7 @@ import com.tp2.pry20220271.ulcernosis.models.repositories.UserRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.MedicService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveMedicResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.MedicResource;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class MedicServiceImpl implements MedicService {
 
 
@@ -31,17 +33,13 @@ public class MedicServiceImpl implements MedicService {
 
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private MedicRepository medicRepository;
+    private final MedicRepository medicRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     private static final ModelMapper mapper = new ModelMapper();
 
-    public MedicServiceImpl(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
+
 
     @Override
     public List<MedicResource> findAll()  {

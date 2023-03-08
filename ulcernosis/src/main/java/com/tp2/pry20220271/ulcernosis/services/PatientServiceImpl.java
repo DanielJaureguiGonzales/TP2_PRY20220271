@@ -12,6 +12,7 @@ import com.tp2.pry20220271.ulcernosis.models.repositories.PatientRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.PatientService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SavePatientResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.PatientResource;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,23 +27,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class PatientServiceImpl implements PatientService {
 
     private static final Logger log = LoggerFactory.getLogger(PatientServiceImpl.class);
 
     private static final ModelMapper mapper = new ModelMapper();
 
-    @Autowired
-    private PatientRepository patientRepository;
 
-    @Autowired
-    private MedicRepository medicRepository;
+    private final PatientRepository patientRepository;
 
-    @Autowired
-    private NurseRepository nurseRepository;
 
-    @Autowired
-    private AssignmentRepository assignmentRepository;
+    private final MedicRepository medicRepository;
+
+
+    private final NurseRepository nurseRepository;
+
+
+    private final AssignmentRepository assignmentRepository;
 
     @Override
     public List<PatientResource> findAllPatientsByMedicId(Long medicId){

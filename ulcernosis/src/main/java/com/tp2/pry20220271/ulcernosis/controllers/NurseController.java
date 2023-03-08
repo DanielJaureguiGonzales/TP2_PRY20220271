@@ -4,7 +4,7 @@ import com.tp2.pry20220271.ulcernosis.models.services.NurseService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveNurseResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.NurseResource;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,11 +16,14 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/nurses")
 public class NurseController {
 
-    @Autowired
-    private NurseService nurseService;
+
+    private final NurseService nurseService;
+
+
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping

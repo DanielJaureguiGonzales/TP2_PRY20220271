@@ -15,6 +15,7 @@ import com.tp2.pry20220271.ulcernosis.resources.request.SaveNurseResource;
 
 import com.tp2.pry20220271.ulcernosis.resources.response.MedicResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.NurseResource;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,28 +31,27 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class NurseServiceImpl implements NurseService {
 
     private static final Logger log = LoggerFactory.getLogger(MedicServiceImpl.class);
     private static final ModelMapper mapper = new ModelMapper();
 
-    @Autowired
-    private NurseRepository nurseRepository;
 
-    @Autowired
-    private MedicRepository medicRepository;
+    private final NurseRepository nurseRepository;
+
+
+    private final MedicRepository medicRepository;
 
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserRepository userRepository;
 
-    @Autowired
-    private TeamWorkRepository teamWorkRepository;
+    private final UserRepository userRepository;
 
-    public NurseServiceImpl(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
+
+    private final TeamWorkRepository teamWorkRepository;
+
+
 
     @Override
     public List<NurseResource> findAll() {
