@@ -1,6 +1,9 @@
 package com.tp2.pry20220271.ulcernosis.services;
 
+import com.tp2.pry20220271.ulcernosis.exceptions.DniExistsException;
+import com.tp2.pry20220271.ulcernosis.exceptions.EmailExistsException;
 import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
+import com.tp2.pry20220271.ulcernosis.exceptions.PhoneExistsException;
 import com.tp2.pry20220271.ulcernosis.models.entities.Assignment;
 import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
 import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
@@ -24,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -89,6 +93,15 @@ public class PatientServiceImpl implements PatientService {
         final Medic assignMedic = medicRepository.findById(savePatientResource.getMedicId()).orElseThrow(()->
             new NotFoundException("Medic","Id",savePatientResource.getMedicId())
         );
+
+
+        if(patientRepository.findByDni(savePatientResource.getDni()).isPresent()){
+            throw new DniExistsException("El DNI ya está asociado a otra cuenta");
+        }else if(patientRepository.findByEmail(savePatientResource.getEmail()).isPresent()){
+            throw new EmailExistsException("El email ya está asociado a otra cuenta");
+        }else if(patientRepository.findByPhone(savePatientResource.getPhone()).isPresent()){
+            throw new PhoneExistsException("El teléfono ya está asociado a otra cuenta");
+        }
 
         Patient newPatient = new Patient();
         newPatient.setFullName(savePatientResource.getFullName());

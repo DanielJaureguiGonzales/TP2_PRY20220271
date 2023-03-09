@@ -17,4 +17,8 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     List<Patient> findAllByAssignmentsIn(List<Assignment> teamWorks);
 
     Optional<Patient> findByFullName( String patientName);
+
+    Optional<Patient> findByDni(String dni);
+    Optional<Patient> findByPhone(String phone);
+    Optional<Patient> findByEmail(String email);
 }
