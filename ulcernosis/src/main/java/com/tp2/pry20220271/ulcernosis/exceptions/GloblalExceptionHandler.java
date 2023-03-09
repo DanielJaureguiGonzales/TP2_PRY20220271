@@ -46,13 +46,13 @@ public class GloblalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DniExistsException.class)
     public ResponseEntity<ErrorResource> handleDNIxception(DniExistsException ex, WebRequest request){
-        ErrorResource error = new ErrorResource(LocalDateTime.now(),ex.getMessage(),request.getDescription(false), "CEP_EXISTS");
+        ErrorResource error = new ErrorResource(LocalDateTime.now(),ex.getMessage(),request.getDescription(false), "DNI_EXISTS");
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(PhoneExistsException.class)
     public ResponseEntity<ErrorResource> handlePhoneException(PhoneExistsException ex, WebRequest request){
-        ErrorResource error = new ErrorResource(LocalDateTime.now(),ex.getMessage(),request.getDescription(false), "CEP_EXISTS");
+        ErrorResource error = new ErrorResource(LocalDateTime.now(),ex.getMessage(),request.getDescription(false), "PHONE_EXISTS");
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
