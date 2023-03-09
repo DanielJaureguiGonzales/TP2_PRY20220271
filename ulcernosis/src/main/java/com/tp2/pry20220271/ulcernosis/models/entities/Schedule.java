@@ -22,26 +22,26 @@ public class Schedule {
     @Column(name = "time_in", nullable = false)
     private Date timeIn;
 
-    @Column(name = "latitude")
+    @Column(name = "latitude_in")
     private String latitudeIn;
 
-    @Column(name = "longitude")
+    @Column(name = "longitude_in")
     private String longitudeIn;
 
-    @Column(name = "altitude")
+    @Column(name = "altitude_in")
     private String altitudeIn;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time_out", nullable = false)
     private Date timeOut;
 
-    @Column(name = "latitude")
+    @Column(name = "latitude_out")
     private String latitudeOut;
 
-    @Column(name = "longitude")
+    @Column(name = "longitude_out")
     private String longitudeOut;
 
-    @Column(name = "altitude")
+    @Column(name = "altitude_out")
     private String altitudeOut;
 
     @ManyToOne(fetch = FetchType.LAZY)
