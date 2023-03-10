@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
 import java.util.Date;
 
 @Data
@@ -11,13 +12,11 @@ import java.util.Date;
 @NoArgsConstructor
 public class SaveScheduleResourceTimeIn {
 
-    private Date time;
+    private LocalTime time;
 
-    private String latitude;
+    private double latitude;
 
-    private String longitude;
-
-    private String altitude;
+    private double longitude;
 
     private Long nurseId;
 

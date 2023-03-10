@@ -4,10 +4,13 @@ import com.tp2.pry20220271.ulcernosis.config.JwtService;
 import com.tp2.pry20220271.ulcernosis.exceptions.*;
 import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
 import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
+import com.tp2.pry20220271.ulcernosis.models.entities.Token;
 import com.tp2.pry20220271.ulcernosis.models.entities.User;
 import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
+import com.tp2.pry20220271.ulcernosis.models.enums.TokenType;
 import com.tp2.pry20220271.ulcernosis.models.repositories.MedicRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.NurseRepository;
+import com.tp2.pry20220271.ulcernosis.models.repositories.TokenRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.UserRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.MedicService;
 import com.tp2.pry20220271.ulcernosis.models.services.NurseService;
@@ -17,7 +20,6 @@ import com.tp2.pry20220271.ulcernosis.resources.request.SaveNurseResource;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,6 +43,7 @@ public class AuthenticationService {
 
 
     private final NurseRepository nurseRepository;
+    private final TokenRepository tokenRepository;
 
 
     private final PasswordEncoder passwordEncoder;
@@ -82,8 +85,7 @@ public class AuthenticationService {
                 .avatar(new byte[]{})
                 .build();
 
-
-
+        var savedUser = repository.save(user);
         if (request.getRole() == Rol.ROLE_MEDIC) {
             Medic medic = medicService.findMedicByCMP(request.getCmp());
 
@@ -91,7 +93,6 @@ public class AuthenticationService {
                 throw new CmpExistsException("El cmp ya está asociado a otro médico");
             }
 
-           repository.save(user);
            medicService.saveMedic(modelMapper.map(request, SaveMedicResource.class));
 
 
@@ -102,15 +103,17 @@ public class AuthenticationService {
                 throw new CepExistsException("El cep ya está asociado a otro enfermero");
             }
 
-            repository.save(user);
             nurseService.saveNurse(modelMapper.map(request, SaveNurseResource.class));
 
         }
         var jwtToken = jwtService.generateToken(user);
+        saveUserToken(savedUser, jwtToken);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
     }
+
+
 
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -121,9 +124,9 @@ public class AuthenticationService {
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
 
-
-
         var jwtToken = jwtService.generateToken(user);
+        revokedAllUserTokens(user);
+        saveUserToken(user, jwtToken);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
@@ -135,13 +138,15 @@ public class AuthenticationService {
         );
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+        /*var jwtToken = jwtService.generateToken(user);*/
         Long id = null;
         if (user.getRole() == Rol.ROLE_MEDIC){
             id = medicRepository.findMedicByEmail(user.getEmail()).orElseThrow(()-> new NotFoundException("Medic","Email",user.getEmail())).getId();
         } else if (user.getRole() == Rol.ROLE_NURSE ) {
             id = nurseRepository.findNurseByEmail(user.getEmail()).orElseThrow(()-> new NotFoundException("Nurse","Email",user.getEmail())).getId();
         }
+       /* revokedAllUserTokens(user);
+        saveUserToken(user, jwtToken);*/
         return AuthenticationResponseId.builder()
                 .id(id)
                 .type(user.getRole())
@@ -153,11 +158,33 @@ public class AuthenticationService {
         );
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+        /*var jwtToken = jwtService.generateToken(user);
+        revokedAllUserTokens(user);
+        saveUserToken(user, jwtToken);*/
         return AuthenticateResponseUserId.builder()
                 .id(user.getId())
                 .build();
     }
 
+    private void saveUserToken(User user, String jwtToken) {
+        var token= Token.builder()
+                .user(user)
+                .token(jwtToken)
+                .tokenType(TokenType.BEARER)
+                .expired(false)
+                .revoked(false)
+                .build();
+        tokenRepository.save(token);
+    }
 
+    private void revokedAllUserTokens(User user){
+        var validUserToken= tokenRepository.findAllValidTokensByUser(user.getId());
+        if (validUserToken.isEmpty())
+            return;
+        validUserToken.forEach(token -> {
+           token.setExpired(true);
+           token.setRevoked(true);
+        });
+        tokenRepository.saveAll(validUserToken);
+    }
 }
