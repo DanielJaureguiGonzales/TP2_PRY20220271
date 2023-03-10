@@ -71,6 +71,8 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Rol role;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Token> tokens;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalTime;
 import java.util.Date;
 
 
@@ -18,31 +20,26 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "time_in", nullable = false)
-    private Date timeIn;
+
+    @Column(name = "time_in")
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime timeIn;
 
     @Column(name = "latitude_in")
-    private String latitudeIn;
+    private double latitudeIn;
 
     @Column(name = "longitude_in")
-    private String longitudeIn;
+    private double longitudeIn;
 
-    @Column(name = "altitude_in")
-    private String altitudeIn;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "time_out", nullable = false)
-    private Date timeOut;
+    @Column(name = "time_out")
+    @DateTimeFormat(pattern = "HH:mm")
+    private LocalTime timeOut;
 
     @Column(name = "latitude_out")
-    private String latitudeOut;
+    private double latitudeOut;
 
     @Column(name = "longitude_out")
-    private String longitudeOut;
-
-    @Column(name = "altitude_out")
-    private String altitudeOut;
+    private double longitudeOut;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nurse_id",nullable = false)

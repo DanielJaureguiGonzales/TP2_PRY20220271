@@ -1,17 +1,15 @@
 package com.tp2.pry20220271.ulcernosis.resources.response;
 
-import java.util.Date;
+import java.time.LocalTime;
 
 public class ScheduleResource {
-    private Date timeIn;
+    private LocalTime timeIn;
 
-    private Date timeOut;
+    private LocalTime timeOut;
 
-    private String latitude;
+    private double latitude;
 
-    private String longitude;
-
-    private String altitude;
+    private double longitude;
 
     private Long nurseId;
 }

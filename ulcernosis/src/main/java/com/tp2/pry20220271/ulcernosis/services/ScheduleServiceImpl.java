@@ -33,7 +33,6 @@ public class ScheduleServiceImpl implements ScheduleService {
         Schedule newSchedule = new Schedule();
         newSchedule.setNurse(nurse);
         newSchedule.setTimeIn(schedule.getTime());
-        newSchedule.setAltitudeIn(schedule.getAltitude());
         newSchedule.setLatitudeIn(schedule.getLatitude());
         newSchedule.setLongitudeIn(schedule.getLongitude());
 
@@ -42,12 +41,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public ScheduleResource saveTimeOut(SaveScheduleResourceTimeIn schedule) {
-        Nurse nurse = nurseRepository.findById(schedule.getNurseId()).orElseThrow(() -> new NotFoundException("Nurse","Id",schedule.getNurseId()));
+        nurseRepository.findById(schedule.getNurseId()).orElseThrow(() -> new NotFoundException("Nurse","Id",schedule.getNurseId()));
         Schedule timeOutSchedule = scheduleRepository.findTopByNurseIdOrderByIdDesc(schedule.getNurseId()).orElseThrow(() -> new NotFoundException("Schedule","NurseId",schedule.getNurseId()));
         timeOutSchedule.setTimeOut(schedule.getTime());
-        timeOutSchedule.setAltitudeOut(schedule.getAltitude());
-        timeOutSchedule.setLatitudeOut(schedule.getLatitude());
-        timeOutSchedule.setLongitudeOut(schedule.getLongitude());
+
         return modelMapper.map(scheduleRepository.save(timeOutSchedule), ScheduleResource.class);
     }
 
