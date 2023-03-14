@@ -6,7 +6,7 @@ import com.tp2.pry20220271.ulcernosis.models.entities.Schedule;
 import com.tp2.pry20220271.ulcernosis.models.repositories.NurseRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.ScheduleRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.ScheduleService;
-import com.tp2.pry20220271.ulcernosis.resources.request.SaveScheduleResourceTimeIn;
+import com.tp2.pry20220271.ulcernosis.resources.request.SaveScheduleResourceTime;
 import com.tp2.pry20220271.ulcernosis.resources.response.ScheduleResource;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -26,27 +26,20 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final NurseRepository nurseRepository;
 
 
-
     @Override
-    public ScheduleResource saveTimeIn(SaveScheduleResourceTimeIn schedule) {
+    public ScheduleResource saveTime(SaveScheduleResourceTime schedule) {
         Nurse nurse = nurseRepository.findById(schedule.getNurseId()).orElseThrow(() -> new NotFoundException("Nurse","Id",schedule.getNurseId()));
         Schedule newSchedule = new Schedule();
         newSchedule.setNurse(nurse);
-        newSchedule.setTimeIn(schedule.getTime());
-        newSchedule.setLatitudeIn(schedule.getLatitude());
-        newSchedule.setLongitudeIn(schedule.getLongitude());
+        newSchedule.setTime(schedule.getTime());
+        newSchedule.setLatitude(schedule.getLatitude());
+        newSchedule.setLongitude(schedule.getLongitude());
+        newSchedule.setTypeHour(schedule.getTypeHour());
+
 
         return modelMapper.map(scheduleRepository.save(newSchedule), ScheduleResource.class);
     }
 
-    @Override
-    public ScheduleResource saveTimeOut(SaveScheduleResourceTimeIn schedule) {
-        nurseRepository.findById(schedule.getNurseId()).orElseThrow(() -> new NotFoundException("Nurse","Id",schedule.getNurseId()));
-        Schedule timeOutSchedule = scheduleRepository.findTopByNurseIdOrderByIdDesc(schedule.getNurseId()).orElseThrow(() -> new NotFoundException("Schedule","NurseId",schedule.getNurseId()));
-        timeOutSchedule.setTimeOut(schedule.getTime());
-
-        return modelMapper.map(scheduleRepository.save(timeOutSchedule), ScheduleResource.class);
-    }
 
     @Override
     public List<ScheduleResource> findAllSchedulesByNurseId(Long nurseId) {

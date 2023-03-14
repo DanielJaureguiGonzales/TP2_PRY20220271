@@ -4,10 +4,7 @@ package com.tp2.pry20220271.ulcernosis.resources.etc;
 import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +20,6 @@ public class RegisterRequest {
     private String fullName;
 
     @Email(message = "El email no puede ser vacio")
-    @NotEmpty(message = "El email no puede ser vacio")
     private String email;
 
     @NotEmpty(message = "La contraseña no puede ser vacia")
@@ -38,8 +34,10 @@ public class RegisterRequest {
     @Pattern(regexp = "\\d{9}",message = "El teléfono debe tener 9 dígitos y debe ser solo números")
     private String phone;
 
-    @NotEmpty(message = "La edad no puede ser vacia")
-    private String age;
+    // @Max(value = 75, message = "La edad debe ser menor a 75")
+    @NotNull(message = "La edad no puede ser vacia")
+    @Min(value = 25, message = "La edad debe ser mayor a 25")
+    private Integer age;
 
     @NotEmpty(message = "La dirección no puede ser vacia")
     private String address;

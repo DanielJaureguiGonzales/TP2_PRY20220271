@@ -53,8 +53,6 @@ public class Nurse {
     private String password;
 
     @Column(nullable = false)
-    @Min(value = 18)
-    @Max(value = 75)
     private Integer age;
 
     @NotEmpty(message = "La dirección no debe estar vacío")

@@ -8,10 +8,7 @@ import com.tp2.pry20220271.ulcernosis.models.entities.Assignment;
 import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
 import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
 import com.tp2.pry20220271.ulcernosis.models.entities.Patient;
-import com.tp2.pry20220271.ulcernosis.models.repositories.AssignmentRepository;
-import com.tp2.pry20220271.ulcernosis.models.repositories.MedicRepository;
-import com.tp2.pry20220271.ulcernosis.models.repositories.NurseRepository;
-import com.tp2.pry20220271.ulcernosis.models.repositories.PatientRepository;
+import com.tp2.pry20220271.ulcernosis.models.repositories.*;
 import com.tp2.pry20220271.ulcernosis.models.services.PatientService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SavePatientResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.PatientResource;
@@ -49,6 +46,7 @@ public class PatientServiceImpl implements PatientService {
 
 
     private final AssignmentRepository assignmentRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<PatientResource> findAllPatientsByMedicId(Long medicId){
@@ -95,11 +93,15 @@ public class PatientServiceImpl implements PatientService {
         );
 
 
-        if(patientRepository.findByDni(savePatientResource.getDni()).isPresent()){
+
+        if(patientRepository.findByDni(savePatientResource.getDni()).isPresent() ||
+                userRepository.findByDni(savePatientResource.getDni()).isPresent()){
             throw new DniExistsException("El DNI ya está asociado a otra cuenta");
-        }else if(patientRepository.findByEmail(savePatientResource.getEmail()).isPresent()){
+        }else if(patientRepository.findByEmail(savePatientResource.getEmail()).isPresent() ||
+                userRepository.findByEmail(savePatientResource.getEmail()).isPresent()){
             throw new EmailExistsException("El email ya está asociado a otra cuenta");
-        }else if(patientRepository.findByPhone(savePatientResource.getPhone()).isPresent()){
+        }else if(patientRepository.findByPhone(savePatientResource.getPhone()).isPresent() ||
+                userRepository.findByPhone(savePatientResource.getPhone()).isPresent()){
             throw new PhoneExistsException("El teléfono ya está asociado a otra cuenta");
         }
 

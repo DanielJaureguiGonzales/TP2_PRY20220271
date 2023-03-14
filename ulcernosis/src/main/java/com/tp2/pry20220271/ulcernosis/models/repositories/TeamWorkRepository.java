@@ -16,4 +16,6 @@ public interface TeamWorkRepository extends JpaRepository<TeamWork,Long> {
     List<TeamWork> findAllByMedicId(Long medicId);
 
     void deleteTeamWorkByNurseId(Long nurseId);
+
+    Optional<TeamWork> findByNurseId(Long id);
 }

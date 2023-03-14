@@ -24,32 +24,28 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "El nombre completo no debe estar vacío")
     @Column(nullable = false)
     private String fullName;
 
     @Email
-    @NotEmpty(message = "El email no debe estar vacío")
     @Column(unique = true, nullable = false)
     private String email;
-    @NotEmpty(message = "El DNI no debe estar vacío")
+
     @Column(unique = true, nullable = false, length = 8)
     private String dni;
 
-    @NotEmpty(message = "El DNI no debe estar vacío")
+
     @Column(unique = true, nullable = false, length = 9)
     private String phone;
 
     @Column(nullable = false)
-    @Min(value = 0)
-    @Max(value = 75)
     private Integer age;
 
-    @NotEmpty(message = "La dirección no debe estar vacío")
+
     @Column(nullable = false)
     private String address;
 
-    @NotEmpty(message = "El nombre completo no debe estar vacío")
+
     @Column(nullable = false)
     private String civilStatus;
 

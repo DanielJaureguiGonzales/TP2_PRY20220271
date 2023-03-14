@@ -1,15 +1,12 @@
 package com.tp2.pry20220271.ulcernosis.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 
-
-@Entity(name = "team_work")
+@Entity(name = "team_works")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -8,10 +8,7 @@ import com.tp2.pry20220271.ulcernosis.models.entities.Token;
 import com.tp2.pry20220271.ulcernosis.models.entities.User;
 import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
 import com.tp2.pry20220271.ulcernosis.models.enums.TokenType;
-import com.tp2.pry20220271.ulcernosis.models.repositories.MedicRepository;
-import com.tp2.pry20220271.ulcernosis.models.repositories.NurseRepository;
-import com.tp2.pry20220271.ulcernosis.models.repositories.TokenRepository;
-import com.tp2.pry20220271.ulcernosis.models.repositories.UserRepository;
+import com.tp2.pry20220271.ulcernosis.models.repositories.*;
 import com.tp2.pry20220271.ulcernosis.models.services.MedicService;
 import com.tp2.pry20220271.ulcernosis.models.services.NurseService;
 import com.tp2.pry20220271.ulcernosis.resources.etc.*;
@@ -35,6 +32,7 @@ public class AuthenticationService {
     private static final ModelMapper modelMapper = new ModelMapper();
 
     private final UserRepository repository;
+    private final PatientRepository patientRepository;
 
     private final MedicService medicService;
 
@@ -57,19 +55,25 @@ public class AuthenticationService {
     @Transactional
     public AuthenticationResponse register(RegisterRequest request) {
 
-        Optional<User> userEmailExists = repository.findByEmail(request.getEmail());
-        Optional<User> userPhoneExists = repository.findByPhone(request.getPhone());
-        Optional<User> userDniExists = repository.findByDni(request.getDni());
-        /*Optional<Medic> medicByCmpExists = medicService.findMedicByCMP(request.getCmp());
-        Optional<Nurse> nurseByCepExists = nurseService.findNurseByCEP(request.getCep());*/
+        if(patientRepository.findByDni(request.getDni()).isPresent() ||
+                repository.findByDni(request.getDni()).isPresent())
+        {
+            throw new DniExistsException("El DNI ya está asociado a otra cuenta");
 
-        if (userEmailExists.isPresent()) {
-            throw new EmailExistsException("El email ya está asociado con otra cuenta");
-        } else if (userPhoneExists.isPresent()){
-            throw new PhoneExistsException("El teléfono ya está asociado con otra cuenta");
-        } else if (userDniExists.isPresent()) {
-            throw new DniExistsException("El dni ya está asociado con otra cuenta");
+        }else if(patientRepository.findByEmail(request.getEmail()).isPresent() ||
+                repository.findByEmail(request.getEmail()).isPresent())
+        {
+
+            throw new EmailExistsException("El email ya está asociado a otra cuenta");
+
+        }else if(patientRepository.findByPhone(request.getPhone()).isPresent() ||
+                repository.findByPhone(request.getPhone()).isPresent())
+        {
+
+            throw new PhoneExistsException("El teléfono ya está asociado a otra cuenta");
+
         }
+
 
 
         var user = User.builder()
@@ -77,7 +81,7 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .dni(request.getDni())
-                .age(Integer.valueOf(request.getAge()))
+                .age(request.getAge())
                 .address(request.getAddress())
                 .phone(request.getPhone())
                 .role(request.getRole())

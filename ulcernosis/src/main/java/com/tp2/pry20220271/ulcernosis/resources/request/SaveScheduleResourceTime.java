@@ -1,42 +1,33 @@
-package com.tp2.pry20220271.ulcernosis.models.entities;
+package com.tp2.pry20220271.ulcernosis.resources.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tp2.pry20220271.ulcernosis.models.enums.TypeHour;
-import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
-import java.util.Date;
-
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "schedules")
-public class Schedule {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-
-    @Column(name = "time")
+public class SaveScheduleResourceTime {
     @JsonFormat(pattern = "hh:mm a")
     private LocalTime time;
 
-    @Column(name = "latitude")
+    @NotNull(message = "La latitud no puede ser vacío")
     private double latitude;
 
-    @Column(name = "longitude")
+    @NotNull(message = "La longitud no puede ser vacío")
     private double longitude;
 
     @Enumerated(EnumType.STRING)
     private TypeHour typeHour;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "nurse_id",nullable = false)
-    private Nurse nurse;
+    private Long nurseId;
+
 
 }

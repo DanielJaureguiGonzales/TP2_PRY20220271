@@ -56,6 +56,12 @@ public class GloblalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(LimitTeamWorkExceeded.class)
+    public ResponseEntity<ErrorResource> handleLimitRegisterTeamWorkNurseExceeded(LimitTeamWorkExceeded ex, WebRequest request){
+        ErrorResource error = new ErrorResource(LocalDateTime.now(),ex.getMessage(),request.getDescription(false), "LIMIT_TEAM_WORK_EXCEEDED");
+        return new ResponseEntity<>(error, HttpStatus.TOO_MANY_REQUESTS);
+    }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResource> handleGlobalException(Exception ex, WebRequest request){
