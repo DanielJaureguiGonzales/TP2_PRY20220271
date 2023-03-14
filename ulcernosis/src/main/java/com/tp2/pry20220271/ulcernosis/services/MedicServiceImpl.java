@@ -1,10 +1,14 @@
 package com.tp2.pry20220271.ulcernosis.services;
 
+import com.tp2.pry20220271.ulcernosis.exceptions.DniExistsException;
+import com.tp2.pry20220271.ulcernosis.exceptions.EmailExistsException;
 import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
+import com.tp2.pry20220271.ulcernosis.exceptions.PhoneExistsException;
 import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
 import com.tp2.pry20220271.ulcernosis.models.entities.User;
 import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
 import com.tp2.pry20220271.ulcernosis.models.repositories.MedicRepository;
+import com.tp2.pry20220271.ulcernosis.models.repositories.PatientRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.UserRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.MedicService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveMedicResource;
@@ -36,6 +40,8 @@ public class MedicServiceImpl implements MedicService {
     private final MedicRepository medicRepository;
 
     private final UserRepository userRepository;
+
+    private final PatientRepository patientRepository;
 
     private static final ModelMapper mapper = new ModelMapper();
 
@@ -91,7 +97,6 @@ public class MedicServiceImpl implements MedicService {
         newMedic.setAvatar(new byte[]{});
         newMedic.setDni(saveMedicResource.getDni());
         newMedic.setPassword(passwordEncoder.encode(saveMedicResource.getPassword()));
-
         MedicResource medicResource = mapper.map(medicRepository.save(newMedic),MedicResource.class);
         medicResource.setRole(Rol.ROLE_MEDIC);
         return medicResource;
@@ -101,6 +106,17 @@ public class MedicServiceImpl implements MedicService {
     public MedicResource updateMedic(Long id, SaveMedicResource saveMedicResource) {
        Medic updateMedic = getMedicByID(id);
        User updateUser = userRepository.findByEmail(updateMedic.getEmail()).orElseThrow(()-> new NotFoundException("User","email",updateMedic.getEmail()));
+
+        if(patientRepository.findByDni(saveMedicResource.getDni()).isPresent() ||
+                userRepository.findByDni(saveMedicResource.getDni()).isPresent()){
+            throw new DniExistsException("El DNI ya está asociado a otra cuenta");
+        }else if(patientRepository.findByEmail(saveMedicResource.getEmail()).isPresent() ||
+                userRepository.findByEmail(saveMedicResource.getEmail()).isPresent()){
+            throw new EmailExistsException("El email ya está asociado a otra cuenta");
+        }else if(patientRepository.findByPhone(saveMedicResource.getPhone()).isPresent() ||
+                userRepository.findByPhone(saveMedicResource.getPhone()).isPresent()){
+            throw new PhoneExistsException("El teléfono ya está asociado a otra cuenta");
+        }
 
         updateMedic.setDni(saveMedicResource.getDni());
         updateMedic.setAge(Integer.valueOf(saveMedicResource.getAge()));

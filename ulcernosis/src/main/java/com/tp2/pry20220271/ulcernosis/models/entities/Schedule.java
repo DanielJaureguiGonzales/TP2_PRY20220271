@@ -39,4 +39,7 @@ public class Schedule {
     @JoinColumn(name = "nurse_id",nullable = false)
     private Nurse nurse;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id",nullable = false)
+    private Patient patient;
 }

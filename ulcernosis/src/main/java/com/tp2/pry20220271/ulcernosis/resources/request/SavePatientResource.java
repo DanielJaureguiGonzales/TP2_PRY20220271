@@ -32,7 +32,7 @@ public class SavePatientResource {
     @NotEmpty(message = "El estado civil no puede ser vacio")
     private String civilStatus;
 
-    private Long medicId;
+
 
 
 }

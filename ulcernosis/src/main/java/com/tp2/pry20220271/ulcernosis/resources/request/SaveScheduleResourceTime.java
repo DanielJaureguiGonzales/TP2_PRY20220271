@@ -29,5 +29,6 @@ public class SaveScheduleResourceTime {
 
     private Long nurseId;
 
+    private Long patientId;
 
 }

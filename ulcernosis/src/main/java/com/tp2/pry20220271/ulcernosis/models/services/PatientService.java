@@ -17,8 +17,12 @@ public interface PatientService {
     PatientResource findPatientById(Long id);
     Resource findPatientPhoto(Long id);
     Resource putPatientPhoto(Long id, MultipartFile file) throws IOException;
-    PatientResource createPatient(SavePatientResource savePatientResource);
+    PatientResource createPatient(SavePatientResource savePatientResource, Long medicId);
 
     PatientResource updatePatient(SavePatientResource savePatientResource, Long patientId);
     String deletePatient(Long patientId);
+
+    List<PatientResource> findAllByAssigned(Boolean isAssigned);
+
+    List<PatientResource> findAllPatientsByMedicIdAndIsAssigned(Long medicId, Boolean isAssigned);
 }

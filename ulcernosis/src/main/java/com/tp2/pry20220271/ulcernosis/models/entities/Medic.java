@@ -75,7 +75,6 @@ public class Medic {
     @Enumerated(EnumType.STRING)
     private Rol role;
 
-
     @OneToMany(mappedBy = "medic", fetch=FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonIgnoreProperties(value = {"medic"}, allowSetters = true)
     private List<Patient> patients;

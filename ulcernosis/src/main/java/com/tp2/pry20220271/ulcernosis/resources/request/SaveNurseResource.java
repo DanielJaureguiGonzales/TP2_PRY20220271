@@ -22,6 +22,5 @@ public class SaveNurseResource {
     private String civilStatus;
     private String address;
     private String cep;
-
     private Rol rol;
 }

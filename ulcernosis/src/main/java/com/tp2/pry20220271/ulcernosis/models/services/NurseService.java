@@ -14,7 +14,7 @@ public interface NurseService {
     List<NurseResource> findAll();
 
     List<NurseResource> findAllByMedicId(Long medicalId) ;
-
+    List<NurseResource> findAllByHaveTeamWork(Boolean isHaveTeamWork);
     NurseResource findNurseById(Long id);
 
     Nurse findNurseByCEP(String cep);

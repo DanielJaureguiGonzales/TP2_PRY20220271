@@ -87,9 +87,9 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public PatientResource createPatient(SavePatientResource savePatientResource) {
-        final Medic assignMedic = medicRepository.findById(savePatientResource.getMedicId()).orElseThrow(()->
-            new NotFoundException("Medic","Id",savePatientResource.getMedicId())
+    public PatientResource createPatient(SavePatientResource savePatientResource, Long medicId) {
+        final Medic assignMedic = medicRepository.findById(medicId).orElseThrow(()->
+            new NotFoundException("Medic","Id",medicId)
         );
 
 
@@ -115,15 +115,24 @@ public class PatientServiceImpl implements PatientService {
         newPatient.setCivilStatus(savePatientResource.getCivilStatus());
         newPatient.setMedic(assignMedic);
         newPatient.setPhone(savePatientResource.getPhone());
+        newPatient.setIsAssigned(false);
         Patient savePatient = patientRepository.save(newPatient);
         return mapper.map(savePatient,PatientResource.class);
     }
 
     @Override
     public PatientResource updatePatient(SavePatientResource savePatientResource, Long patientId){
-        final Medic assignMedic = medicRepository.findById(savePatientResource.getMedicId()).orElseThrow(()->
-                new NotFoundException("Medic","Id",savePatientResource.getMedicId())
-        );
+
+        if(patientRepository.findByDni(savePatientResource.getDni()).isPresent() ||
+                userRepository.findByDni(savePatientResource.getDni()).isPresent()){
+            throw new DniExistsException("El DNI ya está asociado a otra cuenta");
+        }else if(patientRepository.findByEmail(savePatientResource.getEmail()).isPresent() ||
+                userRepository.findByEmail(savePatientResource.getEmail()).isPresent()){
+            throw new EmailExistsException("El email ya está asociado a otra cuenta");
+        }else if(patientRepository.findByPhone(savePatientResource.getPhone()).isPresent() ||
+                userRepository.findByPhone(savePatientResource.getPhone()).isPresent()){
+            throw new PhoneExistsException("El teléfono ya está asociado a otra cuenta");
+        }
 
         Patient updatePatient = getPatientByID(patientId);
         updatePatient.setFullName(savePatientResource.getFullName());
@@ -143,6 +152,19 @@ public class PatientServiceImpl implements PatientService {
         patientRepository.delete(patient);
 
         return "Se eliminó al paciente exitosamente";
+    }
+
+    @Override
+    public List<PatientResource> findAllByAssigned(Boolean isAssigned) {
+        List<Patient> patients = patientRepository.findAllByIsAssigned(isAssigned);
+        return patients.stream().map(patient -> mapper.map(patient,PatientResource.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PatientResource> findAllPatientsByMedicIdAndIsAssigned(Long medicId, Boolean isAssigned) {
+        final Medic searchMedic = medicRepository.findById(medicId).orElseThrow(()-> new NotFoundException("Medic","Id",medicId));
+        List<Patient> patients_founds = patientRepository.findAllByMedicIdAndIsAssigned(searchMedic.getId(),isAssigned);
+        return patients_founds.stream().map(patient_found-> mapper.map(patient_found,PatientResource.class)).collect(Collectors.toList());
     }
 
     public Patient getPatientByID(Long id){

@@ -57,11 +57,22 @@ public class GloblalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(LimitTeamWorkExceeded.class)
-    public ResponseEntity<ErrorResource> handleLimitRegisterTeamWorkNurseExceeded(LimitTeamWorkExceeded ex, WebRequest request){
+    public ResponseEntity<ErrorResource> handleLimitRegisterTeamWorkExceeded(LimitTeamWorkExceeded ex, WebRequest request){
         ErrorResource error = new ErrorResource(LocalDateTime.now(),ex.getMessage(),request.getDescription(false), "LIMIT_TEAM_WORK_EXCEEDED");
         return new ResponseEntity<>(error, HttpStatus.TOO_MANY_REQUESTS);
     }
 
+    @ExceptionHandler(LimitAssignmentExceeded.class)
+    public ResponseEntity<ErrorResource> handleLimitRegisterAssignmentExceeded(LimitAssignmentExceeded ex, WebRequest request){
+        ErrorResource error = new ErrorResource(LocalDateTime.now(),ex.getMessage(),request.getDescription(false), "LIMIT_ASSIGNMENT_EXCEEDED");
+        return new ResponseEntity<>(error, HttpStatus.TOO_MANY_REQUESTS);
+    }
+
+    @ExceptionHandler(AssignmentExistsException.class)
+    public ResponseEntity<ErrorResource> handleAssignmentExistsException(AssignmentExistsException ex, WebRequest request){
+        ErrorResource error = new ErrorResource(LocalDateTime.now(),ex.getMessage(),request.getDescription(false), "ASSIGNMENT_EXISTS");
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResource> handleGlobalException(Exception ex, WebRequest request){

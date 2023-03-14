@@ -45,7 +45,7 @@ public class AssignmentController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/create-assigment")
+    @PostMapping("/create-assignment")
     public AssignmentResource createAssignment(@Valid @RequestBody SaveAssignmentResource assignment){
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.CREATED),"CREATED",assignmentService.createAssignment(assignment));
         return assignmentService.createAssignment(assignment);

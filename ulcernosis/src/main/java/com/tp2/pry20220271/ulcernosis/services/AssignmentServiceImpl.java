@@ -1,12 +1,17 @@
 package com.tp2.pry20220271.ulcernosis.services;
 
+import com.tp2.pry20220271.ulcernosis.exceptions.AssignmentExistsException;
+import com.tp2.pry20220271.ulcernosis.exceptions.LimitAssignmentExceeded;
+import com.tp2.pry20220271.ulcernosis.exceptions.LimitTeamWorkExceeded;
 import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
 import com.tp2.pry20220271.ulcernosis.models.entities.Assignment;
 import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
 import com.tp2.pry20220271.ulcernosis.models.entities.Patient;
+import com.tp2.pry20220271.ulcernosis.models.entities.TeamWork;
 import com.tp2.pry20220271.ulcernosis.models.repositories.AssignmentRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.NurseRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.PatientRepository;
+import com.tp2.pry20220271.ulcernosis.models.repositories.TeamWorkRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.AssignmentService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveAssignmentResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.AssignmentResource;
@@ -17,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +39,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     private final PatientRepository patientRepository;
 
+    private final TeamWorkRepository teamWorkRepository;
 
     @Override
     public List<AssignmentResource> findAllAssignments() {
@@ -60,19 +67,28 @@ public class AssignmentServiceImpl implements AssignmentService {
         Nurse nurse = nurseRepository.findById(assignment.getNurseId()).orElseThrow(() -> new NotFoundException("Nurse","id",assignment.getNurseId()));
         Patient patient = patientRepository.findById(assignment.getPatientId()).orElseThrow(() -> new NotFoundException("Patient","id",assignment.getPatientId()));
 
+        // VALIDAR SI EL PACIENTE YA TIENE UNA ASIGNACION
+        if(patient.getIsAssigned()){
+            throw new LimitAssignmentExceeded("El paciente ya tiene una asignación con otro enfermero");
+        }
+
         Assignment newAssignment = new Assignment();
         newAssignment.setNurse(nurse);
         newAssignment.setPatient(patient);
-
-        return modelMapper.map(assignmentRepository.save(newAssignment), AssignmentResource.class);
+        Assignment assignmentCreated = assignmentRepository.save(newAssignment);
+        patient.setIsAssigned(true);
+        nurseRepository.save(nurse);
+        patientRepository.save(patient);
+        return modelMapper.map(assignmentCreated, AssignmentResource.class);
     }
 
     @Override
     public String deleteAssigment(Long id) {
         Assignment assignment = getAssignmentById(id);
+        Patient patient = assignment.getPatient();
 
         assignmentRepository.delete(assignment);
-
+        patient.setIsAssigned(false);
         return "Se eliminó la asignación de forma exitosa";
     }
 

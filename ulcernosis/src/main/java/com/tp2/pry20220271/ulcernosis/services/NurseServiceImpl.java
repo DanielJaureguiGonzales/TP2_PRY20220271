@@ -6,10 +6,7 @@ import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
 import com.tp2.pry20220271.ulcernosis.models.entities.TeamWork;
 import com.tp2.pry20220271.ulcernosis.models.entities.User;
 import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
-import com.tp2.pry20220271.ulcernosis.models.repositories.MedicRepository;
-import com.tp2.pry20220271.ulcernosis.models.repositories.NurseRepository;
-import com.tp2.pry20220271.ulcernosis.models.repositories.TeamWorkRepository;
-import com.tp2.pry20220271.ulcernosis.models.repositories.UserRepository;
+import com.tp2.pry20220271.ulcernosis.models.repositories.*;
 import com.tp2.pry20220271.ulcernosis.models.services.NurseService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveNurseResource;
 
@@ -51,7 +48,8 @@ public class NurseServiceImpl implements NurseService {
 
     private final TeamWorkRepository teamWorkRepository;
 
-
+    private final AssignmentRepository assignmentRepository;
+    private final PatientRepository patientRepository;
 
     @Override
     public List<NurseResource> findAll() {
@@ -64,6 +62,12 @@ public class NurseServiceImpl implements NurseService {
         Medic medic = medicRepository.findById(medicalId).orElseThrow(()-> new NotFoundException("Medic","id",medicalId.toString()));
         List<TeamWork> teamWorks = teamWorkRepository.findAllByMedicId(medicalId);
         List<Nurse> nurseList = nurseRepository.findAllByTeamWorkIn(teamWorks);
+        return nurseList.stream().map(nurse -> mapper.map(nurse,NurseResource.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NurseResource> findAllByHaveTeamWork(Boolean isHaveTeamWork) {
+        List<Nurse> nurseList = nurseRepository.findAllByHaveTeamWork(isHaveTeamWork);
         return nurseList.stream().map(nurse -> mapper.map(nurse,NurseResource.class)).collect(Collectors.toList());
     }
 
@@ -111,7 +115,7 @@ public class NurseServiceImpl implements NurseService {
         newNurse.setDni(saveNurseResource.getDni());
         newNurse.setAvatar(new byte[]{});
         newNurse.setPassword(passwordEncoder.encode(saveNurseResource.getPassword()));
-
+        newNurse.setHaveTeamWork(false);
         NurseResource nurseResource = mapper.map(nurseRepository.save(newNurse), NurseResource.class);
         nurseResource.setRole(Rol.ROLE_NURSE);
         return nurseResource;
@@ -121,6 +125,18 @@ public class NurseServiceImpl implements NurseService {
     public NurseResource updateNurse(Long id, SaveNurseResource saveNurseResource) {
         Nurse updateNurse = getNurseByID(id);
         User updateUser = userRepository.findByEmail(updateNurse.getEmail()).orElseThrow(()-> new NotFoundException("User","email",updateNurse.getEmail()));
+
+       if(patientRepository.findByDni(saveNurseResource.getDni()).isPresent() ||
+               userRepository.findByDni(saveNurseResource.getDni()).isPresent()){
+           throw new DniExistsException("El DNI ya está asociado a otra cuenta");
+       }else if(patientRepository.findByEmail(saveNurseResource.getEmail()).isPresent() ||
+               userRepository.findByEmail(saveNurseResource.getEmail()).isPresent()){
+           throw new EmailExistsException("El email ya está asociado a otra cuenta");
+       }else if(patientRepository.findByPhone(saveNurseResource.getPhone()).isPresent() ||
+               userRepository.findByPhone(saveNurseResource.getPhone()).isPresent()){
+           throw new PhoneExistsException("El teléfono ya está asociado a otra cuenta");
+       }
+
         updateNurse.setDni(saveNurseResource.getDni());
         updateNurse.setAge(saveNurseResource.getAge());
         updateNurse.setEmail(saveNurseResource.getEmail());

@@ -15,8 +15,13 @@ import java.util.Optional;
 @Repository
 public interface NurseRepository extends JpaRepository<Nurse,Long> {
 
+    List<Nurse> findAllByHaveTeamWork(Boolean isHaveTeamWork);
     List<Nurse> findAllByTeamWorkIn(List<TeamWork> teamWorks);
     Optional<Nurse> findNurseByCep(String cep);
     Optional<Nurse> findNurseByEmail(String email);
     Optional<Nurse> findNurseByFullName(String fullName);
+
+    /*List<Nurse> findAllByIsAssigned(Boolean isAssigned);*/
+
+
 }

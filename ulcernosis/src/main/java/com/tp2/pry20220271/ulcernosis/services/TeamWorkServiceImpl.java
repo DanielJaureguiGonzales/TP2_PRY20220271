@@ -62,20 +62,23 @@ public class TeamWorkServiceImpl implements TeamWorkService {
         Medic medic = medicRepository.findById(teamWork.getMedicId()).orElseThrow(()->new NotFoundException("Medic","id",teamWork.getMedicId()));
         Nurse nurse = nurseRepository.findById(teamWork.getNurseId()).orElseThrow(()->new NotFoundException("Nurse","id",teamWork.getNurseId()));
         // VALIDAR SI EL MEDICO YA TIENE TRES ENFERMEROS
-        List<TeamWork> teamWorks = teamWorkRepository.findAllByMedicId(medic.getId());
-        if(teamWorks.size()>=3){
+        List<TeamWork> teamWorksByMedicExists = teamWorkRepository.findAllByMedicId(medic.getId());
+        if(teamWorksByMedicExists.size()>=3){
             throw new LimitTeamWorkExceeded("Usted ya tiene 3 enfermeros asignados");
         }
-        // VALIDAR SI LA ENFERMERA YA PERTENECE A UN EQUIPO
-        Optional<TeamWork> teamWorkByNurseExist = teamWorkRepository.findByNurseId(nurse.getId());
-        if(teamWorkByNurseExist.isPresent()){
+        // VALIDAR SI EL ENFERMERO YA TIENE UN EQUIPO
+        if(nurse.getHaveTeamWork()){
             throw new LimitTeamWorkExceeded("El enfermero ya pertenece a un equipo");
         }
+
         TeamWork teamWork1 = new TeamWork();
         teamWork1.setMedic(medic);
         teamWork1.setNurse(nurse);
 
-        return mapper.map(teamWorkRepository.save(teamWork1), TeamWorkResource.class);
+        TeamWork teamWorkSave = teamWorkRepository.save(teamWork1);
+        nurse.setHaveTeamWork(true);
+        nurseRepository.save(nurse);
+        return mapper.map(teamWorkSave, TeamWorkResource.class);
 
 
     }
@@ -85,6 +88,7 @@ public class TeamWorkServiceImpl implements TeamWorkService {
     public String deleteTeamWorkByNurseId(Long nurseId){
         Nurse nurse = nurseRepository.findById(nurseId).orElseThrow(()->new NotFoundException("Nurse","id",nurseId));
         teamWorkRepository.deleteTeamWorkByNurseId(nurse.getId());
+        nurse.setHaveTeamWork(false);
         return "Se ha eliminado con éxito";
     }
 

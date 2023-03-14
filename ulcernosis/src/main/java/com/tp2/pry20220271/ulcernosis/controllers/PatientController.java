@@ -33,6 +33,13 @@ public class PatientController {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/medic/{medicId}/get-patients-assigned/{isAssigned}")
+    List<PatientResource> getAllPatientsByAssignedBool(@PathVariable("medicId") Long medicId,@PathVariable("isAssigned") Boolean isAssigned) {
+        //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"OK",patientService.findAllPatientsByMedicId(medicId));
+        return patientService.findAllPatientsByMedicIdAndIsAssigned(medicId,isAssigned);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{patientId}")
     PatientResource getPatientById(@PathVariable("patientId") Long patientId){
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"OK",patientService.findPatientById(patientId));
@@ -63,15 +70,15 @@ public class PatientController {
 
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/create-patient")
-    PatientResource createPatient(@Valid @RequestBody SavePatientResource savePatient){
+    @PostMapping("/medic/{medicId}/create-patient")
+    PatientResource createPatient(@Valid @RequestBody SavePatientResource savePatient, @PathVariable("medicId") Long medicId){
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.CREATED),"CREATED",patientService.createPatient(savePatient));
-        return patientService.createPatient(savePatient);
+        return patientService.createPatient(savePatient,medicId);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{patientId}/update-patient")
-    PatientResource updatePatient(@Valid SavePatientResource updatedPatient, @PathVariable("patientId") Long patientId){
+    PatientResource updatePatient(@Valid @RequestBody SavePatientResource updatedPatient, @PathVariable("patientId") Long patientId){
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"UPDATED",patientService.updatePatient(updatedPatient,patientId));
         return patientService.updatePatient(updatedPatient,patientId);
     }
