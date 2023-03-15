@@ -4,10 +4,7 @@ import com.tp2.pry20220271.ulcernosis.exceptions.DniExistsException;
 import com.tp2.pry20220271.ulcernosis.exceptions.EmailExistsException;
 import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
 import com.tp2.pry20220271.ulcernosis.exceptions.PhoneExistsException;
-import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
-import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
-import com.tp2.pry20220271.ulcernosis.models.entities.TeamWork;
-import com.tp2.pry20220271.ulcernosis.models.entities.User;
+import com.tp2.pry20220271.ulcernosis.models.entities.*;
 import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
 import com.tp2.pry20220271.ulcernosis.models.repositories.*;
 import com.tp2.pry20220271.ulcernosis.models.services.NurseService;
@@ -170,6 +167,14 @@ public class NurseServiceImpl implements NurseService {
     public String deleteNurse(Long id) {
         Nurse deleteNurse = getNurseByID(id);
         User user = userRepository.findByEmail(deleteNurse.getEmail()).orElseThrow(()-> new NotFoundException("User","email",deleteNurse.getEmail()));
+        List<Assignment> assignments = assignmentRepository.findAllByNurseId(id);
+        // Encontramos todos los pacientes que tiene asignado el enfermero
+        List<Patient> patients = assignments.stream().map(assignment -> assignment.getPatient()).collect(Collectors.toList());
+        // Cambiamos el estado de asignado de un enfermero con el paciente a false
+        for (Patient patient:patients) {
+            patient.setIsAssigned(false);
+        }
+
         userRepository.delete(user);
         nurseRepository.delete(deleteNurse);
 

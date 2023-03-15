@@ -5,10 +5,13 @@ import com.tp2.pry20220271.ulcernosis.exceptions.EmailExistsException;
 import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
 import com.tp2.pry20220271.ulcernosis.exceptions.PhoneExistsException;
 import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
+import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
+import com.tp2.pry20220271.ulcernosis.models.entities.TeamWork;
 import com.tp2.pry20220271.ulcernosis.models.entities.User;
 import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
 import com.tp2.pry20220271.ulcernosis.models.repositories.MedicRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.PatientRepository;
+import com.tp2.pry20220271.ulcernosis.models.repositories.TeamWorkRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.UserRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.MedicService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveMedicResource;
@@ -40,6 +43,7 @@ public class MedicServiceImpl implements MedicService {
     private final UserRepository userRepository;
 
     private final PatientRepository patientRepository;
+    private final TeamWorkRepository teamWorkRepository;
 
     private static final ModelMapper mapper = new ModelMapper();
 
@@ -151,7 +155,13 @@ public class MedicServiceImpl implements MedicService {
 
         Medic deleteMedic = getMedicByID(id);
         User user = userRepository.findByEmail(deleteMedic.getEmail()).orElseThrow(()-> new NotFoundException("User","email",deleteMedic.getEmail()));
-
+        List<TeamWork> teamWorks = teamWorkRepository.findAllByMedicId(deleteMedic.getId());
+        // Encotrar todos los enfermeros que estan en el equipo de trabajo del medico
+        List<Nurse> nurses = teamWorks.stream().map(TeamWork::getNurse).collect(Collectors.toList());
+        // Eliminar el equipo de trabajo del medico
+        for(Nurse nurse: nurses){
+            nurse.setHaveTeamWork(false);
+        }
         medicRepository.delete(deleteMedic);
         userRepository.delete(user);
         return "Se eliminó al médico exitosamente";

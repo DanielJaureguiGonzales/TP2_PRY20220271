@@ -64,7 +64,14 @@ public class AssignmentServiceImpl implements AssignmentService {
     @Override
     public AssignmentResource createAssignment(SaveAssignmentResource assignment) {
         Nurse nurse = nurseRepository.findById(assignment.getNurseId()).orElseThrow(() -> new NotFoundException("Nurse","id",assignment.getNurseId()));
+
         Patient patient = patientRepository.findById(assignment.getPatientId()).orElseThrow(() -> new NotFoundException("Patient","id",assignment.getPatientId()));
+
+        var existsTeamWork = teamWorkRepository.existsByMedicIdAndNurseId(patient.getMedic().getId(),nurse.getId());
+
+        if(!existsTeamWork){
+            throw new LimitTeamWorkExceeded("El enfermero no pertenece al equipo de trabajo del médico");
+        }
 
         // VALIDAR SI EL PACIENTE YA TIENE UNA ASIGNACION
         if(patient.getIsAssigned()){
