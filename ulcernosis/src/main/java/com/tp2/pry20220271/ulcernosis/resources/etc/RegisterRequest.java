@@ -1,6 +1,5 @@
 package com.tp2.pry20220271.ulcernosis.resources.etc;
 
-
 import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -54,4 +53,7 @@ public class RegisterRequest {
 
     @NotEmpty(message = "El estado civil no puede ser vacio")
     private String civilStatus;
+
+
+    private Boolean isAuxiliar;
 }

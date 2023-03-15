@@ -1,9 +1,7 @@
 package com.tp2.pry20220271.ulcernosis.resources.request;
 
 import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -23,4 +21,5 @@ public class SaveNurseResource {
     private String address;
     private String cep;
     private Rol rol;
+    private Boolean isAuxiliar;
 }

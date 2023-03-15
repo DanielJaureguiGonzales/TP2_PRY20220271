@@ -13,13 +13,12 @@ public class NurseResource {
     private Long id;
     private String fullName;
     private String email;
-
     private String dni;
     private String phone;
-
     private Integer age;
     private String address;
     private String cep;
+    private Boolean isAuxiliar;
     private String civilStatus;
     private Rol role;
 

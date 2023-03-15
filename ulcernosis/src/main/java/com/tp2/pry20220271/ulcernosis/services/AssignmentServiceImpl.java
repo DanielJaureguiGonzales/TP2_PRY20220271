@@ -31,7 +31,6 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     private static final ModelMapper modelMapper = new ModelMapper();
 
-    private static final Logger log = LoggerFactory.getLogger(AssignmentServiceImpl.class);
 
     private final AssignmentRepository assignmentRepository;
 

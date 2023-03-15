@@ -33,8 +33,6 @@ import java.util.stream.Collectors;
 public class MedicServiceImpl implements MedicService {
 
 
-    private static final Logger log = LoggerFactory.getLogger(MedicServiceImpl.class);
-
     private final PasswordEncoder passwordEncoder;
 
     private final MedicRepository medicRepository;

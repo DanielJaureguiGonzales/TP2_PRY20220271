@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PatientServiceImpl implements PatientService {
 
-    private static final Logger log = LoggerFactory.getLogger(PatientServiceImpl.class);
 
     private static final ModelMapper mapper = new ModelMapper();
 

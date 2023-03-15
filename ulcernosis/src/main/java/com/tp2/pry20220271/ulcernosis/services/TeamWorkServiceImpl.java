@@ -27,8 +27,6 @@ import java.util.stream.Collectors;
 public class TeamWorkServiceImpl implements TeamWorkService {
 
     private static final ModelMapper mapper = new ModelMapper();
-    private static final Logger log = LoggerFactory.getLogger(TeamWorkServiceImpl.class);
-
 
     private final TeamWorkRepository teamWorkRepository;
 

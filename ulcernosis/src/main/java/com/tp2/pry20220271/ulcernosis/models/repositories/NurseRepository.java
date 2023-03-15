@@ -1,7 +1,7 @@
 package com.tp2.pry20220271.ulcernosis.models.repositories;
 
 
-import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
+
 import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
 import com.tp2.pry20220271.ulcernosis.models.entities.TeamWork;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,6 +22,6 @@ public interface NurseRepository extends JpaRepository<Nurse,Long> {
     Optional<Nurse> findNurseByFullName(String fullName);
 
     /*List<Nurse> findAllByIsAssigned(Boolean isAssigned);*/
-
+    List<Nurse> findAllByIsAuxiliar(Boolean isAuxiliar);
 
 }

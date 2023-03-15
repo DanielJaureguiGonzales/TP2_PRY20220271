@@ -1,6 +1,9 @@
 package com.tp2.pry20220271.ulcernosis.services;
 
-import com.tp2.pry20220271.ulcernosis.exceptions.*;
+import com.tp2.pry20220271.ulcernosis.exceptions.DniExistsException;
+import com.tp2.pry20220271.ulcernosis.exceptions.EmailExistsException;
+import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
+import com.tp2.pry20220271.ulcernosis.exceptions.PhoneExistsException;
 import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
 import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
 import com.tp2.pry20220271.ulcernosis.models.entities.TeamWork;
@@ -9,14 +12,11 @@ import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
 import com.tp2.pry20220271.ulcernosis.models.repositories.*;
 import com.tp2.pry20220271.ulcernosis.models.services.NurseService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveNurseResource;
-
-import com.tp2.pry20220271.ulcernosis.resources.response.MedicResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.NurseResource;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class NurseServiceImpl implements NurseService {
 
-    private static final Logger log = LoggerFactory.getLogger(MedicServiceImpl.class);
     private static final ModelMapper mapper = new ModelMapper();
 
 
@@ -68,6 +67,12 @@ public class NurseServiceImpl implements NurseService {
     @Override
     public List<NurseResource> findAllByHaveTeamWork(Boolean isHaveTeamWork) {
         List<Nurse> nurseList = nurseRepository.findAllByHaveTeamWork(isHaveTeamWork);
+        return nurseList.stream().map(nurse -> mapper.map(nurse,NurseResource.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NurseResource> findAllByIsAuxiliar(Boolean isAuxiliar) {
+        List<Nurse> nurseList = nurseRepository.findAllByIsAuxiliar(isAuxiliar);
         return nurseList.stream().map(nurse -> mapper.map(nurse,NurseResource.class)).collect(Collectors.toList());
     }
 

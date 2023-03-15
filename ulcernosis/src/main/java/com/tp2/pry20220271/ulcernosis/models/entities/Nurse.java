@@ -75,9 +75,11 @@ public class Nurse {
     @Enumerated(EnumType.STRING)
     private Rol role;
 
-    @Column(nullable = false)
+
     private Boolean haveTeamWork;
 
+    @Column(nullable = false)
+    private Boolean isAuxiliar;
 
     @OneToMany(mappedBy = "nurse", fetch=FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonIgnoreProperties(value = {"nurse"}, allowSetters = true)

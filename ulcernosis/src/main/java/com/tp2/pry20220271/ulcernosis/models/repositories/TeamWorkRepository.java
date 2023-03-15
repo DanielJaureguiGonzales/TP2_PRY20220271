@@ -19,4 +19,6 @@ public interface TeamWorkRepository extends JpaRepository<TeamWork,Long> {
 
     Optional<TeamWork> findByNurseId(Long id);
     Optional<TeamWork> findByNurseIdAndMedicId(Long nurseId, Long medicId);
+
+    boolean existsByMedicIdAndNurseId(Long medicId, Long nurseId);
 }

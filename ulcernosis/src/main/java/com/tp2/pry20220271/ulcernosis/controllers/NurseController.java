@@ -39,6 +39,12 @@ public class NurseController {
         return nurseService.findAllByHaveTeamWork(isHaveTeamWork);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/get-nurses-is-auxiliar/{isAuxiliar}")
+    List<NurseResource> getAllNursesByAuxiliarBool(@PathVariable("isAuxiliar") Boolean isAuxiliar) {
+        //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"OK",nurseService.findAll());
+        return nurseService.findAllByIsAuxiliar(isAuxiliar);
+    }
     /*@ResponseStatus(HttpStatus.OK)
     @GetMapping("/medic/{medicId}/get-nurses-assigned/{isAssigned}")
     List<NurseResource> getAllNursesByMedicIdAndIsAssigned(@PathVariable("medicId") Long medicId,@PathVariable("isAssigned") Boolean isAssigned){
