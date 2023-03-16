@@ -109,16 +109,28 @@ public class MedicServiceImpl implements MedicService {
        Medic updateMedic = getMedicByID(id);
        User updateUser = userRepository.findByEmail(updateMedic.getEmail()).orElseThrow(()-> new NotFoundException("User","email",updateMedic.getEmail()));
 
-        if(patientRepository.findByDni(saveMedicResource.getDni()).isPresent() ||
-                userRepository.findByDni(saveMedicResource.getDni()).isPresent()){
-            throw new DniExistsException("El DNI ya está asociado a otra cuenta");
-        }else if(patientRepository.findByEmail(saveMedicResource.getEmail()).isPresent() ||
-                userRepository.findByEmail(saveMedicResource.getEmail()).isPresent()){
-            throw new EmailExistsException("El email ya está asociado a otra cuenta");
-        }else if(patientRepository.findByPhone(saveMedicResource.getPhone()).isPresent() ||
-                userRepository.findByPhone(saveMedicResource.getPhone()).isPresent()){
-            throw new PhoneExistsException("El teléfono ya está asociado a otra cuenta");
+
+        if (!updateMedic.getDni().equals(saveMedicResource.getDni())){
+            if(patientRepository.findByDni(saveMedicResource.getDni()).isPresent() ||
+                    userRepository.findByDni(saveMedicResource.getDni()).isPresent()){
+                throw new DniExistsException("El DNI ya está asociado a otra cuenta");
+            }
         }
+
+        if (!updateMedic.getEmail().equals(saveMedicResource.getEmail())){
+            if(patientRepository.findByEmail(saveMedicResource.getEmail()).isPresent() ||
+                    userRepository.findByEmail(saveMedicResource.getEmail()).isPresent()){
+                throw new EmailExistsException("El email ya está asociado a otra cuenta");
+            }
+        }
+
+        if (!updateMedic.getPhone().equals(saveMedicResource.getPhone())){
+            if(patientRepository.findByPhone(saveMedicResource.getPhone()).isPresent() ||
+                    userRepository.findByPhone(saveMedicResource.getPhone()).isPresent()){
+                throw new PhoneExistsException("El teléfono ya está asociado a otra cuenta");
+            }
+        }
+
 
         updateMedic.setDni(saveMedicResource.getDni());
         updateMedic.setAge(Integer.valueOf(saveMedicResource.getAge()));

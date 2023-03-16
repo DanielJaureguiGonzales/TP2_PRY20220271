@@ -122,18 +122,29 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public PatientResource updatePatient(SavePatientResource savePatientResource, Long patientId){
 
-        if(patientRepository.findByDni(savePatientResource.getDni()).isPresent() ||
-                userRepository.findByDni(savePatientResource.getDni()).isPresent()){
-            throw new DniExistsException("El DNI ya está asociado a otra cuenta");
-        }else if(patientRepository.findByEmail(savePatientResource.getEmail()).isPresent() ||
-                userRepository.findByEmail(savePatientResource.getEmail()).isPresent()){
-            throw new EmailExistsException("El email ya está asociado a otra cuenta");
-        }else if(patientRepository.findByPhone(savePatientResource.getPhone()).isPresent() ||
-                userRepository.findByPhone(savePatientResource.getPhone()).isPresent()){
-            throw new PhoneExistsException("El teléfono ya está asociado a otra cuenta");
+        Patient updatePatient = getPatientByID(patientId);
+        if (!updatePatient.getDni().equals(savePatientResource.getDni())){
+            if(patientRepository.findByDni(savePatientResource.getDni()).isPresent() ||
+                    userRepository.findByDni(savePatientResource.getDni()).isPresent()){
+                throw new DniExistsException("El DNI ya está asociado a otra cuenta");
+            }
         }
 
-        Patient updatePatient = getPatientByID(patientId);
+        if (!updatePatient.getEmail().equals(savePatientResource.getEmail())){
+            if(patientRepository.findByEmail(savePatientResource.getEmail()).isPresent() ||
+                    userRepository.findByEmail(savePatientResource.getEmail()).isPresent()){
+                throw new EmailExistsException("El email ya está asociado a otra cuenta");
+            }
+        }
+
+        if (!updatePatient.getPhone().equals(savePatientResource.getPhone())){
+            if(patientRepository.findByPhone(savePatientResource.getPhone()).isPresent() ||
+                    userRepository.findByPhone(savePatientResource.getPhone()).isPresent()){
+                throw new PhoneExistsException("El teléfono ya está asociado a otra cuenta");
+            }
+        }
+
+
         updatePatient.setFullName(savePatientResource.getFullName());
         updatePatient.setAge(savePatientResource.getAge());
         updatePatient.setEmail(savePatientResource.getEmail());

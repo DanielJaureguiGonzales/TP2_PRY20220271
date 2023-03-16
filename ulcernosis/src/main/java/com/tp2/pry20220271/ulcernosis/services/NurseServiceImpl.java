@@ -128,16 +128,28 @@ public class NurseServiceImpl implements NurseService {
         Nurse updateNurse = getNurseByID(id);
         User updateUser = userRepository.findByEmail(updateNurse.getEmail()).orElseThrow(()-> new NotFoundException("User","email",updateNurse.getEmail()));
 
-       if(patientRepository.findByDni(saveNurseResource.getDni()).isPresent() ||
-               userRepository.findByDni(saveNurseResource.getDni()).isPresent()){
-           throw new DniExistsException("El DNI ya está asociado a otra cuenta");
-       }else if(patientRepository.findByEmail(saveNurseResource.getEmail()).isPresent() ||
-               userRepository.findByEmail(saveNurseResource.getEmail()).isPresent()){
-           throw new EmailExistsException("El email ya está asociado a otra cuenta");
-       }else if(patientRepository.findByPhone(saveNurseResource.getPhone()).isPresent() ||
-               userRepository.findByPhone(saveNurseResource.getPhone()).isPresent()){
-           throw new PhoneExistsException("El teléfono ya está asociado a otra cuenta");
+       if (!updateNurse.getDni().equals(saveNurseResource.getDni())){
+           if(patientRepository.findByDni(saveNurseResource.getDni()).isPresent() ||
+                   userRepository.findByDni(saveNurseResource.getDni()).isPresent()){
+               throw new DniExistsException("El DNI ya está asociado a otra cuenta");
+           }
        }
+
+      if (!updateNurse.getEmail().equals(saveNurseResource.getEmail())){
+          if(patientRepository.findByEmail(saveNurseResource.getEmail()).isPresent() ||
+                  userRepository.findByEmail(saveNurseResource.getEmail()).isPresent()){
+              throw new EmailExistsException("El email ya está asociado a otra cuenta");
+          }
+       }
+
+       if (!updateNurse.getPhone().equals(saveNurseResource.getPhone())){
+           if(patientRepository.findByPhone(saveNurseResource.getPhone()).isPresent() ||
+                   userRepository.findByPhone(saveNurseResource.getPhone()).isPresent()){
+               throw new PhoneExistsException("El teléfono ya está asociado a otra cuenta");
+           }
+       }
+
+
 
         updateNurse.setDni(saveNurseResource.getDni());
         updateNurse.setAge(saveNurseResource.getAge());
