@@ -5,6 +5,8 @@ import com.tp2.pry20220271.ulcernosis.models.enums.Type;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 public class DiagnosisResource {
@@ -18,4 +20,5 @@ public class DiagnosisResource {
     private Long patientId;
     private Long creatorId;
     private Type creatorType;
+    private Date createdAt;
 }

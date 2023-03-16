@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 
 
 @Data
@@ -27,5 +28,5 @@ public class PatientResource {
 
     private Long medicId;
 
-
+    private Date createdAt;
 }

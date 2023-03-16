@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Entity(name = "diagnosis")
 @Data
 @AllArgsConstructor
@@ -51,5 +53,14 @@ public class Diagnosis {
     @Enumerated(EnumType.STRING)
     @Column(name = "creator_type")
     private Type creatorType;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "created_at")
+    private Date createdAt;
+
+    @PrePersist
+    public void asignCreatedAt() {
+        this.createdAt = new Date();
+    }
 
 }

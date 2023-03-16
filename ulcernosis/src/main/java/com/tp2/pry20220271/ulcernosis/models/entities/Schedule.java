@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 
@@ -20,8 +22,7 @@ public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
+    
     @Column(name = "time")
     @JsonFormat(pattern = "hh:mm a")
     private LocalTime time;
@@ -42,4 +43,12 @@ public class Schedule {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id",nullable = false)
     private Patient patient;
+
+    @Column(name = "date")
+    private String date;
+
+    @PrePersist
+    public void prePersist() {
+        this.date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
 }

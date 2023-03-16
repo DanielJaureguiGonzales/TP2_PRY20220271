@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -22,4 +23,5 @@ public class MedicResource {
     private String cmp;
     private String civilStatus;
     private Rol role;
+    private Date createdAt;
 }
