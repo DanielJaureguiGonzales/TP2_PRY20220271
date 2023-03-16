@@ -92,9 +92,10 @@ public class AssignmentServiceImpl implements AssignmentService {
     public String deleteAssigment(Long id) {
         Assignment assignment = getAssignmentById(id);
         Patient patient = assignment.getPatient();
+        patient.setIsAssigned(false);
 
         assignmentRepository.delete(assignment);
-        patient.setIsAssigned(false);
+
         return "Se eliminó la asignación de forma exitosa";
     }
 

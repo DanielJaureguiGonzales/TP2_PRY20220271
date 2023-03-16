@@ -24,7 +24,7 @@ public class DiagnosisController {
 
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/diagnosis/{diagnosisId}")
+    @GetMapping("/{diagnosisId}")
     DiagnosisResource getDiagnosis(@PathVariable("diagnosisId") Long diagnosisId){
         return diagnosisService.findById(diagnosisId);
     }
@@ -60,7 +60,7 @@ public class DiagnosisController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/delete-diagnosis/{diagnosisId}")
+    @DeleteMapping("/{diagnosisId}/delete-diagnosis")
     String deleteDiagnosis(@PathVariable("diagnosisId") Long diagnosisId){
         return diagnosisService.deleteDiagnosisById(diagnosisId);
     }
