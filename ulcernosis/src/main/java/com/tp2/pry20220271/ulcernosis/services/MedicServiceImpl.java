@@ -1,7 +1,6 @@
 package com.tp2.pry20220271.ulcernosis.services;
 
 import com.tp2.pry20220271.ulcernosis.exceptions.DniExistsException;
-import com.tp2.pry20220271.ulcernosis.exceptions.EmailExistsException;
 import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
 import com.tp2.pry20220271.ulcernosis.exceptions.PhoneExistsException;
 import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
@@ -19,9 +18,6 @@ import com.tp2.pry20220271.ulcernosis.resources.response.MedicResource;
 import com.tp2.pry20220271.ulcernosis.resources.updates.UpdateMedicResource;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -118,12 +114,12 @@ public class MedicServiceImpl implements MedicService {
             }
         }
 
-        if (!updateMedic.getEmail().equals(updateMedicResource.getEmail())){
+        /*if (!updateMedic.getEmail().equals(updateMedicResource.getEmail())){
             if(patientRepository.findByEmail(updateMedicResource.getEmail()).isPresent() ||
                     userRepository.findByEmail(updateMedicResource.getEmail()).isPresent()){
                 throw new EmailExistsException("El email ya está asociado a otra cuenta");
             }
-        }
+        }*/
 
         if (!updateMedic.getPhone().equals(updateMedicResource.getPhone())){
             if(patientRepository.findByPhone(updateMedicResource.getPhone()).isPresent() ||
@@ -135,14 +131,14 @@ public class MedicServiceImpl implements MedicService {
 
         updateMedic.setDni(updateMedicResource.getDni());
         updateMedic.setAge(Integer.valueOf(updateMedicResource.getAge()));
-        updateMedic.setEmail(updateMedicResource.getEmail());
+        /*updateMedic.setEmail(updateMedicResource.getEmail());*/
         updateMedic.setFullName(updateMedicResource.getFullName());
         updateMedic.setCivilStatus(updateMedicResource.getCivilStatus());
         updateMedic.setAddress(updateMedicResource.getAddress());
         updateMedic.setPhone(updateMedicResource.getPhone());
         updateMedic.setCivilStatus(updateMedicResource.getCivilStatus());
 
-        updateUser.setEmail(updateMedicResource.getEmail());
+       /* updateUser.setEmail(updateMedicResource.getEmail());*/
         updateUser.setFullName(updateMedicResource.getFullName());
         updateUser.setCivilStatus(updateMedicResource.getCivilStatus());
         updateUser.setAddress(updateMedicResource.getAddress());

@@ -8,7 +8,7 @@ import lombok.Setter;
 public class UpdateNurseResource {
     private String fullName;
 
-    private String email;
+   /* private String email;*/
 
     private String dni;
 

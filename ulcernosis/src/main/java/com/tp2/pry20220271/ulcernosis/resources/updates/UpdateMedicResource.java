@@ -12,7 +12,7 @@ public class UpdateMedicResource {
 
     private String fullName;
 
-    private String email;
+  /*  private String email;*/
 
     private String dni;
 

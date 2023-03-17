@@ -1,7 +1,6 @@
 package com.tp2.pry20220271.ulcernosis.services;
 
 import com.tp2.pry20220271.ulcernosis.exceptions.DniExistsException;
-import com.tp2.pry20220271.ulcernosis.exceptions.EmailExistsException;
 import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
 import com.tp2.pry20220271.ulcernosis.exceptions.PhoneExistsException;
 import com.tp2.pry20220271.ulcernosis.models.entities.*;
@@ -13,8 +12,6 @@ import com.tp2.pry20220271.ulcernosis.resources.response.NurseResource;
 import com.tp2.pry20220271.ulcernosis.resources.updates.UpdateNurseResource;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -136,13 +133,13 @@ public class NurseServiceImpl implements NurseService {
            }
        }
 
-      if (!updateNurse.getEmail().equals(updateNurseResource.getEmail())){
+      /*if (!updateNurse.getEmail().equals(updateNurseResource.getEmail())){
           if(patientRepository.findByEmail(updateNurseResource.getEmail()).isPresent() ||
                   userRepository.findByEmail(updateNurseResource.getEmail()).isPresent()){
               throw new EmailExistsException("El email ya está asociado a otra cuenta");
           }
        }
-
+*/
        if (!updateNurse.getPhone().equals(updateNurseResource.getPhone())){
            if(patientRepository.findByPhone(updateNurseResource.getPhone()).isPresent() ||
                    userRepository.findByPhone(updateNurseResource.getPhone()).isPresent()){
@@ -154,14 +151,14 @@ public class NurseServiceImpl implements NurseService {
 
         updateNurse.setDni(updateNurseResource.getDni());
         updateNurse.setAge(updateNurseResource.getAge());
-        updateNurse.setEmail(updateNurseResource.getEmail());
+        /*updateNurse.setEmail(updateNurseResource.getEmail());*/
         updateNurse.setCivilStatus(updateNurseResource.getCivilStatus());
         updateNurse.setFullName(updateNurseResource.getFullName());
         updateNurse.setAddress(updateNurseResource.getAddress());
         updateNurse.setPhone(updateNurseResource.getPhone());
         updateNurse.setCivilStatus(updateNurseResource.getCivilStatus());
 
-        updateUser.setEmail(updateNurseResource.getEmail());
+        /*updateUser.setEmail(updateNurseResource.getEmail());*/
         updateUser.setFullName(updateNurseResource.getFullName());
         updateUser.setCivilStatus(updateNurseResource.getCivilStatus());
         updateUser.setAddress(updateNurseResource.getAddress());
