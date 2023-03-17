@@ -82,6 +82,13 @@ public class NurseController {
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(profile_photo);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{nurseId}/notify")
+    NurseResource notifyNurse( @PathVariable("nurseId") Long nurseId) {
+        //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"UPDATED",nurseService.updateNurse(nurseId,updateNurse));
+        return nurseService.changeItWasNotifiedNurse(nurseId);
+    }
+
     /*
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/nurses/create-nurse")

@@ -24,5 +24,6 @@ public class NurseResource {
     private String civilStatus;
     private Rol role;
     private Boolean haveTeamWork;
+    private Boolean itWasNotified;
     private Date createdAt;
 }

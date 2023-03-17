@@ -19,6 +19,7 @@ public interface NurseService {
     List<NurseResource> findAllByIsAuxiliar(Boolean isAuxiliar);
     NurseResource findNurseById(Long id);
 
+    NurseResource changeItWasNotifiedNurse(Long id);
     Nurse findNurseByCEP(String cep);
 
    Resource findNursePhoto(Long id);

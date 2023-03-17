@@ -81,6 +81,9 @@ public class Nurse {
     @Column(nullable = false)
     private Boolean isAuxiliar;
 
+    @Column(nullable = false)
+    private Boolean itWasNotified;
+
     @OneToMany(mappedBy = "nurse", fetch=FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonIgnoreProperties(value = {"nurse"}, allowSetters = true)
     private List<TeamWork> teamWork;

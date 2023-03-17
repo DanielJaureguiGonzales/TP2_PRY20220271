@@ -79,6 +79,15 @@ public class NurseServiceImpl implements NurseService {
     }
 
     @Override
+    public NurseResource changeItWasNotifiedNurse(Long id) {
+        Nurse nurse = nurseRepository.findById(id).orElseThrow(()-> new NotFoundException("Nurse","id",id.toString()));
+        nurse.setItWasNotified(true);
+
+        return mapper.map(nurseRepository.save(nurse), NurseResource.class);
+
+    }
+
+    @Override
     public Nurse findNurseByCEP(String cep) {
         Nurse foundNurse = nurseRepository.findNurseByCep(cep).orElse(null);
         return foundNurse;
@@ -116,6 +125,8 @@ public class NurseServiceImpl implements NurseService {
         newNurse.setAvatar(new byte[]{});
         newNurse.setPassword(passwordEncoder.encode(saveNurseResource.getPassword()));
         newNurse.setHaveTeamWork(false);
+        newNurse.setItWasNotified(false);
+
         NurseResource nurseResource = mapper.map(nurseRepository.save(newNurse), NurseResource.class);
         nurseResource.setRole(Rol.ROLE_NURSE);
         return nurseResource;

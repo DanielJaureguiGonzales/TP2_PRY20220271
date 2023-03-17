@@ -87,6 +87,7 @@ public class TeamWorkServiceImpl implements TeamWorkService {
         Nurse nurse = nurseRepository.findById(nurseId).orElseThrow(()->new NotFoundException("Nurse","id",nurseId));
         teamWorkRepository.deleteTeamWorkByNurseId(nurse.getId());
         nurse.setHaveTeamWork(false);
+        nurse.setItWasNotified(false);
         return "Se ha eliminado con éxito";
     }
 
