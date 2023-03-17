@@ -6,6 +6,7 @@ import com.tp2.pry20220271.ulcernosis.models.services.MedicService;
 import com.tp2.pry20220271.ulcernosis.resources.response.MedicResource;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveMedicResource;
 
+import com.tp2.pry20220271.ulcernosis.resources.updates.UpdateMedicResource;
 import jakarta.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
@@ -71,7 +72,7 @@ public class MedicController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{medicId}/update-medic")
-    MedicResource updateMedic(@Valid @RequestBody SaveMedicResource updateMedic, @PathVariable("medicId") Long medicId){
+    MedicResource updateMedic(@Valid @RequestBody UpdateMedicResource updateMedic, @PathVariable("medicId") Long medicId){
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"UPDATED",medicService.updateMedic(medicId,updateMedic));
         return medicService.updateMedic(medicId,updateMedic);
     }

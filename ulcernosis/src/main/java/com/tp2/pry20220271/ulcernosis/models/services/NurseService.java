@@ -3,6 +3,7 @@ package com.tp2.pry20220271.ulcernosis.models.services;
 import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveNurseResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.NurseResource;
+import com.tp2.pry20220271.ulcernosis.resources.updates.UpdateNurseResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +24,7 @@ public interface NurseService {
    Resource findNursePhoto(Long id);
     Resource putNursePhoto(Long id, MultipartFile file) throws IOException;
     NurseResource saveNurse(SaveNurseResource saveNurseResource);
-    NurseResource updateNurse(Long id, SaveNurseResource saveNurseResource) ;
+    NurseResource updateNurse(Long id, UpdateNurseResource saveNurseResource) ;
 
     String deleteNurse(Long id);
 

@@ -16,6 +16,7 @@ import com.tp2.pry20220271.ulcernosis.models.repositories.UserRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.MedicService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveMedicResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.MedicResource;
+import com.tp2.pry20220271.ulcernosis.resources.updates.UpdateMedicResource;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -105,52 +106,49 @@ public class MedicServiceImpl implements MedicService {
     }
 
     @Override
-    public MedicResource updateMedic(Long id, SaveMedicResource saveMedicResource) {
+    public MedicResource updateMedic(Long id, UpdateMedicResource updateMedicResource) {
        Medic updateMedic = getMedicByID(id);
        User updateUser = userRepository.findByEmail(updateMedic.getEmail()).orElseThrow(()-> new NotFoundException("User","email",updateMedic.getEmail()));
 
 
-        if (!updateMedic.getDni().equals(saveMedicResource.getDni())){
-            if(patientRepository.findByDni(saveMedicResource.getDni()).isPresent() ||
-                    userRepository.findByDni(saveMedicResource.getDni()).isPresent()){
+        if (!updateMedic.getDni().equals(updateMedicResource.getDni())){
+            if(patientRepository.findByDni(updateMedicResource.getDni()).isPresent() ||
+                    userRepository.findByDni(updateMedicResource.getDni()).isPresent()){
                 throw new DniExistsException("El DNI ya está asociado a otra cuenta");
             }
         }
 
-        if (!updateMedic.getEmail().equals(saveMedicResource.getEmail())){
-            if(patientRepository.findByEmail(saveMedicResource.getEmail()).isPresent() ||
-                    userRepository.findByEmail(saveMedicResource.getEmail()).isPresent()){
+        if (!updateMedic.getEmail().equals(updateMedicResource.getEmail())){
+            if(patientRepository.findByEmail(updateMedicResource.getEmail()).isPresent() ||
+                    userRepository.findByEmail(updateMedicResource.getEmail()).isPresent()){
                 throw new EmailExistsException("El email ya está asociado a otra cuenta");
             }
         }
 
-        if (!updateMedic.getPhone().equals(saveMedicResource.getPhone())){
-            if(patientRepository.findByPhone(saveMedicResource.getPhone()).isPresent() ||
-                    userRepository.findByPhone(saveMedicResource.getPhone()).isPresent()){
+        if (!updateMedic.getPhone().equals(updateMedicResource.getPhone())){
+            if(patientRepository.findByPhone(updateMedicResource.getPhone()).isPresent() ||
+                    userRepository.findByPhone(updateMedicResource.getPhone()).isPresent()){
                 throw new PhoneExistsException("El teléfono ya está asociado a otra cuenta");
             }
         }
 
 
-        updateMedic.setDni(saveMedicResource.getDni());
-        updateMedic.setAge(Integer.valueOf(saveMedicResource.getAge()));
-        updateMedic.setEmail(saveMedicResource.getEmail());
-        updateMedic.setFullName(saveMedicResource.getFullName());
-        updateMedic.setCmp(saveMedicResource.getCmp());
-        updateMedic.setCivilStatus(saveMedicResource.getCivilStatus());
-        updateMedic.setAddress(saveMedicResource.getAddress());
-        updateMedic.setPassword(passwordEncoder.encode(saveMedicResource.getPassword()));
-        updateMedic.setPhone(saveMedicResource.getPhone());
-        updateMedic.setCivilStatus(saveMedicResource.getCivilStatus());
+        updateMedic.setDni(updateMedicResource.getDni());
+        updateMedic.setAge(Integer.valueOf(updateMedicResource.getAge()));
+        updateMedic.setEmail(updateMedicResource.getEmail());
+        updateMedic.setFullName(updateMedicResource.getFullName());
+        updateMedic.setCivilStatus(updateMedicResource.getCivilStatus());
+        updateMedic.setAddress(updateMedicResource.getAddress());
+        updateMedic.setPhone(updateMedicResource.getPhone());
+        updateMedic.setCivilStatus(updateMedicResource.getCivilStatus());
 
-        updateUser.setEmail(saveMedicResource.getEmail());
-        updateUser.setFullName(saveMedicResource.getFullName());
-        updateUser.setCivilStatus(saveMedicResource.getCivilStatus());
-        updateUser.setAddress(saveMedicResource.getAddress());
-        updateUser.setDni(saveMedicResource.getDni());
-        updateUser.setAge(Integer.valueOf(saveMedicResource.getAge()));
-        updateUser.setPassword(passwordEncoder.encode(saveMedicResource.getPassword()));
-        updateUser.setPhone(saveMedicResource.getPhone());
+        updateUser.setEmail(updateMedicResource.getEmail());
+        updateUser.setFullName(updateMedicResource.getFullName());
+        updateUser.setCivilStatus(updateMedicResource.getCivilStatus());
+        updateUser.setAddress(updateMedicResource.getAddress());
+        updateUser.setDni(updateMedicResource.getDni());
+        updateUser.setAge(Integer.valueOf(updateMedicResource.getAge()));
+        updateUser.setPhone(updateMedicResource.getPhone());
         userRepository.save(updateUser);
 
        return  mapper.map(medicRepository.save(updateMedic), MedicResource.class);

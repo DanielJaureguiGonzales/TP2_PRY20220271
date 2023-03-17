@@ -10,6 +10,7 @@ import com.tp2.pry20220271.ulcernosis.models.repositories.*;
 import com.tp2.pry20220271.ulcernosis.models.services.NurseService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveNurseResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.NurseResource;
+import com.tp2.pry20220271.ulcernosis.resources.updates.UpdateNurseResource;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -124,53 +125,50 @@ public class NurseServiceImpl implements NurseService {
     }
 
    @Override
-    public NurseResource updateNurse(Long id, SaveNurseResource saveNurseResource) {
+    public NurseResource updateNurse(Long id, UpdateNurseResource updateNurseResource) {
         Nurse updateNurse = getNurseByID(id);
         User updateUser = userRepository.findByEmail(updateNurse.getEmail()).orElseThrow(()-> new NotFoundException("User","email",updateNurse.getEmail()));
 
-       if (!updateNurse.getDni().equals(saveNurseResource.getDni())){
-           if(patientRepository.findByDni(saveNurseResource.getDni()).isPresent() ||
-                   userRepository.findByDni(saveNurseResource.getDni()).isPresent()){
+       if (!updateNurse.getDni().equals(updateNurseResource.getDni())){
+           if(patientRepository.findByDni(updateNurseResource.getDni()).isPresent() ||
+                   userRepository.findByDni(updateNurseResource.getDni()).isPresent()){
                throw new DniExistsException("El DNI ya está asociado a otra cuenta");
            }
        }
 
-      if (!updateNurse.getEmail().equals(saveNurseResource.getEmail())){
-          if(patientRepository.findByEmail(saveNurseResource.getEmail()).isPresent() ||
-                  userRepository.findByEmail(saveNurseResource.getEmail()).isPresent()){
+      if (!updateNurse.getEmail().equals(updateNurseResource.getEmail())){
+          if(patientRepository.findByEmail(updateNurseResource.getEmail()).isPresent() ||
+                  userRepository.findByEmail(updateNurseResource.getEmail()).isPresent()){
               throw new EmailExistsException("El email ya está asociado a otra cuenta");
           }
        }
 
-       if (!updateNurse.getPhone().equals(saveNurseResource.getPhone())){
-           if(patientRepository.findByPhone(saveNurseResource.getPhone()).isPresent() ||
-                   userRepository.findByPhone(saveNurseResource.getPhone()).isPresent()){
+       if (!updateNurse.getPhone().equals(updateNurseResource.getPhone())){
+           if(patientRepository.findByPhone(updateNurseResource.getPhone()).isPresent() ||
+                   userRepository.findByPhone(updateNurseResource.getPhone()).isPresent()){
                throw new PhoneExistsException("El teléfono ya está asociado a otra cuenta");
            }
        }
 
 
 
-        updateNurse.setDni(saveNurseResource.getDni());
-        updateNurse.setAge(saveNurseResource.getAge());
-        updateNurse.setEmail(saveNurseResource.getEmail());
-        updateNurse.setCivilStatus(saveNurseResource.getCivilStatus());
-        updateNurse.setFullName(saveNurseResource.getFullName());
-        updateNurse.setCep(saveNurseResource.getCep());
-        updateNurse.setAddress(saveNurseResource.getAddress());
-        updateNurse.setPassword(passwordEncoder.encode(saveNurseResource.getPassword()));
-        updateNurse.setPhone(saveNurseResource.getPhone());
-        updateNurse.setCivilStatus(saveNurseResource.getCivilStatus());
+        updateNurse.setDni(updateNurseResource.getDni());
+        updateNurse.setAge(updateNurseResource.getAge());
+        updateNurse.setEmail(updateNurseResource.getEmail());
+        updateNurse.setCivilStatus(updateNurseResource.getCivilStatus());
+        updateNurse.setFullName(updateNurseResource.getFullName());
+        updateNurse.setAddress(updateNurseResource.getAddress());
+        updateNurse.setPhone(updateNurseResource.getPhone());
+        updateNurse.setCivilStatus(updateNurseResource.getCivilStatus());
 
-        updateUser.setEmail(saveNurseResource.getEmail());
-        updateUser.setFullName(saveNurseResource.getFullName());
-        updateUser.setCivilStatus(saveNurseResource.getCivilStatus());
-        updateUser.setAddress(saveNurseResource.getAddress());
-        updateUser.setDni(saveNurseResource.getDni());
-        updateUser.setAge(saveNurseResource.getAge());
-        updateUser.setPassword(passwordEncoder.encode(saveNurseResource.getPassword()));
-        updateUser.setPhone(saveNurseResource.getPhone());
-       userRepository.save(updateUser);
+        updateUser.setEmail(updateNurseResource.getEmail());
+        updateUser.setFullName(updateNurseResource.getFullName());
+        updateUser.setCivilStatus(updateNurseResource.getCivilStatus());
+        updateUser.setAddress(updateNurseResource.getAddress());
+        updateUser.setDni(updateNurseResource.getDni());
+        updateUser.setAge(updateNurseResource.getAge());
+        updateUser.setPhone(updateNurseResource.getPhone());
+        userRepository.save(updateUser);
 
         return mapper.map(nurseRepository.save(updateNurse), NurseResource.class);
     }

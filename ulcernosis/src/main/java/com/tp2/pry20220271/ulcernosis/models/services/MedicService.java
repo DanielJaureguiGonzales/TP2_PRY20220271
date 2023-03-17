@@ -3,6 +3,7 @@ package com.tp2.pry20220271.ulcernosis.models.services;
 import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveMedicResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.MedicResource;
+import com.tp2.pry20220271.ulcernosis.resources.updates.UpdateMedicResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,7 +22,7 @@ public interface MedicService {
     Resource updateMedicPhoto(Long id, MultipartFile avatar) throws IOException;
 
     MedicResource saveMedic(SaveMedicResource saveMedicResource);
-    MedicResource updateMedic(Long id, SaveMedicResource saveMedicResource) ;
+    MedicResource updateMedic(Long id, UpdateMedicResource saveMedicResource) ;
 
     Medic findMedicByCMP(String cmp);
 

@@ -3,6 +3,7 @@ package com.tp2.pry20220271.ulcernosis.controllers;
 import com.tp2.pry20220271.ulcernosis.models.services.NurseService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveNurseResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.NurseResource;
+import com.tp2.pry20220271.ulcernosis.resources.updates.UpdateNurseResource;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -91,7 +92,7 @@ public class NurseController {
 */
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{nurseId}/update-nurse")
-    NurseResource updateNurse(@Valid @RequestBody SaveNurseResource updateNurse, @PathVariable("nurseId") Long nurseId) {
+    NurseResource updateNurse(@Valid @RequestBody UpdateNurseResource updateNurse, @PathVariable("nurseId") Long nurseId) {
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"UPDATED",nurseService.updateNurse(nurseId,updateNurse));
         return nurseService.updateNurse(nurseId,updateNurse);
     }
