@@ -77,6 +77,12 @@ public class MedicController {
         return medicService.updateMedic(medicId,updateMedic);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/get-medic-by-nurse/{nurseId}")
+    MedicResource getMedicByNurseId(@PathVariable("nurseId") Long nurseId) {
+        //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"OK",medicService.findMedicById(medicId));
+        return medicService.findMedicByNurseId(nurseId);
+    }
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{medicId}/delete-medic")

@@ -157,6 +157,18 @@ public class MedicServiceImpl implements MedicService {
     }
 
     @Override
+    public MedicResource findMedicByNurseId(Long nurseId) {
+        // Encontrar el médico que tiene asignado el enfermero
+
+        TeamWork teamWork = teamWorkRepository.findByNurseId(nurseId).orElseThrow(()-> new NotFoundException("TeamWork","nurseId",nurseId));
+        /*if (!teamWorkRepository.existsByMedicIdAndNurseId(teamWork.getMedic().getId(),nurseId)){
+            throw new NotFoundException("TeamWork","nurseId",nurseId);
+        }*/
+        Medic medic = teamWork.getMedic();
+        return mapper.map(medic,MedicResource.class);
+    }
+
+    @Override
     public String deleteMedic(Long id) {
 
         Medic deleteMedic = getMedicByID(id);

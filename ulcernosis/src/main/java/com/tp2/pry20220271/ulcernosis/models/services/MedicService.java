@@ -16,6 +16,7 @@ public interface MedicService {
     MedicResource findMedicById(Long id) ;
 
     MedicResource findMedicByFullName(String fullName);
+    MedicResource findMedicByNurseId(Long nurseId);
 
     Resource findMedicPhoto(Long id);
 
