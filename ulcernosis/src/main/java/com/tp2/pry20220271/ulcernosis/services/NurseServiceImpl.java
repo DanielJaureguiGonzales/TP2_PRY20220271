@@ -1,8 +1,6 @@
 package com.tp2.pry20220271.ulcernosis.services;
 
-import com.tp2.pry20220271.ulcernosis.exceptions.DniExistsException;
-import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
-import com.tp2.pry20220271.ulcernosis.exceptions.PhoneExistsException;
+import com.tp2.pry20220271.ulcernosis.exceptions.*;
 import com.tp2.pry20220271.ulcernosis.models.entities.*;
 import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
 import com.tp2.pry20220271.ulcernosis.models.repositories.*;
@@ -81,6 +79,12 @@ public class NurseServiceImpl implements NurseService {
     @Override
     public NurseResource changeItWasNotifiedNurse(Long id) {
         Nurse nurse = nurseRepository.findById(id).orElseThrow(()-> new NotFoundException("Nurse","id",id.toString()));
+        // validar si ya fue notificado al enfermero
+        if( nurse.getItWasNotified() ){
+            throw new NurseWasNotifiedException("El enfermero ya fue notificado");
+        } else if ( !nurse.getHaveTeamWork() ){
+            throw new TeamWorkExistsException("El enfermero no tiene equipo de trabajo, no se puede notificar");
+        }
         nurse.setItWasNotified(true);
 
         return mapper.map(nurseRepository.save(nurse), NurseResource.class);

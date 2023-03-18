@@ -68,10 +68,22 @@ public class GloblalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.TOO_MANY_REQUESTS);
     }
 
-    @ExceptionHandler(AssignmentExistsException.class)
+    /*@ExceptionHandler(AssignmentExistsException.class)
     public ResponseEntity<ErrorResource> handleAssignmentExistsException(AssignmentExistsException ex, WebRequest request){
         ErrorResource error = new ErrorResource(LocalDateTime.now(),ex.getMessage(),request.getDescription(false), "ASSIGNMENT_EXISTS");
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+*/
+    @ExceptionHandler(TeamWorkExistsException.class)
+    public ResponseEntity<ErrorResource> handleTeamWorkExistsException(TeamWorkExistsException ex, WebRequest request){
+        ErrorResource error = new ErrorResource(LocalDateTime.now(),ex.getMessage(),request.getDescription(false), "TEAM_WORK_NOT_EXISTS");
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NurseWasNotifiedException.class)
+    public ResponseEntity<ErrorResource> handleNurseWasNotifiedException(NurseWasNotifiedException ex, WebRequest request){
+        ErrorResource error = new ErrorResource(LocalDateTime.now(),ex.getMessage(),request.getDescription(false), "NURSE_WAS_NOTIFIED");
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(Exception.class)
@@ -79,6 +91,8 @@ public class GloblalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResource error = new ErrorResource(LocalDateTime.now(),ex.getMessage(),request.getDescription(false), "INTERNAL_SERVER_ERROR");
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
