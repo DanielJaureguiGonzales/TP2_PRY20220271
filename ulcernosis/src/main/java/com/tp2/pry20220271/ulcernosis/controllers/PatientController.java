@@ -69,7 +69,7 @@ public class PatientController {
     }
 
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/medic/{medicId}/create-patient")
     PatientResource createPatient(@Valid @RequestBody SavePatientResource savePatient, @PathVariable("medicId") Long medicId){
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.CREATED),"CREATED",patientService.createPatient(savePatient));

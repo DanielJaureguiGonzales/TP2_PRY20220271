@@ -53,7 +53,7 @@ public class DiagnosisController {
         return diagnosisService.findAllByStagePredicted(stagePredicted);
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/create-diagnosis")
     DiagnosisResource createDiagnosis(@Valid SaveDiagnosisResource saveDiagnosisResource, @RequestParam("file") MultipartFile file) throws IOException {
         return diagnosisService.saveDiagnosis(saveDiagnosisResource, file);

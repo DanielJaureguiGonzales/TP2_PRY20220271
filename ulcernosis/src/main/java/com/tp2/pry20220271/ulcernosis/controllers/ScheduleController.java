@@ -18,7 +18,7 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/save")
     ScheduleResource saveTime(@Valid @RequestBody SaveScheduleResourceTime schedule) {
         return scheduleService.saveTime(schedule);
