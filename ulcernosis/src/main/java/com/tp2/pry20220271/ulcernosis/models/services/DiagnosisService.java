@@ -1,8 +1,6 @@
 package com.tp2.pry20220271.ulcernosis.models.services;
 
 
-import com.tp2.pry20220271.ulcernosis.models.entities.Diagnosis;
-import com.tp2.pry20220271.ulcernosis.models.enums.Type;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveDiagnosisResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.DiagnosisResource;
 import org.springframework.web.multipart.MultipartFile;

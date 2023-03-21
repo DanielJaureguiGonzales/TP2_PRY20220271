@@ -96,6 +96,10 @@ public class Nurse {
     @JsonIgnoreProperties(value = {"nurse"}, allowSetters = true)
     private List<Schedule> schedules;
 
+    @OneToMany(mappedBy = "nurse", fetch=FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonIgnoreProperties(value = {"nurse"}, allowSetters = true)
+    private List<Itinerary> itineraries;
+
     @PrePersist
     public void asignCreatedAt(){
         this.createdAt = new Date();
