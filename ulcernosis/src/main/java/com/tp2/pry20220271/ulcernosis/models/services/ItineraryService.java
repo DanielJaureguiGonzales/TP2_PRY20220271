@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface ItineraryService {
 
-    ItineraryResource saveItinerary(SaveItineraryResource itinerary);
+    ItineraryResource saveItinerary(SaveItineraryResource itinerary, Long nurseId);
     ItineraryResource updateItinerary(Long itineraryId, UpdateItineraryResource itinerary);
-    List<ItineraryResource> findAllItineraryByNurseId(Long nurseId);
+    ItineraryResource findItineraryByNurseId(Long nurseId);
 
 }

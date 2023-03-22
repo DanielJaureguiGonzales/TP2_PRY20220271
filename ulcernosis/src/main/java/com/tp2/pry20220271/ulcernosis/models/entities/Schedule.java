@@ -24,8 +24,7 @@ public class Schedule {
     private Long id;
     
     @Column(name = "time")
-    @JsonFormat(pattern = "hh:mm a")
-    private LocalTime time;
+    private String time;
 
     @Column(name = "latitude")
     private double latitude;

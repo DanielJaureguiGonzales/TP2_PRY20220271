@@ -15,9 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 public class ItineraryServiceImpl implements ItineraryService {
@@ -29,20 +26,23 @@ public class ItineraryServiceImpl implements ItineraryService {
     private final TeamWorkRepository teamWorkRepository;
 
     @Override
-    public List<ItineraryResource> findAllItineraryByNurseId(Long nurseId) {
-        List<Itinerary> itineraries = itineraryRepository.findAllByNurseId(nurseId);
-        return itineraries.stream().map(itinerary -> mapper.map(itinerary, ItineraryResource.class)).collect(Collectors.toList());
+    public ItineraryResource findItineraryByNurseId(Long nurseId) {
+        Itinerary itineraries = itineraryRepository.findByNurseId(nurseId);
+        return mapper.map(itineraries, ItineraryResource.class);
     }
 
     @Override
-    public ItineraryResource saveItinerary(SaveItineraryResource itinerary) {
-        Nurse nurse = nurseRepository.findById(itinerary.getNurseId()).orElseThrow(() -> new NotFoundException("Nurse","Id",itinerary.getNurseId()));
-        if (!teamWorkRepository.existsByNurseId(itinerary.getNurseId()))
+    public ItineraryResource saveItinerary(SaveItineraryResource itinerary, Long nurseId) {
+        Nurse nurse = nurseRepository.findById(nurseId).orElseThrow(() -> new NotFoundException("Nurse","Id",nurseId));
+
+        if (!teamWorkRepository.existsByNurseId(nurseId))
             throw new TeamWorkExistsException("El enfermero no está asignado a ningún equipo médico, por favor asignelo en uno.");
+        if (itineraryRepository.existsByNurseId(nurseId))
+            throw new TeamWorkExistsException("El enfermero ya tiene un itinerario asignado, por favor actualice el itinerario existente.");
 
         var itineraryToSave = Itinerary.builder()
                 .timeIn(itinerary.getTimeIn())
-                .timeOut(itinerary.getTimeOut())
+                .timeOut((itinerary.getTimeOut()))
                 .nurse(nurse)
                 .build();
 
