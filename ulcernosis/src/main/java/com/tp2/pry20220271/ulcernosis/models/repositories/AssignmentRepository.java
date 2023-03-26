@@ -14,4 +14,5 @@ public interface AssignmentRepository extends JpaRepository<Assignment,Long> {
     List<Assignment> findAllByNurseId(Long nurseId);
     Optional<Assignment> findByPatientId(Long patientId);
     Optional<Assignment> findByPatientIdAndNurseId(Long patientId, Long nurseId);
+    void deleteAllByNurseId(Long nurseId);
 }
