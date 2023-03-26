@@ -45,7 +45,7 @@ public class GloblalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(DniExistsException.class)
-    public ResponseEntity<ErrorResource> handleDNIxception(DniExistsException ex, WebRequest request){
+    public ResponseEntity<ErrorResource> handleDNIException(DniExistsException ex, WebRequest request){
         ErrorResource error = new ErrorResource(LocalDateTime.now(),ex.getMessage(),request.getDescription(false), "DNI_EXISTS");
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
@@ -56,6 +56,11 @@ public class GloblalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ItineraryExistsException.class)
+    public ResponseEntity<ErrorResource> handleItineraryException(ItineraryExistsException ex, WebRequest request){
+        ErrorResource error = new ErrorResource(LocalDateTime.now(),ex.getMessage(),request.getDescription(false), "ITINERARY_EXISTS");
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
     @ExceptionHandler(LimitTeamWorkExceeded.class)
     public ResponseEntity<ErrorResource> handleLimitRegisterTeamWorkExceeded(LimitTeamWorkExceeded ex, WebRequest request){
         ErrorResource error = new ErrorResource(LocalDateTime.now(),ex.getMessage(),request.getDescription(false), "LIMIT_TEAM_WORK_EXCEEDED");

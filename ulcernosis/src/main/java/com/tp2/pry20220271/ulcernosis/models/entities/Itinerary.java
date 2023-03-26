@@ -21,11 +21,9 @@ public class Itinerary {
     private Long id;
 
     @Column(name = "time_in")
-    @JsonFormat(pattern = "hh:mm a")
-    private LocalTime timeIn;
+    private String timeIn;
     @Column(name = "time_out")
-    @JsonFormat(pattern = "hh:mm a")
-    private LocalTime timeOut;
+    private String timeOut;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nurse_id",nullable = false)

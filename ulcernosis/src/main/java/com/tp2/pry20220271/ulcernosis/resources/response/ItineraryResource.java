@@ -11,7 +11,7 @@ import java.time.LocalTime;
 public class ItineraryResource {
 
     private Long id;
-    private LocalTime timeIn;
-    private LocalTime timeOut;
-    private Nurse nurse;
+    private String timeIn;
+    private String timeOut;
+    private Long nurseId;
 }

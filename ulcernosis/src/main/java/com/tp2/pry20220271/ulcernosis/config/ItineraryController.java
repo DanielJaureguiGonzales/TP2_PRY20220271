@@ -9,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/itineraries")
@@ -20,14 +18,14 @@ public class ItineraryController {
 
     @GetMapping("/get-by-nurse/{nurseId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<ItineraryResource> getItineraryByNurseId(Long nurseId) {
-        return itineraryService.findAllItineraryByNurseId(nurseId);
+    public ItineraryResource getItineraryByNurseId( @PathVariable(name = "nurseId") Long nurseId) {
+        return itineraryService.findItineraryByNurseId(nurseId);
     }
 
-    @PostMapping("/create-itinerary")
+    @PostMapping("/nurse/{nurseId}/create-itinerary")
     @ResponseStatus(HttpStatus.CREATED)
-    public ItineraryResource createItinerary(@RequestBody @Valid SaveItineraryResource itineraryResource) {
-        return itineraryService.saveItinerary(itineraryResource);
+    public ItineraryResource createItinerary(@RequestBody @Valid SaveItineraryResource itineraryResource, @PathVariable(name = "nurseId") Long nurseId) {
+        return itineraryService.saveItinerary(itineraryResource,nurseId);
     }
 
     @PutMapping("/update-itinerary/{itineraryId}")

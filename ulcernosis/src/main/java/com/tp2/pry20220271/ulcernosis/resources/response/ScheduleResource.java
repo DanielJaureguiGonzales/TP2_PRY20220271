@@ -10,7 +10,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class ScheduleResource {
-    private LocalTime time;
+    private String time;
 
     private double latitude;
 
