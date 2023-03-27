@@ -1,5 +1,6 @@
 package com.tp2.pry20220271.ulcernosis.services;
 
+import com.tp2.pry20220271.ulcernosis.exceptions.ItineraryExistsException;
 import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
 import com.tp2.pry20220271.ulcernosis.exceptions.TeamWorkExistsException;
 import com.tp2.pry20220271.ulcernosis.models.entities.Itinerary;
@@ -38,7 +39,7 @@ public class ItineraryServiceImpl implements ItineraryService {
         if (!teamWorkRepository.existsByNurseId(nurseId))
             throw new TeamWorkExistsException("El enfermero no está asignado a ningún equipo médico, por favor asignelo en uno.");
         if (itineraryRepository.existsByNurseId(nurseId))
-            throw new TeamWorkExistsException("El enfermero ya tiene un itinerario asignado, por favor actualice el itinerario existente.");
+            throw new ItineraryExistsException("El enfermero ya tiene un itinerario asignado, por favor actualice el itinerario existente.");
 
         var itineraryToSave = Itinerary.builder()
                 .timeIn(itinerary.getTimeIn())

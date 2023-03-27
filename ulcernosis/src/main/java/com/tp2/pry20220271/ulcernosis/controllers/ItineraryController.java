@@ -1,4 +1,4 @@
-package com.tp2.pry20220271.ulcernosis.config;
+package com.tp2.pry20220271.ulcernosis.controllers;
 
 import com.tp2.pry20220271.ulcernosis.models.services.ItineraryService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveItineraryResource;
