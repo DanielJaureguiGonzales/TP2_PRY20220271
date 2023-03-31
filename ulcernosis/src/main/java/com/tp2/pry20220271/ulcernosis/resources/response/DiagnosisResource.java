@@ -21,4 +21,5 @@ public class DiagnosisResource {
     private Long creatorId;
     private Type creatorType;
     private Date createdAt;
+    private Boolean isConfirmed;
 }

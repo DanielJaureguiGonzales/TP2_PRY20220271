@@ -36,6 +36,12 @@ public class DiagnosisController {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    List<DiagnosisResource> getAllDiagnostics(){
+        return diagnosisService.findAllDiagnostics();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/get-by-nurse-name/{nurseName}")
     List<DiagnosisResource> getAllDiagnosticsByNurseName(@PathVariable("nurseName") String nurseName){
         return diagnosisService.findAllByNurseFullname(nurseName);
@@ -59,6 +65,17 @@ public class DiagnosisController {
         return diagnosisService.saveDiagnosis(saveDiagnosisResource, file);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/confirm-diagnosis-nurse/{diagnosisId}")
+    String confirmDiagnosisNurse(@PathVariable("diagnosisId") Long diagnosisId){
+        return diagnosisService.confirmDiagnosisNurse(diagnosisId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/confirm-diagnosis-medic/{diagnosisId}")
+    String confirmDiagnosisMedic(@PathVariable("diagnosisId") Long diagnosisId){
+        return diagnosisService.confirmDiagnosisMedic(diagnosisId);
+    }
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{diagnosisId}/delete-diagnosis")
     String deleteDiagnosis(@PathVariable("diagnosisId") Long diagnosisId){

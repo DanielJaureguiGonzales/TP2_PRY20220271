@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -17,6 +18,9 @@ public interface DiagnosisRepository extends JpaRepository<Diagnosis,Long> {
     List<Diagnosis> findAllByPatientId(Long patientId);
 
     List<Diagnosis> findAllByStagePredicted(String stagePredicted);
-    /*List<Diagnosis> findAllByStagePredictedAndCreatorIdAndCreatorType(String stagePredicted,Long creatorId, Type creatorType);*/
-    boolean existsByCreatorIdAndCreatorType(Long creatorId, Type creatorType);
+    Diagnosis findByCreatorIdAndPatientIdAndIsConfirmed(Long creatorId, Long patientId, Boolean isConfirmed);
+    boolean existsByCreatorIdAndPatientIdAndIsConfirmed(Long creatorId, Long patientId, Boolean isConfirmed);
+   /* boolean existsByCreatorIdAndPatientIdAndCreatedAt(Long creatorId, Long patientId, Date createdAt);
+    *//*List<Diagnosis> findAllByStagePredictedAndCreatorIdAndCreatorType(String stagePredicted,Long creatorId, Type creatorType);*//*
+    boolean existsByCreatorIdAndCreatorType(Long creatorId, Type creatorType);*/
 }

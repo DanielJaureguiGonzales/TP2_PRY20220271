@@ -2,7 +2,7 @@ package com.tp2.pry20220271.ulcernosis.services;
 
 import com.tp2.pry20220271.ulcernosis.exceptions.*;
 import com.tp2.pry20220271.ulcernosis.models.entities.*;
-import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
+import com.tp2.pry20220271.ulcernosis.models.enums.Role;
 import com.tp2.pry20220271.ulcernosis.models.repositories.*;
 import com.tp2.pry20220271.ulcernosis.models.services.NurseService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveNurseResource;
@@ -40,7 +40,6 @@ public class NurseServiceImpl implements NurseService {
 
     private final TeamWorkRepository teamWorkRepository;
 
-    private final AssignmentRepository assignmentRepository;
     private final PatientRepository patientRepository;
 
     @Override
@@ -124,7 +123,7 @@ public class NurseServiceImpl implements NurseService {
 
 
         Nurse newNurse = mapper.map(saveNurseResource,Nurse.class);
-        newNurse.setRole(Rol.ROLE_NURSE);
+        newNurse.setRole(Role.ROLE_NURSE);
         newNurse.setDni(saveNurseResource.getDni());
         newNurse.setAvatar(new byte[]{});
         newNurse.setPassword(passwordEncoder.encode(saveNurseResource.getPassword()));
@@ -132,7 +131,7 @@ public class NurseServiceImpl implements NurseService {
         newNurse.setItWasNotified(false);
 
         NurseResource nurseResource = mapper.map(nurseRepository.save(newNurse), NurseResource.class);
-        nurseResource.setRole(Rol.ROLE_NURSE);
+        nurseResource.setRole(Role.ROLE_NURSE);
         return nurseResource;
     }
 
@@ -148,13 +147,6 @@ public class NurseServiceImpl implements NurseService {
            }
        }
 
-      /*if (!updateNurse.getEmail().equals(updateNurseResource.getEmail())){
-          if(patientRepository.findByEmail(updateNurseResource.getEmail()).isPresent() ||
-                  userRepository.findByEmail(updateNurseResource.getEmail()).isPresent()){
-              throw new EmailExistsException("El email ya está asociado a otra cuenta");
-          }
-       }
-*/
        if (!updateNurse.getPhone().equals(updateNurseResource.getPhone())){
            if(patientRepository.findByPhone(updateNurseResource.getPhone()).isPresent() ||
                    userRepository.findByPhone(updateNurseResource.getPhone()).isPresent()){
@@ -166,14 +158,13 @@ public class NurseServiceImpl implements NurseService {
 
         updateNurse.setDni(updateNurseResource.getDni());
         updateNurse.setAge(updateNurseResource.getAge());
-        /*updateNurse.setEmail(updateNurseResource.getEmail());*/
         updateNurse.setCivilStatus(updateNurseResource.getCivilStatus());
         updateNurse.setFullName(updateNurseResource.getFullName());
         updateNurse.setAddress(updateNurseResource.getAddress());
         updateNurse.setPhone(updateNurseResource.getPhone());
         updateNurse.setCivilStatus(updateNurseResource.getCivilStatus());
 
-        /*updateUser.setEmail(updateNurseResource.getEmail());*/
+
         updateUser.setFullName(updateNurseResource.getFullName());
         updateUser.setCivilStatus(updateNurseResource.getCivilStatus());
         updateUser.setAddress(updateNurseResource.getAddress());
@@ -189,13 +180,6 @@ public class NurseServiceImpl implements NurseService {
     public String deleteNurse(Long id) {
         Nurse deleteNurse = getNurseByID(id);
         User user = userRepository.findByEmail(deleteNurse.getEmail()).orElseThrow(()-> new NotFoundException("User","email",deleteNurse.getEmail()));
-        List<Assignment> assignments = assignmentRepository.findAllByNurseId(id);
-        // Encontramos todos los pacientes que tiene asignado el enfermero
-        List<Patient> patients = assignments.stream().map(assignment -> assignment.getPatient()).collect(Collectors.toList());
-        // Cambiamos el estado de asignado de un enfermero con el paciente a false
-        for (Patient patient:patients) {
-            patient.setIsAssigned(false);
-        }
 
         userRepository.delete(user);
         nurseRepository.delete(deleteNurse);
