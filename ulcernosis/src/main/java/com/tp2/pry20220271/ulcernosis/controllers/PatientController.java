@@ -32,12 +32,12 @@ public class PatientController {
         return patientService.findAllPatientsByMedicId(medicId);
     }
 
-    @ResponseStatus(HttpStatus.OK)
+   /* @ResponseStatus(HttpStatus.OK)
     @GetMapping("/medic/{medicId}/get-patients-assigned/{isAssigned}")
     List<PatientResource> getAllPatientsByAssignedBool(@PathVariable("medicId") Long medicId,@PathVariable("isAssigned") Boolean isAssigned) {
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"OK",patientService.findAllPatientsByMedicId(medicId));
         return patientService.findAllPatientsByMedicIdAndIsAssigned(medicId,isAssigned);
-    }
+    }*/
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{patientId}")
@@ -46,12 +46,12 @@ public class PatientController {
         return patientService.findPatientById(patientId);
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    /*@ResponseStatus(HttpStatus.OK)
     @GetMapping("/get_by_nurse/{nurseId}")
     List<PatientResource> getAllPatientsByNurseId(@PathVariable("nurseId") Long nurseId){
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"OK",patientService.findAllByNurseId(nurseId));
         return patientService.findAllByNurseId(nurseId);
-    }
+    }*/
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{patientId}/profile-photo")

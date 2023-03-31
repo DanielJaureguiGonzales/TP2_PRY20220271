@@ -2,11 +2,9 @@ package com.tp2.pry20220271.ulcernosis.services;
 
 import com.tp2.pry20220271.ulcernosis.exceptions.LimitTeamWorkExceeded;
 import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
-import com.tp2.pry20220271.ulcernosis.models.entities.Assignment;
 import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
 import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
 import com.tp2.pry20220271.ulcernosis.models.entities.TeamWork;
-import com.tp2.pry20220271.ulcernosis.models.repositories.AssignmentRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.MedicRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.NurseRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.TeamWorkRepository;
@@ -15,13 +13,10 @@ import com.tp2.pry20220271.ulcernosis.resources.request.SaveTeamWorkResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.TeamWorkResource;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,7 +32,7 @@ public class TeamWorkServiceImpl implements TeamWorkService {
 
 
     private final NurseRepository nurseRepository;
-    private final AssignmentRepository assignmentRepository;
+
 
     @Override
     public List<TeamWorkResource> findAllTeamWork(){
@@ -88,7 +83,6 @@ public class TeamWorkServiceImpl implements TeamWorkService {
     @Transactional
     public String deleteTeamWorkByNurseId(Long nurseId){
         Nurse nurse = nurseRepository.findById(nurseId).orElseThrow(()->new NotFoundException("Nurse","id",nurseId));
-        assignmentRepository.deleteAllByNurseId(nurse.getId());
 
         teamWorkRepository.deleteTeamWorkByNurseId(nurse.getId());
         nurse.setHaveTeamWork(false);

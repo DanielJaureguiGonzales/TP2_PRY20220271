@@ -53,10 +53,11 @@ public class Diagnosis {
     @Enumerated(EnumType.STRING)
     @Column(name = "creator_type")
     private Type creatorType;
-
     @Temporal(TemporalType.DATE)
     @Column(name = "created_at")
     private Date createdAt;
+
+    private Boolean isConfirmed;
 
     @PrePersist
     public void asignCreatedAt() {

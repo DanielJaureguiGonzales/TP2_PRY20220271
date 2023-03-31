@@ -1,6 +1,6 @@
 package com.tp2.pry20220271.ulcernosis.resources.response;
 
-import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
+import com.tp2.pry20220271.ulcernosis.models.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +25,7 @@ public class UserResource {
 
     private String cep;
 
-    private Rol role;
+    private Role role;
 
     private String civilStatus;
 }

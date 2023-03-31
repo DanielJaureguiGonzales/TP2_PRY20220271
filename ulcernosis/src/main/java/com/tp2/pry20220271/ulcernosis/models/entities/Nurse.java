@@ -3,7 +3,7 @@ package com.tp2.pry20220271.ulcernosis.models.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
+import com.tp2.pry20220271.ulcernosis.models.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -73,7 +73,7 @@ public class Nurse {
     private Date createdAt;
 
     @Enumerated(EnumType.STRING)
-    private Rol role;
+    private Role role;
 
 
     private Boolean haveTeamWork;
@@ -88,17 +88,6 @@ public class Nurse {
     @JsonIgnoreProperties(value = {"nurse"}, allowSetters = true)
     private List<TeamWork> teamWork;
 
-    @OneToMany(mappedBy = "nurse", fetch=FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
-    @JsonIgnoreProperties(value = {"nurse"}, allowSetters = true)
-    private List<Assignment> assignments;
-
-    @OneToMany(mappedBy = "nurse", fetch=FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
-    @JsonIgnoreProperties(value = {"nurse"}, allowSetters = true)
-    private List<Schedule> schedules;
-
-    @OneToMany(mappedBy = "nurse", fetch=FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
-    @JsonIgnoreProperties(value = {"nurse"}, allowSetters = true)
-    private List<Itinerary> itineraries;
 
     @PrePersist
     public void asignCreatedAt(){

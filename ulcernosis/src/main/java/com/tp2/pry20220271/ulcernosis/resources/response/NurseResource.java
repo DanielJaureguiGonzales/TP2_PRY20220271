@@ -1,6 +1,6 @@
 package com.tp2.pry20220271.ulcernosis.resources.response;
 
-import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
+import com.tp2.pry20220271.ulcernosis.models.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +22,7 @@ public class NurseResource {
     private String cep;
     private Boolean isAuxiliar;
     private String civilStatus;
-    private Rol role;
+    private Role role;
     private Boolean haveTeamWork;
     private Boolean itWasNotified;
     private Date createdAt;

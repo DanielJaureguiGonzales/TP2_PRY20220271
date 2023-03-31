@@ -6,7 +6,7 @@ import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
 import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
 import com.tp2.pry20220271.ulcernosis.models.entities.Token;
 import com.tp2.pry20220271.ulcernosis.models.entities.User;
-import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
+import com.tp2.pry20220271.ulcernosis.models.enums.Role;
 import com.tp2.pry20220271.ulcernosis.models.enums.TokenType;
 import com.tp2.pry20220271.ulcernosis.models.repositories.*;
 import com.tp2.pry20220271.ulcernosis.models.services.MedicService;
@@ -23,7 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -90,7 +89,7 @@ public class AuthenticationService {
                 .build();
 
         var savedUser = repository.save(user);
-        if (request.getRole() == Rol.ROLE_MEDIC) {
+        if (request.getRole() == Role.ROLE_MEDIC) {
             Medic medic = medicService.findMedicByCMP(request.getCmp());
 
             if (!(Objects.isNull(medic))){
@@ -100,7 +99,7 @@ public class AuthenticationService {
            medicService.saveMedic(modelMapper.map(request, SaveMedicResource.class));
 
 
-        } else if (request.getRole() == Rol.ROLE_NURSE) {
+        } else if (request.getRole() == Role.ROLE_NURSE) {
             Nurse nurse = nurseService.findNurseByCEP(request.getCep());
 
             if (!(Objects.isNull(nurse))){
@@ -144,9 +143,9 @@ public class AuthenticationService {
                 .orElseThrow();
         /*var jwtToken = jwtService.generateToken(user);*/
         Long id = null;
-        if (user.getRole() == Rol.ROLE_MEDIC){
+        if (user.getRole() == Role.ROLE_MEDIC){
             id = medicRepository.findMedicByEmail(user.getEmail()).orElseThrow(()-> new NotFoundException("Medic","Email",user.getEmail())).getId();
-        } else if (user.getRole() == Rol.ROLE_NURSE ) {
+        } else if (user.getRole() == Role.ROLE_NURSE ) {
             id = nurseRepository.findNurseByEmail(user.getEmail()).orElseThrow(()-> new NotFoundException("Nurse","Email",user.getEmail())).getId();
         }
        /* revokedAllUserTokens(user);

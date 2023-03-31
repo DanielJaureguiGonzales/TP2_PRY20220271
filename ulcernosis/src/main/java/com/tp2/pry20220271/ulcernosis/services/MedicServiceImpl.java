@@ -7,7 +7,7 @@ import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
 import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
 import com.tp2.pry20220271.ulcernosis.models.entities.TeamWork;
 import com.tp2.pry20220271.ulcernosis.models.entities.User;
-import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
+import com.tp2.pry20220271.ulcernosis.models.enums.Role;
 import com.tp2.pry20220271.ulcernosis.models.repositories.MedicRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.PatientRepository;
 import com.tp2.pry20220271.ulcernosis.models.repositories.TeamWorkRepository;
@@ -92,12 +92,12 @@ public class MedicServiceImpl implements MedicService {
     public MedicResource saveMedic(SaveMedicResource saveMedicResource) {
 
         Medic newMedic = mapper.map(saveMedicResource,Medic.class);
-        newMedic.setRole(Rol.ROLE_MEDIC);
+        newMedic.setRole(Role.ROLE_MEDIC);
         newMedic.setAvatar(new byte[]{});
         newMedic.setDni(saveMedicResource.getDni());
         newMedic.setPassword(passwordEncoder.encode(saveMedicResource.getPassword()));
         MedicResource medicResource = mapper.map(medicRepository.save(newMedic),MedicResource.class);
-        medicResource.setRole(Rol.ROLE_MEDIC);
+        medicResource.setRole(Role.ROLE_MEDIC);
         return medicResource;
     }
 
@@ -158,12 +158,10 @@ public class MedicServiceImpl implements MedicService {
 
     @Override
     public MedicResource findMedicByNurseId(Long nurseId) {
-        // Encontrar el médico que tiene asignado el enfermero
+
 
         TeamWork teamWork = teamWorkRepository.findByNurseId(nurseId).orElseThrow(()-> new NotFoundException("TeamWork","nurseId",nurseId));
-        /*if (!teamWorkRepository.existsByMedicIdAndNurseId(teamWork.getMedic().getId(),nurseId)){
-            throw new NotFoundException("TeamWork","nurseId",nurseId);
-        }*/
+
         Medic medic = teamWork.getMedic();
         return mapper.map(medic,MedicResource.class);
     }

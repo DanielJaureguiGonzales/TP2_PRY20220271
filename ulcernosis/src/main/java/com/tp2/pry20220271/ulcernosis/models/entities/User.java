@@ -1,11 +1,9 @@
 package com.tp2.pry20220271.ulcernosis.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
+import com.tp2.pry20220271.ulcernosis.models.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -67,7 +65,7 @@ public class User implements UserDetails {
     private byte[] avatar;
 
     @Enumerated(EnumType.STRING)
-    private Rol role;
+    private Role role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Token> tokens;

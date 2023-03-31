@@ -4,19 +4,17 @@ import com.tp2.pry20220271.ulcernosis.exceptions.DniExistsException;
 import com.tp2.pry20220271.ulcernosis.exceptions.EmailExistsException;
 import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
 import com.tp2.pry20220271.ulcernosis.exceptions.PhoneExistsException;
-import com.tp2.pry20220271.ulcernosis.models.entities.Assignment;
 import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
-import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
 import com.tp2.pry20220271.ulcernosis.models.entities.Patient;
-import com.tp2.pry20220271.ulcernosis.models.repositories.*;
+import com.tp2.pry20220271.ulcernosis.models.repositories.MedicRepository;
+import com.tp2.pry20220271.ulcernosis.models.repositories.NurseRepository;
+import com.tp2.pry20220271.ulcernosis.models.repositories.PatientRepository;
+import com.tp2.pry20220271.ulcernosis.models.repositories.UserRepository;
 import com.tp2.pry20220271.ulcernosis.models.services.PatientService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SavePatientResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.PatientResource;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -24,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,7 +41,6 @@ public class PatientServiceImpl implements PatientService {
     private final NurseRepository nurseRepository;
 
 
-    private final AssignmentRepository assignmentRepository;
     private final UserRepository userRepository;
 
     @Override
@@ -54,14 +50,7 @@ public class PatientServiceImpl implements PatientService {
         return patients_founds.stream().map(patient_found-> mapper.map(patient_found,PatientResource.class)).collect(Collectors.toList());
     }
 
-    @Override
-    public List<PatientResource> findAllByNurseId(Long nurseId){
-        Nurse nurse = nurseRepository.findById(nurseId).orElseThrow(()-> new NotFoundException("Nurse","Id",nurseId));
-        List<Assignment> assignments = assignmentRepository.findAllByNurseId(nurse.getId());
-        List<Patient> patients = patientRepository.findAllByAssignmentsIn(assignments);
-        return patients.stream().map(patient -> mapper.map(patient,PatientResource.class)).collect(Collectors.toList());
 
-    }
 
     @Override
     public PatientResource findPatientById(Long id) {
@@ -114,7 +103,7 @@ public class PatientServiceImpl implements PatientService {
         newPatient.setCivilStatus(savePatientResource.getCivilStatus());
         newPatient.setMedic(assignMedic);
         newPatient.setPhone(savePatientResource.getPhone());
-        newPatient.setIsAssigned(false);
+       /* newPatient.setIsAssigned(false);*/
         Patient savePatient = patientRepository.save(newPatient);
         return mapper.map(savePatient,PatientResource.class);
     }
@@ -164,18 +153,18 @@ public class PatientServiceImpl implements PatientService {
         return "Se eliminó al paciente exitosamente";
     }
 
-    @Override
+    /*@Override
     public List<PatientResource> findAllByAssigned(Boolean isAssigned) {
         List<Patient> patients = patientRepository.findAllByIsAssigned(isAssigned);
         return patients.stream().map(patient -> mapper.map(patient,PatientResource.class)).collect(Collectors.toList());
-    }
+    }*/
 
-    @Override
+   /* @Override
     public List<PatientResource> findAllPatientsByMedicIdAndIsAssigned(Long medicId, Boolean isAssigned) {
         final Medic searchMedic = medicRepository.findById(medicId).orElseThrow(()-> new NotFoundException("Medic","Id",medicId));
         List<Patient> patients_founds = patientRepository.findAllByMedicIdAndIsAssigned(searchMedic.getId(),isAssigned);
         return patients_founds.stream().map(patient_found-> mapper.map(patient_found,PatientResource.class)).collect(Collectors.toList());
-    }
+    }*/
 
     public Patient getPatientByID(Long id){
         return patientRepository.findById(id).orElseThrow(()->

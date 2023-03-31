@@ -1,5 +1,5 @@
 package com.tp2.pry20220271.ulcernosis.models.enums;
 
-public enum Rol {
-    ROLE_MEDIC,ROLE_NURSE
+public enum Status {
+    PENDIENTE, REALIZADO
 }

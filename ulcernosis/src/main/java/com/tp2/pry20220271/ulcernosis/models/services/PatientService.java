@@ -13,7 +13,7 @@ public interface PatientService {
     //List<PatientResource> findAllPatientsByCreatorId(Long creatorId) throws UlcernosisException;
     List<PatientResource> findAllPatientsByMedicId(Long medicId);
 
-    List<PatientResource> findAllByNurseId(Long nurseId);
+    /*List<PatientResource> findAllByNurseId(Long nurseId);*/
     PatientResource findPatientById(Long id);
     Resource findPatientPhoto(Long id);
     Resource putPatientPhoto(Long id, MultipartFile file) throws IOException;
@@ -22,7 +22,7 @@ public interface PatientService {
     PatientResource updatePatient(SavePatientResource savePatientResource, Long patientId);
     String deletePatient(Long patientId);
 
-    List<PatientResource> findAllByAssigned(Boolean isAssigned);
+    /*List<PatientResource> findAllByAssigned(Boolean isAssigned);*/
 
-    List<PatientResource> findAllPatientsByMedicIdAndIsAssigned(Long medicId, Boolean isAssigned);
+   /* List<PatientResource> findAllPatientsByMedicIdAndIsAssigned(Long medicId, Boolean isAssigned);*/
 }

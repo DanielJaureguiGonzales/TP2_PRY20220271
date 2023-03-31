@@ -1,19 +1,15 @@
 package com.tp2.pry20220271.ulcernosis.services;
 
 import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
-import com.tp2.pry20220271.ulcernosis.models.entities.Diagnosis;
-import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
-import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
-import com.tp2.pry20220271.ulcernosis.models.entities.Patient;
+import com.tp2.pry20220271.ulcernosis.models.entities.*;
+import com.tp2.pry20220271.ulcernosis.models.enums.Status;
 import com.tp2.pry20220271.ulcernosis.models.enums.Type;
-import com.tp2.pry20220271.ulcernosis.models.repositories.DiagnosisRepository;
-import com.tp2.pry20220271.ulcernosis.models.repositories.MedicRepository;
-import com.tp2.pry20220271.ulcernosis.models.repositories.NurseRepository;
-import com.tp2.pry20220271.ulcernosis.models.repositories.PatientRepository;
+import com.tp2.pry20220271.ulcernosis.models.repositories.*;
 import com.tp2.pry20220271.ulcernosis.models.services.DiagnosisService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveDiagnosisResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.DiagResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.DiagnosisResource;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,6 +46,8 @@ public class DiagnosisServiceImpl implements DiagnosisService {
 
     private final NurseRepository nurseRepository;
 
+    private final AppointmentRepository appointmentRepository;
+
     @Value("${cnn.server.url}")
     private String urlCNN;
 
@@ -61,79 +59,128 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     }
 
     @Override
+    public List<DiagnosisResource> findAllDiagnostics() {
+        List<Diagnosis> listDiagnosis = diagnosisRepository.findAll();
+        return listDiagnosis.stream().map(diagnosis -> mapper.map(diagnosis,DiagnosisResource.class)).collect(Collectors.toList());
+    }
+
+    @Override
     public List<DiagnosisResource> findAllByPatientName(String patientName) {
         Patient patient = patientRepository.findByFullName(patientName).orElseThrow(() -> new NotFoundException("Patient", "name", patientName));
-        List<Diagnosis> diagnosticList = diagnosisRepository.findAllByPatientId(patient.getId());
-        return diagnosticList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
+        List<Diagnosis> diagnosisList = diagnosisRepository.findAllByPatientId(patient.getId());
+        return diagnosisList.stream().map(diagnosis -> mapper.map(diagnosis, DiagnosisResource.class)).collect(Collectors.toList());
     }
 
     @Override
     public List<DiagnosisResource> findAllByNurseFullname(String nurseName) {
         Nurse nurse = nurseRepository.findNurseByFullName(nurseName).orElseThrow(() -> new NotFoundException("Nurse", "name", nurseName));
-        List<Diagnosis> diagnosticList = diagnosisRepository.findAllByCreatorIdAndCreatorType(nurse.getId(), Type.NURSE);
-        return diagnosticList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
+        List<Diagnosis> diagnosisList = diagnosisRepository.findAllByCreatorIdAndCreatorType(nurse.getId(), Type.NURSE);
+        return diagnosisList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
     }
 
     @Override
     public List<DiagnosisResource> findAllByMedicFullname(String medicName) {
         Medic medic = medicRepository.findMedicByFullName(medicName).orElseThrow(() -> new NotFoundException("Medic", "name", medicName));
-        List<Diagnosis> diagnosticList = diagnosisRepository.findAllByCreatorIdAndCreatorType(medic.getId(), Type.MEDIC);
-        return diagnosticList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
+        List<Diagnosis> diagnosisList = diagnosisRepository.findAllByCreatorIdAndCreatorType(medic.getId(), Type.MEDIC);
+        return diagnosisList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
     }
 
     @Override
     public List<DiagnosisResource> findAllByStagePredicted(String stagePredicted) {
-        List<Diagnosis> diagnosticList = diagnosisRepository.findAllByStagePredicted(stagePredicted);
-        return diagnosticList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
+        List<Diagnosis> diagnosisList = diagnosisRepository.findAllByStagePredicted(stagePredicted);
+        return diagnosisList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
     }
 
 
-    /*@Override
-    public List<DiagnosisResource> findAllByCreatorIdAndCreatorTypeAndStagePredicted(Long creatorId, Type creatorType, String stagePredicted) {
-        List<Diagnosis> diagnosticList = diagnosisRepository.findAllByStagePredictedAndCreatorIdAndCreatorType(stagePredicted,creatorId, creatorType );
-        return diagnosticList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
-    }
 
     @Override
-    public List<DiagnosisResource> findAllByCreatorIdAndCreatorType(Long creatorId, Type creatorType){
-        List<Diagnosis> diagnosticList = diagnosisRepository.findAllByCreatorIdAndCreatorType(creatorId, creatorType);
-        return diagnosticList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
-    }*/
-
-
-    @Override
+    @Transactional
     public DiagnosisResource saveDiagnosis(SaveDiagnosisResource saveDiagnosisResource, MultipartFile file) throws IOException {
         Patient patient = patientRepository.findById(saveDiagnosisResource.getPatientId()).orElseThrow(() -> new NotFoundException("Patient", "id", saveDiagnosisResource.getPatientId()));
         DiagResource response =getDiagResourceCNN(file);
         Diagnosis diagnosis = new Diagnosis();
+        DiagnosisResource diagnosisResource = new DiagnosisResource();
         if (saveDiagnosisResource.getCreatorType()== Type.MEDIC){
             Medic medic = medicRepository.findById(saveDiagnosisResource.getCreatorId()).orElseThrow(() -> new NotFoundException("Medic", "id", saveDiagnosisResource.getCreatorId()));
-            diagnosis.setUlcerPhoto(file.getBytes());
-            diagnosis.setCreatorId(medic.getId());
-            diagnosis.setStage1(response.getStage_1());
-            diagnosis.setStage2(response.getStage_2());
-            diagnosis.setStage3(response.getStage_3());
-            diagnosis.setStage4(response.getStage_4());
-            diagnosis.setStagePredicted(response.getStage_predicted());
-            diagnosis.setPatient(patient);
-            diagnosis.setCreatorType(Type.MEDIC);
+            if (!diagnosisRepository.existsByCreatorIdAndPatientIdAndIsConfirmed(medic.getId(), patient.getId(),false)){
+                diagnosis.setUlcerPhoto(file.getBytes());
+                diagnosis.setCreatorId(medic.getId());
+                diagnosis.setStage1(response.getStage_1());
+                diagnosis.setStage2(response.getStage_2());
+                diagnosis.setStage3(response.getStage_3());
+                diagnosis.setStage4(response.getStage_4());
+                diagnosis.setStagePredicted(response.getStage_predicted());
+                diagnosis.setPatient(patient);
+                diagnosis.setCreatorType(Type.MEDIC);
+                diagnosis.setIsConfirmed(false);
+                diagnosisResource=mapper.map(diagnosisRepository.save(diagnosis), DiagnosisResource.class);
+
+            }else{
+                diagnosis = diagnosisRepository.findByCreatorIdAndPatientIdAndIsConfirmed(medic.getId(), patient.getId(),false);
+                diagnosis.setStage1(response.getStage_1());
+                diagnosis.setStage2(response.getStage_2());
+                diagnosis.setStage3(response.getStage_3());
+                diagnosis.setStage4(response.getStage_4());
+                diagnosis.setStagePredicted(response.getStage_predicted());
+                diagnosisResource=mapper.map(diagnosisRepository.save(diagnosis), DiagnosisResource.class);
+            }
+
         } else if (saveDiagnosisResource.getCreatorType()== Type.NURSE){
+
             Nurse nurse = nurseRepository.findById(saveDiagnosisResource.getCreatorId()).orElseThrow(() -> new NotFoundException("Nurse", "id", saveDiagnosisResource.getCreatorId()));
-            diagnosis.setUlcerPhoto(file.getBytes());
-            diagnosis.setCreatorId(nurse.getId());
-            diagnosis.setStage1(response.getStage_1());
-            diagnosis.setStage2(response.getStage_2());
-            diagnosis.setStage3(response.getStage_3());
-            diagnosis.setStage4(response.getStage_4());
-            diagnosis.setStagePredicted(response.getStage_predicted());
-            diagnosis.setPatient(patient);
-            diagnosis.setCreatorType(Type.NURSE);
+
+                if (!diagnosisRepository.existsByCreatorIdAndPatientIdAndIsConfirmed(nurse.getId(), patient.getId(),false)){
+                    diagnosis.setUlcerPhoto(file.getBytes());
+                    diagnosis.setCreatorId(nurse.getId());
+                    diagnosis.setStage1(response.getStage_1());
+                    diagnosis.setStage2(response.getStage_2());
+                    diagnosis.setStage3(response.getStage_3());
+                    diagnosis.setStage4(response.getStage_4());
+                    diagnosis.setStagePredicted(response.getStage_predicted());
+                    diagnosis.setPatient(patient);
+                    diagnosis.setCreatorType(Type.NURSE);
+                    diagnosis.setIsConfirmed(false);
+                    diagnosisResource=mapper.map(diagnosisRepository.save(diagnosis), DiagnosisResource.class);
+                    Appointment appointment = appointmentRepository.findByNurseIdAndPatientIdAndStatus(nurse.getId(), patient.getId(), Status.PENDIENTE);
+                    appointment.setDiagnosisId(diagnosis.getId());
+                    appointmentRepository.save(appointment);
+                }else{
+                    diagnosis = diagnosisRepository.findByCreatorIdAndPatientIdAndIsConfirmed(nurse.getId(), patient.getId(),false);
+                    diagnosis.setStage1(response.getStage_1());
+                    diagnosis.setStage2(response.getStage_2());
+                    diagnosis.setStage3(response.getStage_3());
+                    diagnosis.setStage4(response.getStage_4());
+                    diagnosis.setStagePredicted(response.getStage_predicted());
+                    diagnosisResource=mapper.map(diagnosisRepository.save(diagnosis), DiagnosisResource.class);
+
+                }
+
+
+
         }
 
-        return mapper.map(diagnosisRepository.save(diagnosis), DiagnosisResource.class);
+        return diagnosisResource;
 
     }
 
+    @Override
+    public String confirmDiagnosisNurse(Long diagnosticId) {
+       Diagnosis diagnosisConfirm = diagnosisRepository.findById(diagnosticId).orElseThrow(() -> new NotFoundException("Diagnosis", "id", diagnosticId));
+       Appointment appointment = appointmentRepository.findByDiagnosisId(diagnosisConfirm.getId());
+       diagnosisConfirm.setIsConfirmed(true);
+       appointment.setStatus(Status.REALIZADO);
+       diagnosisRepository.save(diagnosisConfirm);
+       appointmentRepository.save(appointment);
+       return "El diagnóstico ha sido confirmado";
+    }
+
+    @Override
+    public String confirmDiagnosisMedic(Long diagnosticId) {
+        Diagnosis diagnosisConfirm = diagnosisRepository.findById(diagnosticId).orElseThrow(() -> new NotFoundException("Diagnosis", "id", diagnosticId));
+        diagnosisConfirm.setIsConfirmed(true);
+        diagnosisRepository.save(diagnosisConfirm);
+        return "El diagnóstico ha sido confirmado";
+    }
 
     @Override
     public String deleteDiagnosisById(Long diagnosticId) {

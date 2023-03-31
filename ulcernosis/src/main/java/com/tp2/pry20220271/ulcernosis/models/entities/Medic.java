@@ -2,7 +2,7 @@ package com.tp2.pry20220271.ulcernosis.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
+import com.tp2.pry20220271.ulcernosis.models.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -73,7 +73,7 @@ public class Medic {
     private Date createdAt;
 
     @Enumerated(EnumType.STRING)
-    private Rol role;
+    private Role role;
 
     @OneToMany(mappedBy = "medic", fetch=FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonIgnoreProperties(value = {"medic"}, allowSetters = true)

@@ -1,12 +1,11 @@
 package com.tp2.pry20220271.ulcernosis.resources.response;
 
-import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
+import com.tp2.pry20220271.ulcernosis.models.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
 
 
 @Data
@@ -22,6 +21,6 @@ public class MedicResource {
     private String address;
     private String cmp;
     private String civilStatus;
-    private Rol role;
+    private Role role;
     private Date createdAt;
 }

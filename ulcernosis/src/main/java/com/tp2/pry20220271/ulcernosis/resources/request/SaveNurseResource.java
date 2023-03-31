@@ -1,6 +1,6 @@
 package com.tp2.pry20220271.ulcernosis.resources.request;
 
-import com.tp2.pry20220271.ulcernosis.models.enums.Rol;
+import com.tp2.pry20220271.ulcernosis.models.enums.Role;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +20,6 @@ public class SaveNurseResource {
     private String civilStatus;
     private String address;
     private String cep;
-    private Rol rol;
+    private Role role;
     private Boolean isAuxiliar;
 }

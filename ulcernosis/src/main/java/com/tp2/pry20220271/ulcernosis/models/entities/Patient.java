@@ -60,8 +60,6 @@ public class Patient {
     @Column(name = "avatar", columnDefinition="LONGBLOB")
     private byte[] avatar;
 
-    @Column(nullable = false)
-    private Boolean isAssigned;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "created_at")
@@ -71,13 +69,6 @@ public class Patient {
     @JsonIgnoreProperties(value = {"patient"}, allowSetters = true)
     private List<Diagnosis> diagnosis;
 
-    @OneToMany(mappedBy = "patient", fetch=FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
-    @JsonIgnoreProperties(value = {"patient"}, allowSetters = true)
-    private List<Assignment> assignments;
-
-    @OneToMany(mappedBy = "patient", fetch=FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
-    @JsonIgnoreProperties(value = {"patient"}, allowSetters = true)
-    private List<Schedule> schedules;
 
 
     @PrePersist

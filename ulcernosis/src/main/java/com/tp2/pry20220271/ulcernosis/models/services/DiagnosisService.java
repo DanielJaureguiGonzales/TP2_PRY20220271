@@ -11,6 +11,7 @@ import java.util.List;
 public interface DiagnosisService {
 
     DiagnosisResource findById(Long diagnosticId);
+    List<DiagnosisResource> findAllDiagnostics();
 
     List<DiagnosisResource> findAllByPatientName(String patientName);
     List<DiagnosisResource> findAllByNurseFullname(String nurseName);
@@ -22,6 +23,7 @@ public interface DiagnosisService {
     List<DiagnosisResource> findAllByCreatorIdAndCreatorType(Long creatorId, Type creatorType);*/
 
     DiagnosisResource saveDiagnosis(SaveDiagnosisResource saveDiagnosisResource, MultipartFile file) throws IOException;
-
+    String confirmDiagnosisNurse(Long diagnosticId);
+    String confirmDiagnosisMedic(Long diagnosticId);
     String deleteDiagnosisById(Long diagnosticId) ;
 }
