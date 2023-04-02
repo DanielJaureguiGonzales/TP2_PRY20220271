@@ -103,7 +103,7 @@ public class PatientServiceImpl implements PatientService {
         newPatient.setCivilStatus(savePatientResource.getCivilStatus());
         newPatient.setMedic(assignMedic);
         newPatient.setPhone(savePatientResource.getPhone());
-       /* newPatient.setIsAssigned(false);*/
+        newPatient.setIsAssigned(false);
         Patient savePatient = patientRepository.save(newPatient);
         return mapper.map(savePatient,PatientResource.class);
     }
@@ -154,17 +154,23 @@ public class PatientServiceImpl implements PatientService {
     }
 
     /*@Override
+    public List<PatientResource> findAllByAssigned(Long medicId, Boolean isAssigned) {
+        List<Patient> patients = patientRepository.findAllByIsAssigned(isAssigned);
+        return patients.stream().map(patient -> mapper.map(patient,PatientResource.class)).collect(Collectors.toList());
+    }*/
+
+    /*@Override
     public List<PatientResource> findAllByAssigned(Boolean isAssigned) {
         List<Patient> patients = patientRepository.findAllByIsAssigned(isAssigned);
         return patients.stream().map(patient -> mapper.map(patient,PatientResource.class)).collect(Collectors.toList());
     }*/
 
-   /* @Override
+    @Override
     public List<PatientResource> findAllPatientsByMedicIdAndIsAssigned(Long medicId, Boolean isAssigned) {
         final Medic searchMedic = medicRepository.findById(medicId).orElseThrow(()-> new NotFoundException("Medic","Id",medicId));
         List<Patient> patients_founds = patientRepository.findAllByMedicIdAndIsAssigned(searchMedic.getId(),isAssigned);
         return patients_founds.stream().map(patient_found-> mapper.map(patient_found,PatientResource.class)).collect(Collectors.toList());
-    }*/
+    }
 
     public Patient getPatientByID(Long id){
         return patientRepository.findById(id).orElseThrow(()->

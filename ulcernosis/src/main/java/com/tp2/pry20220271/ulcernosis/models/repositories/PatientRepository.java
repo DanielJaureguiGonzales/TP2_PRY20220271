@@ -13,7 +13,8 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
     List<Patient> findAllByMedicId(Long medicId);
 
-
+    List<Patient> findAllByIsAssigned(Boolean isAssigned);
+    List<Patient> findAllByMedicIdAndIsAssigned(Long medicId, Boolean isAssigned);
     Optional<Patient> findByFullName( String patientName);
 
     Optional<Patient> findByDni(String dni);

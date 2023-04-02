@@ -61,6 +61,8 @@ public class Patient {
     private byte[] avatar;
 
 
+    private Boolean isAssigned;
+
     @Temporal(TemporalType.DATE)
     @Column(name = "created_at")
     private Date createdAt;

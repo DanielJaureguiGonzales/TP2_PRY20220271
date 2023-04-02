@@ -158,7 +158,8 @@ public class DiagnosisServiceImpl implements DiagnosisService {
 
 
         }
-
+        patient.setIsAssigned(false);
+        patientRepository.save(patient);
         return diagnosisResource;
 
     }

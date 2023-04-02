@@ -57,12 +57,19 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setPatientId(patient.getId());
 
         appointment.setDiagnosisId(0L);
-        return modelMapper.map(appointmentRepository.save(appointment), AppointmentResource.class);
+
+        patient.setIsAssigned(true);
+        patientRepository.save(patient);
+        AppointmentResource savedAppointment = modelMapper.map(appointmentRepository.save(appointment), AppointmentResource.class);
+
+        return savedAppointment;
     }
 
     @Override
     public String deleteAppointmentById(Long id) {
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new NotFoundException("Appointment","id",id));
+        Patient patient = patientRepository.findById(appointment.getPatientId()).orElseThrow(() -> new NotFoundException("Patient","id",appointment.getPatientId()));
+        patient.setIsAssigned(false);
         appointmentRepository.delete(appointment);
         return """
                     La cita se eliminó correctamente.

@@ -22,7 +22,7 @@ public interface PatientService {
     PatientResource updatePatient(SavePatientResource savePatientResource, Long patientId);
     String deletePatient(Long patientId);
 
-    /*List<PatientResource> findAllByAssigned(Boolean isAssigned);*/
+    /*List<PatientResource> findAllByAssigned(Long medicId,Boolean isAssigned);*/
 
-   /* List<PatientResource> findAllPatientsByMedicIdAndIsAssigned(Long medicId, Boolean isAssigned);*/
+    List<PatientResource> findAllPatientsByMedicIdAndIsAssigned(Long medicId, Boolean isAssigned);
 }
