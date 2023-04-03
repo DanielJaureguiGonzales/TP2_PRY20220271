@@ -4,12 +4,12 @@ import com.tp2.pry20220271.ulcernosis.exceptions.DniExistsException;
 import com.tp2.pry20220271.ulcernosis.exceptions.EmailExistsException;
 import com.tp2.pry20220271.ulcernosis.exceptions.NotFoundException;
 import com.tp2.pry20220271.ulcernosis.exceptions.PhoneExistsException;
+import com.tp2.pry20220271.ulcernosis.models.entities.Appointment;
 import com.tp2.pry20220271.ulcernosis.models.entities.Medic;
+import com.tp2.pry20220271.ulcernosis.models.entities.Nurse;
 import com.tp2.pry20220271.ulcernosis.models.entities.Patient;
-import com.tp2.pry20220271.ulcernosis.models.repositories.MedicRepository;
-import com.tp2.pry20220271.ulcernosis.models.repositories.NurseRepository;
-import com.tp2.pry20220271.ulcernosis.models.repositories.PatientRepository;
-import com.tp2.pry20220271.ulcernosis.models.repositories.UserRepository;
+import com.tp2.pry20220271.ulcernosis.models.enums.Status;
+import com.tp2.pry20220271.ulcernosis.models.repositories.*;
 import com.tp2.pry20220271.ulcernosis.models.services.PatientService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SavePatientResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.PatientResource;
@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,6 +43,7 @@ public class PatientServiceImpl implements PatientService {
 
 
     private final UserRepository userRepository;
+    private final AppointmentRepository appointmentRepository;
 
     @Override
     public List<PatientResource> findAllPatientsByMedicId(Long medicId){
@@ -170,6 +172,19 @@ public class PatientServiceImpl implements PatientService {
         final Medic searchMedic = medicRepository.findById(medicId).orElseThrow(()-> new NotFoundException("Medic","Id",medicId));
         List<Patient> patients_founds = patientRepository.findAllByMedicIdAndIsAssigned(searchMedic.getId(),isAssigned);
         return patients_founds.stream().map(patient_found-> mapper.map(patient_found,PatientResource.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PatientResource> findAllPatientsByNurseIdAndIsAssigned(Long nurseId){
+        Nurse searchNurse = nurseRepository.findById(nurseId).orElseThrow(()-> new NotFoundException("Nurse","Id",nurseId));
+        List<Appointment> appointments = appointmentRepository.findAllByNurseId(searchNurse.getId()).stream().filter((a)-> a.getStatus()== Status.PENDIENTE).toList();
+        List<Long> patients_ids_founds = new ArrayList<>();
+        for (Appointment appointment : appointments
+             ) {
+            patients_ids_founds.add(appointment.getPatientId());
+        }
+        List<Patient> patients_founds = patientRepository.findAllByIdIn(patients_ids_founds).stream().filter(Patient::getIsAssigned).toList();
+        return patients_founds.stream().map((e)-> mapper.map(e,PatientResource.class)).collect(Collectors.toList());
     }
 
     public Patient getPatientByID(Long id){

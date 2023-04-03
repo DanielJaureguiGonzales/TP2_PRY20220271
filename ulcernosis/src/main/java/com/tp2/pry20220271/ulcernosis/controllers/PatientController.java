@@ -46,12 +46,12 @@ public class PatientController {
         return patientService.findPatientById(patientId);
     }
 
-    /*@ResponseStatus(HttpStatus.OK)
-    @GetMapping("/get_by_nurse/{nurseId}")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/get-all-by-nurse/{nurseId}")
     List<PatientResource> getAllPatientsByNurseId(@PathVariable("nurseId") Long nurseId){
         //return new UlcernosisResponse<>("Success",String.valueOf(HttpStatus.OK),"OK",patientService.findAllByNurseId(nurseId));
-        return patientService.findAllByNurseId(nurseId);
-    }*/
+        return patientService.findAllPatientsByNurseIdAndIsAssigned(nurseId);
+    }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{patientId}/profile-photo")

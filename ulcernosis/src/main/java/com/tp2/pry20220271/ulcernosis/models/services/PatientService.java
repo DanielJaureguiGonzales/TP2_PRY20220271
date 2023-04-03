@@ -25,4 +25,5 @@ public interface PatientService {
     /*List<PatientResource> findAllByAssigned(Long medicId,Boolean isAssigned);*/
 
     List<PatientResource> findAllPatientsByMedicIdAndIsAssigned(Long medicId, Boolean isAssigned);
+    List<PatientResource> findAllPatientsByNurseIdAndIsAssigned(Long nurseId);
 }

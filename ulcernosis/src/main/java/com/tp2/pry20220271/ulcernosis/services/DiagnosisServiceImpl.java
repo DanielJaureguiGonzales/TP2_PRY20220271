@@ -128,7 +128,7 @@ public class DiagnosisServiceImpl implements DiagnosisService {
         } else if (saveDiagnosisResource.getCreatorType()== Type.NURSE){
 
             Nurse nurse = nurseRepository.findById(saveDiagnosisResource.getCreatorId()).orElseThrow(() -> new NotFoundException("Nurse", "id", saveDiagnosisResource.getCreatorId()));
-
+            Appointment appointment = appointmentRepository.findByNurseIdAndPatientIdAndStatus(nurse.getId(), patient.getId(), Status.PENDIENTE);
                 if (!diagnosisRepository.existsByCreatorIdAndPatientIdAndIsConfirmed(nurse.getId(), patient.getId(),false)){
                     diagnosis.setUlcerPhoto(file.getBytes());
                     diagnosis.setCreatorId(nurse.getId());
@@ -141,7 +141,7 @@ public class DiagnosisServiceImpl implements DiagnosisService {
                     diagnosis.setCreatorType(Type.NURSE);
                     diagnosis.setIsConfirmed(false);
                     diagnosisResource=mapper.map(diagnosisRepository.save(diagnosis), DiagnosisResource.class);
-                    Appointment appointment = appointmentRepository.findByNurseIdAndPatientIdAndStatus(nurse.getId(), patient.getId(), Status.PENDIENTE);
+
                     appointment.setDiagnosisId(diagnosis.getId());
                     appointmentRepository.save(appointment);
                 }else{

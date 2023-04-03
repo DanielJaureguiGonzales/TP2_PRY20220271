@@ -15,6 +15,7 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
     List<Patient> findAllByIsAssigned(Boolean isAssigned);
     List<Patient> findAllByMedicIdAndIsAssigned(Long medicId, Boolean isAssigned);
+    List<Patient> findAllByIdIn(List<Long> ids);
     Optional<Patient> findByFullName( String patientName);
 
     Optional<Patient> findByDni(String dni);
