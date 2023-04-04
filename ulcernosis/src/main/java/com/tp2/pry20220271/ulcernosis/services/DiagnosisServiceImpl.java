@@ -158,8 +158,7 @@ public class DiagnosisServiceImpl implements DiagnosisService {
 
 
         }
-        patient.setIsAssigned(false);
-        patientRepository.save(patient);
+
         return diagnosisResource;
 
     }
@@ -168,10 +167,14 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     public String confirmDiagnosisNurse(Long diagnosticId) {
        Diagnosis diagnosisConfirm = diagnosisRepository.findById(diagnosticId).orElseThrow(() -> new NotFoundException("Diagnosis", "id", diagnosticId));
        Appointment appointment = appointmentRepository.findByDiagnosisId(diagnosisConfirm.getId());
+       Patient patient = patientRepository.findById(appointment.getPatientId()).get();
+
        diagnosisConfirm.setIsConfirmed(true);
        appointment.setStatus(Status.REALIZADO);
+       patient.setIsAssigned(false);
        diagnosisRepository.save(diagnosisConfirm);
        appointmentRepository.save(appointment);
+       patientRepository.save(patient);
        return "El diagnóstico ha sido confirmado";
     }
 
