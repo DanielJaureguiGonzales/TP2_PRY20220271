@@ -14,7 +14,7 @@ public interface DiagnosisRepository extends JpaRepository<Diagnosis,Long> {
 
 
     List<Diagnosis> findAllByCreatorIdAndCreatorType(Long creatorId, Type creatorType);
-
+    List<Diagnosis> findAllByCreatorIdInAndCreatorType(List<Long> creatorsId, Type creatorType);
     List<Diagnosis> findAllByPatientId(Long patientId);
 
     List<Diagnosis> findAllByStagePredicted(String stagePredicted);

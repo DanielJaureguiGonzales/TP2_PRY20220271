@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.HttpHeaders;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,7 @@ public class DiagnosisServiceImpl implements DiagnosisService {
 
     private final DiagnosisRepository diagnosisRepository;
 
-
+    private final TeamWorkRepository teamWorkRepository;
     private final PatientRepository patientRepository;
 
     private final MedicRepository medicRepository;
@@ -90,6 +91,25 @@ public class DiagnosisServiceImpl implements DiagnosisService {
         List<Diagnosis> diagnosisList = diagnosisRepository.findAllByStagePredicted(stagePredicted).stream().filter(Diagnosis::getIsConfirmed).toList();
         return diagnosisList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
     }
+
+    @Override
+    public List<DiagnosisResource> findAllByMedicCMP(String medicCMP) {
+        Medic medic = medicRepository.findMedicByCmp(medicCMP).orElseThrow(() -> new NotFoundException("Medic", "CMP", medicCMP));
+        List<TeamWork> teamWork = teamWorkRepository.findAllByMedicId(medic.getId());
+        List<Long> idNurses = new ArrayList<>();
+        for (TeamWork t : teamWork) {
+            idNurses.add(t.getNurse().getId());
+        }
+        List<Diagnosis> diagnosisMedicList = diagnosisRepository.findAllByCreatorIdAndCreatorType(medic.getId(), Type.MEDIC).stream().filter(Diagnosis::getIsConfirmed).toList();
+        List<Diagnosis> diagnosisNurseList = diagnosisRepository.findAllByCreatorIdInAndCreatorType(idNurses, Type.NURSE).stream().filter(Diagnosis::getIsConfirmed).toList();
+
+        List<Diagnosis> diagnosisList = new ArrayList<>();
+        diagnosisList.addAll(diagnosisMedicList);
+        diagnosisList.addAll(diagnosisNurseList);
+
+        return diagnosisList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
+    }
+
 
     @Override
     public List<DiagnosisResource> findAllByNurseCEP(String nurseCEP) {

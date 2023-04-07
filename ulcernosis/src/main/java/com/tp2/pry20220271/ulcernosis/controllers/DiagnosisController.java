@@ -54,6 +54,12 @@ public class DiagnosisController {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/get-by-medic-cmp/{medicCMP}")
+    List<DiagnosisResource> getAllDiagnosticsByMedicCmp(@PathVariable("medicCMP") String medicCMP){
+        return diagnosisService.findAllByMedicCMP(medicCMP);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/get-by-medic-name/{medicName}")
     List<DiagnosisResource> getAllDiagnosticsByMedicName(@PathVariable("medicName") String medicName){
         return diagnosisService.findAllByMedicFullname(medicName);
