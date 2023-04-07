@@ -104,11 +104,11 @@ public class NurseController {
         return nurseService.updateNurse(nurseId,updateNurse);
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    /*@ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{nurseId}/delete-nurse")
     String deleteNurse(@PathVariable("nurseId") Long nurseId){
         //return new UlcernosisResponse<>("Success", String.valueOf(HttpStatus.OK),"OK", nurseService.deleteNurse(nurseId));
         return nurseService.deleteNurse(nurseId);
-    }
+    }*/
 
 }

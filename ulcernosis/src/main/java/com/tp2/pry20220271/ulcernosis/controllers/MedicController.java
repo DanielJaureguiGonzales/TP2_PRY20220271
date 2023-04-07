@@ -84,13 +84,13 @@ public class MedicController {
         return medicService.findMedicByNurseId(nurseId);
     }
 
-    @ResponseStatus(HttpStatus.OK)
+   /* @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{medicId}/delete-medic")
     @PreAuthorize("hasRole('ROLE_MEDIC')")
     String deleteMedic(@PathVariable("medicId") Long medicId){
         //return new UlcernosisResponse<>("Success", String.valueOf(HttpStatus.OK),"OK", medicService.deleteMedic(medicId));
         return medicService.deleteMedic(medicId);
-    }
+    }*/
 
 
 }

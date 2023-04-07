@@ -83,11 +83,11 @@ public class PatientController {
         return patientService.updatePatient(updatedPatient,patientId);
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    /*@ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{patientId}/delete-patient")
-    String deleteNurse(@PathVariable("patientId") Long patientId){
+    String deletePatient(@PathVariable("patientId") Long patientId){
         //return new UlcernosisResponse<>("Success", String.valueOf(HttpStatus.OK),"OK", patientService.deletePatient(patientId));
         return patientService.deletePatient(patientId);
     }
-
+*/
 }

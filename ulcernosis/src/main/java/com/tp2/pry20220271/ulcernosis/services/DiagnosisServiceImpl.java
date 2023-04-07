@@ -60,7 +60,7 @@ public class DiagnosisServiceImpl implements DiagnosisService {
 
     @Override
     public List<DiagnosisResource> findAllDiagnostics() {
-        List<Diagnosis> listDiagnosis = diagnosisRepository.findAll();
+        List<Diagnosis> listDiagnosis = diagnosisRepository.findAll().stream().filter(Diagnosis::getIsConfirmed).toList();
         return listDiagnosis.stream().map(diagnosis -> mapper.map(diagnosis,DiagnosisResource.class)).collect(Collectors.toList());
     }
 

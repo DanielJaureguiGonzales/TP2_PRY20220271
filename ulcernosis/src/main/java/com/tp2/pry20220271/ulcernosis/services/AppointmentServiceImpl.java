@@ -59,6 +59,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setDiagnosisId(0L);
 
         patient.setIsAssigned(true);
+
         patientRepository.save(patient);
         AppointmentResource savedAppointment = modelMapper.map(appointmentRepository.save(appointment), AppointmentResource.class);
 
