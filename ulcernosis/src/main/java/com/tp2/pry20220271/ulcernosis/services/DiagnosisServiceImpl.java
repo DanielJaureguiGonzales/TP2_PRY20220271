@@ -67,30 +67,36 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     @Override
     public List<DiagnosisResource> findAllByPatientName(String patientName) {
         Patient patient = patientRepository.findByFullName(patientName).orElseThrow(() -> new NotFoundException("Patient", "name", patientName));
-        List<Diagnosis> diagnosisList = diagnosisRepository.findAllByPatientId(patient.getId());
+        List<Diagnosis> diagnosisList = diagnosisRepository.findAllByPatientId(patient.getId()).stream().filter(Diagnosis::getIsConfirmed).toList();
         return diagnosisList.stream().map(diagnosis -> mapper.map(diagnosis, DiagnosisResource.class)).collect(Collectors.toList());
     }
 
     @Override
     public List<DiagnosisResource> findAllByNurseFullname(String nurseName) {
         Nurse nurse = nurseRepository.findNurseByFullName(nurseName).orElseThrow(() -> new NotFoundException("Nurse", "name", nurseName));
-        List<Diagnosis> diagnosisList = diagnosisRepository.findAllByCreatorIdAndCreatorType(nurse.getId(), Type.NURSE);
+        List<Diagnosis> diagnosisList = diagnosisRepository.findAllByCreatorIdAndCreatorType(nurse.getId(), Type.NURSE).stream().filter(Diagnosis::getIsConfirmed).toList();
         return diagnosisList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
     }
 
     @Override
     public List<DiagnosisResource> findAllByMedicFullname(String medicName) {
         Medic medic = medicRepository.findMedicByFullName(medicName).orElseThrow(() -> new NotFoundException("Medic", "name", medicName));
-        List<Diagnosis> diagnosisList = diagnosisRepository.findAllByCreatorIdAndCreatorType(medic.getId(), Type.MEDIC);
+        List<Diagnosis> diagnosisList = diagnosisRepository.findAllByCreatorIdAndCreatorType(medic.getId(), Type.MEDIC).stream().filter(Diagnosis::getIsConfirmed).toList();
         return diagnosisList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
     }
 
     @Override
     public List<DiagnosisResource> findAllByStagePredicted(String stagePredicted) {
-        List<Diagnosis> diagnosisList = diagnosisRepository.findAllByStagePredicted(stagePredicted);
+        List<Diagnosis> diagnosisList = diagnosisRepository.findAllByStagePredicted(stagePredicted).stream().filter(Diagnosis::getIsConfirmed).toList();
         return diagnosisList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
     }
 
+    @Override
+    public List<DiagnosisResource> findAllByNurseCEP(String nurseCEP) {
+        Nurse nurse = nurseRepository.findNurseByCep(nurseCEP).orElseThrow(() -> new NotFoundException("Nurse", "CEP", nurseCEP));
+        List<Diagnosis> diagnosisList = diagnosisRepository.findAllByCreatorIdAndCreatorType(nurse.getId(), Type.NURSE).stream().filter(Diagnosis::getIsConfirmed).toList();
+        return diagnosisList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
+    }
 
 
     @Override

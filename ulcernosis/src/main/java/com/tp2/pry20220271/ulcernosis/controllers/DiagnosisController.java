@@ -48,6 +48,12 @@ public class DiagnosisController {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/get-by-nurse-cep/{nurseCEP}")
+    List<DiagnosisResource> getAllDiagnosticsByNurseCep(@PathVariable("nurseCEP") String nurseCEP){
+        return diagnosisService.findAllByNurseCEP(nurseCEP);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/get-by-medic-name/{medicName}")
     List<DiagnosisResource> getAllDiagnosticsByMedicName(@PathVariable("medicName") String medicName){
         return diagnosisService.findAllByMedicFullname(medicName);

@@ -17,6 +17,7 @@ public interface DiagnosisService {
     List<DiagnosisResource> findAllByNurseFullname(String nurseName);
     List<DiagnosisResource> findAllByMedicFullname(String medicName);
     List<DiagnosisResource> findAllByStagePredicted(String stagePredicted);
+    List<DiagnosisResource> findAllByNurseCEP(String nurseCEP);
 
     /*List<DiagnosisResource> findAllByCreatorIdAndCreatorTypeAndStagePredicted(Long creatorId, Type creatorType, String stagePredicted);
 
