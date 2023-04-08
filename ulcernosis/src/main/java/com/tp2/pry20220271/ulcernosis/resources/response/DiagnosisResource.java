@@ -18,8 +18,10 @@ public class DiagnosisResource {
     private String stage4;
     private String stagePredicted;
     private Long patientId;
+    private String patientName;
     private Long creatorId;
     private Type creatorType;
     private Date createdAt;
     private Boolean isConfirmed;
+
 }
