@@ -50,6 +50,9 @@ public class Diagnosis {
     @Column(nullable = false,name = "creator_id")
     private Long creatorId;
 
+    @Column(nullable = false,name = "creator_name")
+    private String creatorName;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "creator_type")
     private Type creatorType;

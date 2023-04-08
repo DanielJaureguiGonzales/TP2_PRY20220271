@@ -21,6 +21,7 @@ public class DiagnosisResource {
     private String patientName;
     private Long creatorId;
     private Type creatorType;
+    private String creatorName;
     private Date createdAt;
     private Boolean isConfirmed;
 

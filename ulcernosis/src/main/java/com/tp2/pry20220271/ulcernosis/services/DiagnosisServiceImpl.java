@@ -137,6 +137,7 @@ public class DiagnosisServiceImpl implements DiagnosisService {
                 diagnosis.setStage4(response.getStage_4());
                 diagnosis.setStagePredicted(response.getStage_predicted());
                 diagnosis.setPatient(patient);
+                diagnosis.setCreatorName(medic.getFullName());
                 diagnosis.setCreatorType(Type.MEDIC);
                 diagnosis.setIsConfirmed(false);
                 diagnosisResource=mapper.map(diagnosisRepository.save(diagnosis), DiagnosisResource.class);
@@ -164,7 +165,9 @@ public class DiagnosisServiceImpl implements DiagnosisService {
                     diagnosis.setStage4(response.getStage_4());
                     diagnosis.setStagePredicted(response.getStage_predicted());
                     diagnosis.setPatient(patient);
+                    diagnosis.setCreatorName(nurse.getFullName());
                     diagnosis.setCreatorType(Type.NURSE);
+
                     diagnosis.setIsConfirmed(false);
                     diagnosisResource=mapper.map(diagnosisRepository.save(diagnosis), DiagnosisResource.class);
 
