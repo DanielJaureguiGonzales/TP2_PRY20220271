@@ -16,9 +16,12 @@ public interface DiagnosisService {
     List<DiagnosisResource> findAllByPatientName(String patientName);
     List<DiagnosisResource> findAllByNurseFullname(String nurseName);
     List<DiagnosisResource> findAllByMedicFullname(String medicName);
-    List<DiagnosisResource> findAllByStagePredicted(String stagePredicted);
+    /*List<DiagnosisResource> findAllByStagePredicted(String stagePredicted);*/
     List<DiagnosisResource> findAllByNurseCEP(String nurseCEP);
     List<DiagnosisResource> findAllByMedicCMP(String medicCMP);
+
+    List<DiagnosisResource> findAllByStagePredictedMedic(String medicCMP,String stagePredicted);
+    List<DiagnosisResource> findAllByStagePredictedNurse(String nurseCEP,String stagePredicted);
     /*List<DiagnosisResource> findAllByCreatorIdAndCreatorTypeAndStagePredicted(Long creatorId, Type creatorType, String stagePredicted);
 
     List<DiagnosisResource> findAllByCreatorIdAndCreatorType(Long creatorId, Type creatorType);*/

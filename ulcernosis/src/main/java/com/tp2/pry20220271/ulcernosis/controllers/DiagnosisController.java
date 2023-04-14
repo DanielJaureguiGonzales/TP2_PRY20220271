@@ -66,9 +66,15 @@ public class DiagnosisController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/stage-predicted/{stagePredicted}")
-    List<DiagnosisResource> getAllDiagnosticsByStagePredicted(@PathVariable("stagePredicted") String stagePredicted){
-        return diagnosisService.findAllByStagePredicted(stagePredicted);
+    @GetMapping("/medic-cmp/{medicCMP}/stage-predicted/{stagePredicted}")
+    List<DiagnosisResource> getAllDiagnosticsByStagePredictedAndMedicCMP(@PathVariable("medicCMP") String medicCMP,@PathVariable("stagePredicted") String stagePredicted){
+        return diagnosisService.findAllByStagePredictedMedic(medicCMP,stagePredicted);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/nurse-cep/{nurseCEP}/stage-predicted/{stagePredicted}")
+    List<DiagnosisResource> getAllDiagnosticsByStagePredictedAndNurseCEP(@PathVariable("nurseCEP") String nurseCEP,@PathVariable("stagePredicted") String stagePredicted){
+        return diagnosisService.findAllByStagePredictedNurse(nurseCEP,stagePredicted);
     }
 
     @ResponseStatus(HttpStatus.CREATED)

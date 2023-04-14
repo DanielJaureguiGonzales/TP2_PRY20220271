@@ -86,9 +86,30 @@ public class DiagnosisServiceImpl implements DiagnosisService {
         return diagnosisList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
     }
 
+
+
     @Override
-    public List<DiagnosisResource> findAllByStagePredicted(String stagePredicted) {
-        List<Diagnosis> diagnosisList = diagnosisRepository.findAllByStagePredicted(stagePredicted).stream().filter(Diagnosis::getIsConfirmed).toList();
+    public List<DiagnosisResource> findAllByStagePredictedMedic(String medicCMP,String stagePredicted) {
+        Medic medic = medicRepository.findMedicByCmp(medicCMP).orElseThrow(() -> new NotFoundException("Medic", "CMP", medicCMP));
+        List<TeamWork> teamWork = teamWorkRepository.findAllByMedicId(medic.getId());
+        List<Long> idNurses = new ArrayList<>();
+        for (TeamWork t : teamWork) {
+            idNurses.add(t.getNurse().getId());
+        }
+        List<Diagnosis> diagnosisMedicList = diagnosisRepository.findAllByCreatorIdAndCreatorTypeAndStagePredicted(medic.getId(), Type.MEDIC, stagePredicted).stream().filter(Diagnosis::getIsConfirmed).toList();
+        List<Diagnosis> diagnosisNurseList = diagnosisRepository.findAllByCreatorIdInAndCreatorTypeAndStagePredicted(idNurses, Type.NURSE,stagePredicted).stream().filter(Diagnosis::getIsConfirmed).toList();
+
+        List<Diagnosis> diagnosisList = new ArrayList<>();
+        diagnosisList.addAll(diagnosisMedicList);
+        diagnosisList.addAll(diagnosisNurseList);
+
+        return diagnosisList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<DiagnosisResource> findAllByStagePredictedNurse(String nurseCEP,String stagePredicted) {
+        Nurse nurse = nurseRepository.findNurseByCep(nurseCEP).orElseThrow(() -> new NotFoundException("Nurse", "CEP", nurseCEP));
+        List<Diagnosis> diagnosisList = diagnosisRepository.findAllByCreatorIdAndCreatorTypeAndStagePredicted(nurse.getId(), Type.NURSE,stagePredicted).stream().filter(Diagnosis::getIsConfirmed).toList();
         return diagnosisList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
     }
 
