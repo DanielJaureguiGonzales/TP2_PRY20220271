@@ -3,6 +3,7 @@ package com.tp2.pry20220271.ulcernosis.controllers;
 
 import com.tp2.pry20220271.ulcernosis.models.services.DiagnosisService;
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveDiagnosisResource;
+import com.tp2.pry20220271.ulcernosis.resources.response.DiagResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.DiagnosisResource;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -81,6 +82,12 @@ public class DiagnosisController {
     @PostMapping("/create-diagnosis")
     DiagnosisResource createDiagnosis(@Valid SaveDiagnosisResource saveDiagnosisResource, @RequestParam("file") MultipartFile file) throws IOException {
         return diagnosisService.saveDiagnosis(saveDiagnosisResource, file);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/quick-diagnosis")
+    DiagResource fastReferenceDiagnosis(@RequestParam("file") MultipartFile file) throws IOException {
+        return diagnosisService.getDiagResourceCNN(file);
     }
 
     @ResponseStatus(HttpStatus.OK)

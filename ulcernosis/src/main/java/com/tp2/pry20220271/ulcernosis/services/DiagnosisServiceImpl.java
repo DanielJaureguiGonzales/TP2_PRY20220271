@@ -249,6 +249,7 @@ public class DiagnosisServiceImpl implements DiagnosisService {
         );
     }
 
+    @Override
     public DiagResource getDiagResourceCNN(MultipartFile file) throws  IOException {
         MultiValueMap<String,Object> body= new LinkedMultiValueMap<>();
         body.add("image",new ByteArrayResource(file.getBytes()){
@@ -262,8 +263,11 @@ public class DiagnosisServiceImpl implements DiagnosisService {
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
         DiagResource response = restTemplate.postForObject(urlCNN,request,DiagResource.class);
+        response.setCreatorType(Type.MEDIC);
         return response;
     }
+
+
 
 
 }

@@ -2,6 +2,7 @@ package com.tp2.pry20220271.ulcernosis.models.services;
 
 
 import com.tp2.pry20220271.ulcernosis.resources.request.SaveDiagnosisResource;
+import com.tp2.pry20220271.ulcernosis.resources.response.DiagResource;
 import com.tp2.pry20220271.ulcernosis.resources.response.DiagnosisResource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +28,7 @@ public interface DiagnosisService {
     List<DiagnosisResource> findAllByCreatorIdAndCreatorType(Long creatorId, Type creatorType);*/
 
     DiagnosisResource saveDiagnosis(SaveDiagnosisResource saveDiagnosisResource, MultipartFile file) throws IOException;
+    DiagResource getDiagResourceCNN(MultipartFile file) throws  IOException;
     String confirmDiagnosisNurse(Long diagnosticId);
     String confirmDiagnosisMedic(Long diagnosticId);
     String deleteDiagnosisById(Long diagnosticId) ;
