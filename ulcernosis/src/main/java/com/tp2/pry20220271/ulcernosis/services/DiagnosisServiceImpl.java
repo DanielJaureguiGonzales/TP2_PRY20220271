@@ -12,6 +12,7 @@ import com.tp2.pry20220271.ulcernosis.resources.response.DiagnosisResource;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.bytebuddy.build.DispatcherAnnotationPlugin;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
@@ -91,17 +92,25 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     @Override
     public List<DiagnosisResource> findAllByStagePredictedMedic(String medicCMP,String stagePredicted) {
         Medic medic = medicRepository.findMedicByCmp(medicCMP).orElseThrow(() -> new NotFoundException("Medic", "CMP", medicCMP));
+        List<Type> typeList = new ArrayList<>();
+        typeList.add(Type.MEDIC);
+        typeList.add(Type.NURSE);
         List<TeamWork> teamWork = teamWorkRepository.findAllByMedicId(medic.getId());
-        List<Long> idNurses = new ArrayList<>();
+        List<Long> ids= new ArrayList<>();
+        ids.add(medic.getId());
         for (TeamWork t : teamWork) {
-            idNurses.add(t.getNurse().getId());
+            ids.add(t.getNurse().getId());
         }
-        List<Diagnosis> diagnosisMedicList = diagnosisRepository.findAllByCreatorIdAndCreatorTypeAndStagePredicted(medic.getId(), Type.MEDIC, stagePredicted).stream().filter(Diagnosis::getIsConfirmed).toList();
-        List<Diagnosis> diagnosisNurseList = diagnosisRepository.findAllByCreatorIdInAndCreatorTypeAndStagePredicted(idNurses, Type.NURSE,stagePredicted).stream().filter(Diagnosis::getIsConfirmed).toList();
 
-        List<Diagnosis> diagnosisList = new ArrayList<>();
-        diagnosisList.addAll(diagnosisMedicList);
-        diagnosisList.addAll(diagnosisNurseList);
+
+        List<Diagnosis> diagnosisList = diagnosisRepository.findAllByCreatorIdInAndCreatorTypeInAndStagePredicted(ids, typeList, stagePredicted).stream().filter(Diagnosis::getIsConfirmed).toList();
+
+        //List<Diagnosis> diagnosisMedicList = diagnosisRepository.findAllByCreatorIdAndCreatorTypeAndStagePredicted(medic.getId(), Type.MEDIC, stagePredicted).stream().filter(Diagnosis::getIsConfirmed).toList();
+        //List<Diagnosis> diagnosisNurseList = diagnosisRepository.findAllByCreatorIdInAndCreatorTypeAndStagePredicted(idNurses, Type.NURSE,stagePredicted).stream().filter(Diagnosis::getIsConfirmed).toList();
+
+        //List<Diagnosis> diagnosisList = new ArrayList<>();
+        //diagnosisList.addAll(diagnosisMedicList);
+        //diagnosisList.addAll(diagnosisNurseList);
 
         return diagnosisList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
     }
@@ -116,17 +125,23 @@ public class DiagnosisServiceImpl implements DiagnosisService {
     @Override
     public List<DiagnosisResource> findAllByMedicCMP(String medicCMP) {
         Medic medic = medicRepository.findMedicByCmp(medicCMP).orElseThrow(() -> new NotFoundException("Medic", "CMP", medicCMP));
+        List<Type> typeList = new ArrayList<>();
+        typeList.add(Type.MEDIC);
+        typeList.add(Type.NURSE);
         List<TeamWork> teamWork = teamWorkRepository.findAllByMedicId(medic.getId());
-        List<Long> idNurses = new ArrayList<>();
+        List<Long> ids= new ArrayList<>();
+        ids.add(medic.getId());
         for (TeamWork t : teamWork) {
-            idNurses.add(t.getNurse().getId());
+            ids.add(t.getNurse().getId());
         }
-        List<Diagnosis> diagnosisMedicList = diagnosisRepository.findAllByCreatorIdAndCreatorType(medic.getId(), Type.MEDIC).stream().filter(Diagnosis::getIsConfirmed).toList();
-        List<Diagnosis> diagnosisNurseList = diagnosisRepository.findAllByCreatorIdInAndCreatorType(idNurses, Type.NURSE).stream().filter(Diagnosis::getIsConfirmed).toList();
 
-        List<Diagnosis> diagnosisList = new ArrayList<>();
-        diagnosisList.addAll(diagnosisMedicList);
-        diagnosisList.addAll(diagnosisNurseList);
+        List<Diagnosis> diagnosisList = diagnosisRepository.findAllByCreatorIdInAndCreatorTypeIn(ids, typeList).stream().filter(Diagnosis::getIsConfirmed).toList();
+
+        //List<Diagnosis> diagnosisList = diagnosisRepository.findAllByCreatorIdInAndCreatorTypeInAndStagePredicted()
+        //List<Diagnosis> diagnosisList = new ArrayList<>();
+        //diagnosisList.addAll(diagnosisMedicList);
+        //diagnosisList.addAll(diagnosisNurseList);
+
 
         return diagnosisList.stream().map(diagnostic -> mapper.map(diagnostic, DiagnosisResource.class)).collect(Collectors.toList());
     }
