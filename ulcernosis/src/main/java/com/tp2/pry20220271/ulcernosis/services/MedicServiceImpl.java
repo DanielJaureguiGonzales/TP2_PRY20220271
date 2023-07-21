@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -96,6 +97,7 @@ public class MedicServiceImpl implements MedicService {
         newMedic.setAvatar(new byte[]{});
         newMedic.setDni(saveMedicResource.getDni());
         newMedic.setPassword(passwordEncoder.encode(saveMedicResource.getPassword()));
+        newMedic.setCreatedAt(new Date());
         MedicResource medicResource = mapper.map(medicRepository.save(newMedic),MedicResource.class);
         medicResource.setRole(Role.ROLE_MEDIC);
         return medicResource;
